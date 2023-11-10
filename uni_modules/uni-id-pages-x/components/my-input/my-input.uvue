@@ -1,0 +1,165 @@
+<template>
+	<view class="input-box" :class="{border}">
+		<!-- <solt></solt> -->
+		<text v-if="hasTitleAndContent" class="title">{{title}}</text>
+		<input class="input" ref="input" :placeholder="_placeholder" :class="{'move-down':hasTitleAndContent}"
+			:value="modelValue" @input="updateValue" :type="type" :maxlength="maxlength"
+			:password="password && !showPassword" :focus="focus" @blur="onBlur" @focus="onFocus" @confirm="confirm"
+			:confirm-type="confirmType" />
+		<view class="my-input-icon-box" v-if="modelValue">
+			<uni-id-pages-x-icon v-if="password" :color="showPassword?'#0070ff':'#ddd'" @touchstart="showPassword = true"
+				@touchend="showPassword = false" @touchcancel="showPassword = false" type="eyes" />
+			<view class="password-icon">
+				<uni-id-pages-x-icon @click="clearValue" type="clear" color="#ddd" />
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		name: 'MyInput',
+		emits: ["modelValue", "blur", "focus", "confirm"],
+		data() {
+			return {
+				showPassword: false
+			}
+		},
+		computed: {
+			_placeholder() : string {
+				if (this.placeholder.length > 0) {
+					return this.placeholder
+				} else if (this.title.length > 0) {
+					return "请输入" + this.title
+				} else {
+					return ""
+				}
+			},
+			hasTitleAndContent() : boolean {
+				return this.title.length > 0 && this.modelValue.length > 0
+			}
+		},
+		props: {
+			title: {
+				type: String,
+				default: ""
+			},
+			modelValue: {
+				type: String,
+				default: ""
+			},
+			type: {
+				type: String,
+				default: "text"
+			},
+			placeholder: {
+				type: String,
+				default: ""
+			},
+			maxlength: {
+				type: Number,
+				default: 140
+			},
+			password: {
+				type: Boolean,
+				default: false
+			},
+			focus: {
+				type: Boolean,
+				default: false
+			},
+			border: {
+				type: Boolean,
+				default: false
+			},
+			confirmType: {
+				type: String,
+				default: "done"
+			},
+		},
+		methods: {
+			updateValue(event : InputEvent) {
+				// console.log('event.detail.value', event.detail.value);
+				this.$emit('update:modelValue', event.detail.value);
+			},
+			clearValue() {
+				this.$emit('update:modelValue', '');
+				this.setFocus(true)
+			},
+			onBlur() {
+				// this.$emit('update:focus', false);
+				this.$emit('blur');
+			},
+			onFocus() {
+				this.$emit('focus');
+				// this.$emit('update:focus', true);
+			},
+			setFocus(state : boolean) {
+				const inputEl = this.$refs['input'] as Element
+				if (state) {
+					inputEl.focus();
+				} else {
+					inputEl.blur();
+				}
+			},
+			confirm(event : InputConfirmEvent) {
+				this.$emit('confirm', event)
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.input-box {
+		position: relative;
+		margin: 0;
+		background-color: #F8F8F8;
+		height: 44px !important;
+		// border: 1px solid #000;
+	}
+
+	.border {
+		border: 1px solid #86868b;
+	}
+
+	.input {
+		border-radius: 5px;
+		height: 44px;
+		padding: 0 16rpx;
+		font-size: 14px;
+		top: 0;
+		position: relative;
+		/* background-color: red; */
+		// border: 1px solid #000;
+	}
+
+	.title {
+		position: absolute;
+		top: 0;
+		left: 16rpx;
+		color: #555;
+		font-weight: 400;
+		font-size: 12px;
+		/* color: red; */
+		height: 26px;
+		line-height: 26px;
+		// border: 1px solid red;
+	}
+
+	.input.move-down {
+		top: 18px;
+		// border: 1px solid #000;
+		height: 22px;
+	}
+
+	.my-input-icon-box {
+		position: absolute;
+		right: 10px;
+		bottom: 12px;
+		flex-direction: row;
+	}
+
+	.password-icon {
+		margin-left: 5px;
+	}
+</style>

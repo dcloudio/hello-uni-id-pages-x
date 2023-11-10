@@ -1,0 +1,59 @@
+<template>
+	<view>
+		<text class="uni-id-icon" :style="{color,'fontSize':size + 'px'}">{{iconCode}}</text>
+	</view>
+</template>
+
+<script>
+	export default {
+		props: {
+			type: {
+				type: String,
+				default: "",
+				required: true
+			},
+			color: {
+				type: String,
+				default: "#ccc"
+			},
+			size: {
+				type: Number,
+				default: 16
+			},
+		},
+		computed: {
+			iconCode() : string {
+				const iconCode : UTSJSONObject = {
+					"clear": "\ue622",
+					"down": "\ue600",
+					"right-arrow": "\ue8f1",
+					"jiahao": "\ue602",
+					"eyes": "\ue62b",
+				};
+				return iconCode.getString(this.type) as string
+			}
+		},
+		data() {
+			return {
+
+			}
+		},
+		methods: {
+
+		}
+	}
+</script>
+
+<style>
+	@font-face {
+		font-family: "uni-id-icon";
+		/* src: url('/uni_modules/uni-id-pages-x/static/fonts/uni-id-icon.ttf'); */
+		src: url('https://at.alicdn.com/t/c/font_4275719_au4f4b0m7d4.ttf?t=1698219081630');
+	}
+
+	.uni-id-icon {
+		font-family: "uni-id-icon";
+		font-size: 16px;
+		font-style: normal;
+	}
+</style>

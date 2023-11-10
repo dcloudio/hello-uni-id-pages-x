@@ -1,0 +1,130 @@
+<template>
+	<view class="page">
+		<uni-navbar-lite title="设置昵称" class="uni-navbar-lite">
+			<template v-slot:right>
+				<text class="submit" :class="{disabled:!hasChange || nickname == ''}" @click="setNickname">完成</text>
+			</template>
+		</uni-navbar-lite>
+
+		<my-input class="my-input" v-model="nickname" @confirm="setNickname" placeholder="请输入昵称" :focus="true"
+			:maxlength="25"></my-input>
+	</view>
+</template>
+
+<script>
+	type TypeTestErr = {
+		errCode : string,
+		errMsg : string
+	}
+	import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
+	export default {
+		data() {
+			return {
+				nickname: "",
+				testErr: {
+					errCode: '',
+					errMsg: ''
+				} as TypeTestErr,
+				testState: false,
+				testSuccess:100
+			};
+		},
+		computed: {
+			hasChange() : boolean {
+				return this.currentNickname != this.nickname
+			},
+			currentNickname() : string {
+				let currentNickname = state.userInfo.get("nickname");
+				if(currentNickname == null){
+					currentNickname = ""
+				}
+				return currentNickname as string
+			}
+		},
+		onLoad() {
+			this.nickname = this.currentNickname
+		},
+		methods: {
+			setNickname() {
+				if (this.nickname.length == 0) {
+					uni.showToast({
+						title: '昵称不能为空',
+						icon: 'none'
+					});
+					this.nickname = this.currentNickname
+					return
+				}
+				if (!this.hasChange) {
+					console.log('没有变化');
+					return
+				}
+
+				uni.showLoading({
+					title: '加载中',
+					mask: false
+				});
+				const db = uniCloud.databaseForJQL()
+				const uid = uniCloud.getCurrentUserInfo().uid
+				if (uid != null) {
+					db.collection('uni-id-users')
+						.doc(uid)
+						.update({
+							"nickname": this.nickname
+						})
+						.then<void>((e) => {
+							console.log('e: ',e);
+							this.testState = true
+							this.testSuccess = e['updated'] as number
+							mutations.updateUserInfo({ "nickname": this.nickname } as UTSJSONObject)
+							// uni.navigateBack()
+						})
+						.catch<void>((err : any | null) => {
+							this.testState = true
+							const error = err as UniCloudError
+							console.log('error', error);
+							this.testErr.errCode = (error.errCode as string)
+							this.testErr.errMsg = (error.errMsg as string)
+							console.log(JSON.stringify(this.testErr))
+						})
+						.finally(() => {
+							// console.log('finally');
+							uni.hideLoading()
+						})
+				}
+			}
+		}
+	}
+</script>
+
+<style lang="scss">
+	@import url("/uni_modules/uni-id-pages-x/common/common.scss");
+
+	.page {
+		background-color: #f8f8f8;
+	}
+
+	.my-input {
+		background-color: #FFF;
+	}
+
+	.uni-navbar-lite .right-content {
+		width: 65px;
+	}
+
+	.submit {
+		// height: 28px;
+		line-height: 28px;
+		width: 50px;
+		text-align: center;
+		font-size: 14px;
+		border-radius: 5px;
+		margin-right: 15px;
+		background-color: #0070ff;
+		color: #FFF;
+	}
+
+	.submit.disabled {
+		background-color: #EFEFEF;
+		color: #AAA;
+	}
+</style>

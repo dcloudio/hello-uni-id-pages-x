@@ -1,0 +1,189 @@
+import { watch, watchEffect } from 'vue'
+// export type AvatarFile = {
+//   // 名称
+//   name:string,
+//   // 格式
+//   extname:string,
+//   // 链接
+//   url:string,
+// }
+
+// export type UserInfo = {
+//   _id: String | null,
+//   avatar_file: AvatarFile | null,
+//   nickname:string| null,
+//   mobile:string| null,
+// }
+
+type TestObj = {
+	n : number
+}
+
+export type State = {
+	pendingAgreements : boolean,
+	isLogin : boolean,
+	userInfo : UTSJSONObject,
+	test : number
+	testObj : TestObj
+}
+// 实例化为state
+export const state = reactive({
+	pendingAgreements: false,
+	userInfo: {
+		"_id": null,
+		"avatar_file": null,
+		"nickname": null,
+		"mobile": null,
+	} as UTSJSONObject,
+	isLogin: false,
+	test: 0,
+	testObj: {
+		n: 0
+	}
+} as State)
+
+
+function initState() {
+	try {
+		let userInfo = uni.getStorageSync('uni-id-pages-x-userInfo')
+		if (userInfo instanceof UTSJSONObject) {
+			state.userInfo = userInfo
+			// console.log('init userInfo',userInfo);
+		}
+	} catch (e) {
+		console.error('init userInfo error', e);
+	}
+	state.isLogin = uniCloud.getCurrentUserInfo().tokenExpired > Date.now()
+};
+initState()
+
+
+type Mutations = {
+	updateUserInfo(param : null | UTSJSONObject) : void
+}
+export const mutations = {
+	updateUserInfo(param : null | UTSJSONObject) {
+		console.log('updateUserInfo', param); // param为 null 时从云端获取数据更新，为UTSJSONObject时直接根据传入的值来更新
+		function afterUpdateUserInfo() {
+			console.error('afterUpdateUserInfo', state.userInfo);
+			uni.setStorageSync('uni-id-pages-x-userInfo', state.userInfo)
+		}
+		if (param == null) {
+			const db = uniCloud.databaseForJQL()
+			const user_id = uniCloud.getCurrentUserInfo().uid
+			console.log('user_id', user_id);
+			if (user_id != null) {
+				db.collection('uni-id-users')
+					.doc(user_id)
+					.field('_id,username,nickname,avatar_file,mobile')
+					.get()
+					.then<void>(res => {
+						console.log("get cloud userinfo", res);
+						state.userInfo = res.data[0]
+						afterUpdateUserInfo()
+					})
+					.catch<void>((err : any | null) => {
+						const error = err as UniCloudError
+						console.log(error.errMsg, '错误')
+					})
+			}
+		} else {
+			param.toMap().forEach((value, key) => {
+				console.log("updateUserInfo.", key, value)
+				state.userInfo.set(key, value)
+			})
+			afterUpdateUserInfo()
+		}
+	}
+} as Mutations;
+
+
+function afterUpdateUserInfo() {
+	console.error('afterUpdateUserInfo', state.userInfo);
+	uni.setStorageSync('uni-id-pages-x-userInfo', state.userInfo)
+};
+
+// watch(
+// () => { state.userInfo }, 
+// (userInfo : UTSJSONObject, oldUserInfo : UTSJSONObject) => {
+//   console.log(`watch new userInfo: ${JSON.stringify(userInfo)}`)
+//   console.log(`watch old userInfo: ${JSON.stringify(oldUserInfo)}`)
+
+//   // 如果用户id变了，从未登录->登录，或者切换账号
+//   const user_id = userInfo.getString("_id");
+//   if (user_id != null && user_id != oldUserInfo.getString("_id")) {
+//     const db = uniCloud.databaseForJQL()
+//     db.collection('uni-id-users')
+//       .doc(user_id)
+//       .field('_id,username,nickname,avatar_file,mobile')
+//       .get()
+//       .then<void>(res => {
+//         console.log("get cloud userinfo", res);
+//         state.userInfo = res.data[0]
+//         afterUpdateUserInfo()
+//       })
+//       .catch<void>((err : any | null) => {
+//         const error = err as UniCloudError
+//         console.log(error.errMsg, '错误')
+//       })
+//   } else {
+//     afterUpdateUserInfo()
+//   }
+// },
+// {
+//   "deep": true
+// } as WatchOptions);
+
+
+
+
+// watch(
+//   ():UTSJSONObject=>state.userInfo, 
+//   (newValue:UTSJSONObject,oldValue:UTSJSONObject)=>{
+//     console.error('watch newValue',newValue);
+//     console.error('watch oldValue',oldValue);
+//   },
+//   {"deep": true} as WatchOptions
+// )
+
+// setTimeout(()=> {
+//   console.log(333);
+//   state.userInfo.set("_id","11212")
+// }, 3000);
+
+
+watch(
+	// ():string=>{
+	//   let str = ""
+	//   for (let key in state.testObj) {
+	//     str = key + JSON.stringify(state.testObj[key]) + "&"
+	//   }
+	//   console.log(str);
+	//   return str
+	// }, 
+	() : TestObj => state.testObj,
+	(newValue : TestObj, oldValue : TestObj) => {
+		console.error('watch newValue', newValue);
+		console.error('watch oldValue', oldValue);
+	},
+	{ "deep": true } as WatchOptions
+)
+
+// watchEffect((onCleanup: OnCleanup) => {
+//   console.error(`watchEffect testObj: ${state.testObj.n}`);
+//   console.error(`watchEffect userInfo: ${state.userInfo["_id"]}`);
+//   onCleanup(() => {
+//     // 一些清理工作
+//   });
+// });
+
+// setTimeout(()=> {
+//   console.log('change state.userInfo');
+//   state.testObj.n = 100
+//   state.userInfo.set("_id","123")
+//   // // state.testObj = ({n:100} as TestObj)
+//   // console.log('state.testObj.n',state.testObj.n);
+// }, 3000);
+
+
+// testObj
