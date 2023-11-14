@@ -114,7 +114,8 @@
 		position: relative;
 		margin: 0;
 		background-color: #F8F8F8;
-		height: 44px !important;
+		height: 50px !important;
+		border-radius: 5rpx;
 		// border: 1px solid #000;
 	}
 
@@ -124,13 +125,11 @@
 
 	.input {
 		border-radius: 5px;
-		height: 44px;
-		padding: 0 16rpx;
+		height: 50px;
+		padding: 0 16rpx 0 12px;
 		font-size: 14px;
 		top: 0;
 		position: relative;
-		/* background-color: red; */
-		// border: 1px solid #000;
 	}
 
 	.title {
@@ -140,22 +139,20 @@
 		color: #555;
 		font-weight: 400;
 		font-size: 12px;
-		/* color: red; */
-		height: 26px;
-		line-height: 26px;
-		// border: 1px solid red;
+		padding-left:5px;
+		height: 30px;
+		line-height: 30px;
 	}
 
 	.input.move-down {
-		top: 18px;
-		// border: 1px solid #000;
+		top: 22px;
 		height: 22px;
 	}
 
 	.my-input-icon-box {
 		position: absolute;
 		right: 10px;
-		bottom: 12px;
+		bottom:14px;
 		flex-direction: row;
 	}
 

@@ -18,11 +18,11 @@
 		<!-- 弹出式 -->
 		<uni-popup ref="popup">
 			<view class="popup-content">
-				<text class="text">请先阅读并同意</text>
+				<text class="popup-text">请先阅读并同意</text>
 				<view class="content">
 					<view class="agreements-item" v-for="(agreement,index) in agreements" :key="index">
-						<text class="agreement text" @click="navigateTo(index)">{{agreement.title}}</text>
-						<text class="text and" v-if="hasAnd(index)" space="nbsp"> 和 </text>
+						<text class="agreement popup-text" @click="navigateTo(index)">{{agreement.title}}</text>
+						<text class="popup-text and" v-if="hasAnd(index)" space="nbsp"> 和 </text>
 					</view>
 				</view>
 				<view class="btn-group">
@@ -145,6 +145,7 @@
 		transform: scale(1.3);
 		margin-left: 3px;
 		color: #8a8f8b;
+		font-size: 12px;
 	}
 
 	.agreements-item {
@@ -153,6 +154,11 @@
 
 	.text {
 		line-height: 26px;
+		font-size: 12px;
+	}
+	.popup-text{
+		line-height: 30px;
+		font-size:16px;
 	}
 
 	.agreement {
@@ -179,7 +185,7 @@
 		border-top: 1px solid #eee;
 		flex-direction: row;
 		justify-content: space-around;
-		margin-top: 5px;
+		margin-top: 10px;
 	}
 
 	.popup-content .btn-group .btn {

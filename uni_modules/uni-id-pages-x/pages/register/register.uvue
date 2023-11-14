@@ -20,7 +20,7 @@
 				<my-input class="my-input" title="重复密码" placeholder="请重新输入密码" v-model="password2" :password="true"
 					ref="password2"></my-input>
 			</view>
-			<view class="item">
+			<view class="item mt">
 				<uni-captcha ref="captcha" scene="register" v-model="captcha" />
 			</view>
 			<!-- 隐私政策协议授权申请框 -->
@@ -204,10 +204,13 @@
 	}
 
 	.item {
-		margin-top: 10px;
+		margin-top: 8px;
 		position: relative;
 		padding-left: 15px;
 		margin-left: -15px;
+	}
+	.mt{
+		margin-top: 16px;
 	}
 
 	.required {

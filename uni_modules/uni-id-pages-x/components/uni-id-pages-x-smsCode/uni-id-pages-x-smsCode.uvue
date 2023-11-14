@@ -243,7 +243,7 @@
 		background-color: #F8F8F8;
 		justify-content: center;
 		align-items: center;
-		/* border: 1px solid #000; */
+		border-radius: 5rpx;
 	}
 
 	.area {
@@ -252,15 +252,13 @@
 		align-items: center;
 		flex-direction: row;
 		margin-left: 10px;
-		/* border: 1px solid #000; */
 	}
 
 	.mobile-box .input-box {
 		flex: 1;
-		/* border: 1px solid #000; */
 	}
 
 	.send-sms-captcha-box {
-		margin-top: 5px;
+		margin-top: 10px;
 	}
 </style>

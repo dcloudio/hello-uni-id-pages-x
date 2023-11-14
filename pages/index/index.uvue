@@ -4,7 +4,7 @@
 		<text class="tip">请选择登录方式：</text>
 		<radio-group @change="radioChange" style="flex-direction: row;flex-wrap: wrap;">
 			<radio v-for="(item,index) in loginTypeList" :key="index" :value="item.value"
-				:checked="loginType === item.value" color="#0070ff" style="margin-right: 5px;">{{item.name}}</radio>
+				:checked="loginType === item.value" color="#0070ff" style="margin-right:16px;">{{item.name}}</radio>
 		</radio-group>
 		<button class="btn" @click="toLogin" type="primary">前往登录</button>
 		<button class="btn" @click="toUserInfoPage" type="primary" :plain="true">个人资料</button>
@@ -89,7 +89,7 @@
 	}
 
 	.tip {
-		margin-bottom: 6px;
+		margin-bottom: 16px;
 		font-weight: 700;
 	}
 

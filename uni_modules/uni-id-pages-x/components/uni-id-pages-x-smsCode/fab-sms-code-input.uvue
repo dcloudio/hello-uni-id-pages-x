@@ -142,26 +142,26 @@
 		width: 550rpx;
 		justify-content: center;
 		align-items: center;
-		padding: 15px;
+		padding: 15px 20px;
+		border-radius: 5px;
 	}
 
 	.sms-code-title,
 	.sms-code-tip {
 		text-align: left;
-		padding-left: 10px;
+		padding-left:20px;
 		width: 550rpx;
-		/* border: 1px solid #000; */
 	}
 
 	.sms-code-tip {
 		color: #555;
 		font-weight: 400;
 		font-size: 12px;
+		margin-top: 5px;
 	}
 
 	.code-input-list {
 		flex-direction: row;
-		/* border: 1px solid #000; */
 	}
 
 	.code-input-list .code-input {
@@ -178,7 +178,6 @@
 		font-size: 12px;
 		text-align: right;
 		color: #AAA;
-		/* border: 1px solid #000; */
 		margin-top: 5px;
 		margin-left: 350rpx;
 		position: relative;
