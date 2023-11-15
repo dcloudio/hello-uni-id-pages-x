@@ -200,10 +200,10 @@
 				}
 			},
 			toPage(path : string) {
-				console.log(13, path);
+				// console.log(13, path);
 			},
 			login_before(type : string) {
-				console.log(type);
+				// console.log(type);
 				// 提示空实现
 				if (["qq", "xiaomi", "sinaweibo", "taobao", "facebook", "google", "alipay", "douyin"].includes(type)) {
 					return uni.showToast({

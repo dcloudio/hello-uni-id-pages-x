@@ -130,7 +130,7 @@
 					count: 1,
 					crop,
 					success(res) : void {
-						console.log('res', res);
+						// console.log('res', res);
 						let tempFiles = res.tempFiles as UTSJSONObject[];
 						let tempFile = tempFiles[0];
 						let tempFileName = tempFile.getString('name')
@@ -196,7 +196,7 @@
 							mask: true
 						});
 
-						console.log('filePath', filePath);
+						// console.log('filePath', filePath);
 						uniCloud.uploadFile({
 							filePath,
 							cloudPath,
@@ -204,7 +204,7 @@
 							.then<void>(function (res) {
 								// console.log('res777777777',res);
 								avatar_file.url = res.fileID
-								console.log('avatar_file111', avatar_file);
+								// console.log('avatar_file111', avatar_file);
 								mutations.updateUserInfo({ avatar_file } as UTSJSONObject)
 							})
 							.catch<void>(function (err : any | null) {
@@ -213,7 +213,7 @@
 									content: '上传失败，' + error.errMsg,
 									showCancel: false
 								});
-								console.log(error);
+								console.error(error);
 							}).finally(() => {
 								uni.hideLoading()
 							})

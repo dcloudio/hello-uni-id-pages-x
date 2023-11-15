@@ -144,7 +144,7 @@
 
 				if (state.pendingAgreements) {
 					this.showPopupCaptcha(() => {
-						console.log('state.pendingAgreements', state.pendingAgreements);
+						// console.log('state.pendingAgreements', state.pendingAgreements);
 						if (!state.pendingAgreements) {
 							this.registerBefore()
 						}

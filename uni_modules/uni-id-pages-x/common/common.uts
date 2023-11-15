@@ -44,7 +44,7 @@ export const loginSuccess = (_ : UTSJSONObject) => {
 }
 
 export const logout = () => {
-	console.log("logout");
+	// console.log("logout");
 	// 1. 已经过期就不需要调用服务端的注销接口	2.即使调用注销接口失败，不能阻塞客户端
 	if (uniCloud.getCurrentUserInfo().tokenExpired > Date.now()) {
 		const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: false })
@@ -64,7 +64,7 @@ export const logout = () => {
 }
 
 export const checkPassword = (password : string) : UTSJSONObject => {
-	console.log("checkPassword", password);
+	// console.log("checkPassword", password);
 	// 根据配置的密码强度校验
 	let passwordStrength = config.getString("passwordStrength")
 	if (passwordStrength == null) {

@@ -45,8 +45,8 @@
 		onLoad(param : Map<string, string>) {
 			const mobile = param.get("mobile")
 			const email = param.get("email")
-			console.log('mobile--', mobile);
-			console.log('email--', email);
+			// console.log('mobile--', mobile);
+			// console.log('email--', email);
 
 			if (mobile != null) {
 				this.$nextTick(() => {
@@ -56,7 +56,7 @@
 		},
 		methods: {
 			smsCodeInput(param : UTSJSONObject) {
-				console.log('smsCodeInput param', param);
+				// console.log('smsCodeInput param', param);
 				const mobile = param.getString("mobile") as string;
 				const code = param.getString("code") as string;
 				const sendSmsCaptcha = param.getString("sendSmsCaptcha") as string;

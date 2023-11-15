@@ -74,7 +74,7 @@
 				uni.navigateTo({
 					url: "/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile",
 					complete(e) {
-						console.log('e', e);
+						// console.log('e', e);
 					}
 				})
 			},
@@ -82,7 +82,7 @@
 				uni.navigateTo({
 					url: "/uni_modules/uni-id-pages-x/pages/userinfo/deactivate/deactivate",
 					complete(e) {
-						console.log('e', e);
+						// console.log('e', e);
 					}
 				})
 			},

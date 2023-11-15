@@ -12,7 +12,7 @@
 </template>
 
 <script>
-	let confirmCallBack = (value : string) : void => console.log('未传入回调函数，value：', value)
+	let confirmCallBack = (value : string) : void => {}// console.log('未传入回调函数，value：', value)
 	export default {
 		emits: ["confirm"],
 		data() {
@@ -23,7 +23,7 @@
 		},
 		methods: {
 			open(param : UTSJSONObject, callback : (value : string) => void) : void {
-				console.log('param', param);
+				// console.log('param', param);
 				this.title = (param.getString("title") as string);
 				let value = param.getString("value")
 				if (value != null) {

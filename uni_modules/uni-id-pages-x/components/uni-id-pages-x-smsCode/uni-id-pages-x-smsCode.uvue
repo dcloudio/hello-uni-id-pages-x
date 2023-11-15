@@ -126,7 +126,7 @@
 				this.sendSmsCaptcha = ""
 				this.clearCodeInput()
 				this.hideCodeInput()
-				console.log('reset');
+				// console.log('reset');
 			},
 			sendSmsCode() {
 				// console.log("state.pendingAgreements", state.pendingAgreements);
@@ -193,7 +193,7 @@
 							icon: 'none',
 							duration: 3000
 						});
-						console.log('result', result);
+						// console.log('result', result);
 						this.showCodeInput()
 					})
 					.catch<void>((err : any | null) : void => {

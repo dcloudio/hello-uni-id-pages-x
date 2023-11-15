@@ -37,7 +37,7 @@
 					cancelText: "返回",
 					confirmText: "确定",
 					success: (e) => {
-						console.log('confirm', e.confirm);
+						// console.log('confirm', e.confirm);
 						if (e.confirm) {
 							const uniIdco = uniCloud.importObject("uni-id-co");
 							uniIdco.closeAccount().then(() => {

@@ -55,7 +55,7 @@
 					return
 				}
 				if (!this.hasChange) {
-					console.log('没有变化');
+					// console.log('没有变化');
 					return
 				}
 

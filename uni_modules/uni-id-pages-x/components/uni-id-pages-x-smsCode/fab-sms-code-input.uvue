@@ -77,7 +77,7 @@
 				this.smsCodeList = ["\u200b", "\u200b", "\u200b", "\u200b", "\u200b", "\u200b"];
 				if (this.isOpen) {
 					(this.$refs["code-input"] as Element[])[0].focus();
-					console.log('clear success');
+					// console.log('clear success');
 				} else {
 					// console.log('已经关了，不能清空');
 				}
@@ -90,9 +90,9 @@
 				let $value = value.replace(/\u200b/g, '')
 				if ($value.length == 6) {
 					// (this.$refs["code-input"] as Element[])[0].focus();
-					console.log('~~~~~', $value, $value.split(''));
+					// console.log('~~~~~', $value, $value.split(''));
 					$value.split('').forEach((item : string, index : number) => {
-						console.log('index', index, item);
+						// console.log('index', index, item);
 						this.smsCodeList[index] = "\u200b" + item
 					})
 					return
@@ -102,7 +102,7 @@
 				if (value.length > 2) {
 					this.$nextTick(() => {
 						let newValue = value.slice(value.length - 1)
-						console.log('newValue', newValue);
+						// console.log('newValue', newValue);
 						this.smsCodeList[i] = newValue
 					})
 				}
@@ -127,11 +127,11 @@
 				}
 			},
 			codeChange(i : number, e : InputEvent) {
-				console.log(i, e);
+				// console.log(i, e);
 			},
 			onFocus(i : number) {
 				if (this.smsCodeList[i].length == 0) {
-					console.log('i', i);
+					// console.log('i', i);
 					this.smsCodeList[i] = '\u200b'
 				}
 			},

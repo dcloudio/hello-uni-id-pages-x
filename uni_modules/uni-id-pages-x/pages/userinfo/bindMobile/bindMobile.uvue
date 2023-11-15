@@ -45,7 +45,7 @@
 				this.$smsCodeEl!.sendSmsCode();
 			},
 			smsCodeInput(param : UTSJSONObject) {
-				console.log('smsCodeInput param', param);
+				// console.log('smsCodeInput param', param);
 				const mobile = param.getString("mobile") as string;
 				const code = param.getString("code") as string;
 				if (mobile.length == 11 && code.length == 6) {
@@ -127,7 +127,7 @@
 					})
 			},
 			popupCaptchaCancel() {
-				console.log('popupCaptchaCancel');
+				// console.log('popupCaptchaCancel');
 				this.$smsCodeEl!.reset();
 				this.captcha = ""
 			}

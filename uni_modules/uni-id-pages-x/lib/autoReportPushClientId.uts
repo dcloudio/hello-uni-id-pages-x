@@ -11,19 +11,19 @@ const reportPushClientId = () => {
         pushClientId
       })
       .then(res => {
-        console.log('getPushClientId', res);
+        // console.log('getPushClientId', res);
       })
     },
     fail(e) {
-      console.log(e)
+      // console.log(e)
     }
   })
 }
 export default reportPushClientId;
 
 
-console.log('已导入 autoReportPushClientId 模块，将再重新登录会 token 续期后自动将客户端上报到服务端');
+// console.log('已导入 autoReportPushClientId 模块，将再重新登录会 token 续期后自动将客户端上报到服务端');
 uniCloud.onRefreshToken((_) => {
-  console.log('onRefreshToken');
+  // console.log('onRefreshToken');
   reportPushClientId()
 })
