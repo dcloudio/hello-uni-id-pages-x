@@ -84,7 +84,7 @@ export const mutations = {
 					})
 					.catch<void>((err : any | null) => {
 						const error = err as UniCloudError
-						// console.log(error.errMsg, '错误')
+						console.error(error.errMsg, '错误')
 					})
 			}
 		} else {
