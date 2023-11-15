@@ -4,6 +4,8 @@
 // 导入配置
 import config from '@/uni_modules/uni-id-pages-x/config.uts'
 
+import {state} from '@/uni_modules/uni-id-pages-x/store.uts';
+
 // uni-id的云对象
 const uniIdCo = uniCloud.importObject('uni-id-co', {
   customUI: true
@@ -78,4 +80,21 @@ export default async function () {
   // }
   // // 解绑clientDB错误事件
   // // db.off('error', onDBError)
+  
+
+  uni.addInterceptor('navigateTo',{
+    invoke:(e:NavigateToOptions)=>{
+      if (!state.isLogin && !e.url.includes('/uni_modules/uni-id-pages-x/pages/login/login')) {
+        e.url = "/uni_modules/uni-id-pages-x/pages/login/login?uniIdRedirectUrl=" + encodeURIComponent(e.url)
+      }
+    }
+  })
+  uni.addInterceptor('redirectTo',{
+    invoke:(e:RedirectToOptions)=>{
+      if (!state.isLogin && !e.url.includes('/uni_modules/uni-id-pages-x/pages/login/login')) {
+        e.url = "/uni_modules/uni-id-pages-x/pages/login/login?uniIdRedirectUrl=" + encodeURIComponent(e.url)
+      }
+    }
+  })
+  
 }

@@ -18,7 +18,6 @@
 		name : string
 	}
 	import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
-	import { uniIdNavigateTo } from '@/uni_modules/uni-id-pages-x/common/common.uts';
 	export default {
 		computed: {
 			userInfo() : UTSJSONObject {
@@ -70,14 +69,14 @@
 				this.loginType = selected!.value
 			},
 			toLogin() {
-				uniIdNavigateTo({
+				uni.navigateTo({
 					url: "/uni_modules/uni-id-pages-x/pages/login/login?type=" + this.loginType
-				} as NavigateToOptions)
+				})
 			},
 			toUserInfoPage() {
-				uniIdNavigateTo({
+				uni.navigateTo({
 					url: "/uni_modules/uni-id-pages-x/pages/userinfo/userinfo?showLoginManage=true"
-				} as NavigateToOptions)
+				})
 			},
 		}
 	}
