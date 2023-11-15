@@ -2,7 +2,7 @@
 	<view class="agreements-root" v-if="agreements.length != 0">
 		<template v-if="needAgreements">
 			<checkbox-group @change="setAgree">
-				<checkbox class="checkbox" style="transform: scale(0.7);margin-right: -6px;padding-right: 3px;"
+				<checkbox class="checkbox" style="transform: scale(0.7);margin-right: -6px;padding-right: 3px;margin-left: 1px;"
 					:checked="!pendingAgreements" value="agreement">
 					<text class="checkbox-text">同意</text>
 				</checkbox>
@@ -135,10 +135,6 @@
 		align-items: center;
 		justify-content: flex-start;
 		margin-left: -9px;
-	}
-
-	.checkbox {
-		transform: scale(0.2);
 	}
 
 	.checkbox-text {
