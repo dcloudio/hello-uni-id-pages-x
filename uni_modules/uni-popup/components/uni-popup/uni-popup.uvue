@@ -17,6 +17,12 @@
         isOpen:false
       }
     },
+    props: {
+      maskClick: {
+        type: Boolean,
+        default: true
+      },
+    },
     watch: {
       // 设置show = true 时，如果没有 open 需要设置为 open
       isShow:{
@@ -48,8 +54,10 @@
         this.isOpen = true;
       },
       clickMask(){
-        this.$emit('clickMask')
-        this.close()
+        if(this.maskClick == true){
+          this.$emit('clickMask')
+          this.close()
+        }
       },
       close(): void{
         this.isOpen = false;
