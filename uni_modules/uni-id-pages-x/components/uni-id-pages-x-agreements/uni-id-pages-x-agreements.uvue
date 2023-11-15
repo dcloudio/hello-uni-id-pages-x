@@ -38,7 +38,7 @@
   import config from '@/uni_modules/uni-id-pages-x/config.uts';
   import {state} from '@/uni_modules/uni-id-pages-x/store.uts';
   type Agreement = {url:string,title:string};
-  let confirmCallBack = ():void=>console.log('未传入回调函数，value：')
+  let confirmCallBack = ():void=>{} //console.log('未传入回调函数，value：')
   export default {
     name: "uni-id-pages-x-agreements",
     computed: {
@@ -90,7 +90,7 @@
       //   console.log('showPopupAgreements after');
       // })
       uni.$on("uni-id-pages-x-agreements-shake",()=>{
-        console.log('弹出申请同意隐私协议的框');
+        // console.log('弹出申请同意隐私协议的框');
         (this.$refs['popup-box'] as INode).style.setProperty("top",0)
       })
     },
@@ -103,8 +103,8 @@
         const url = this.agreements[index].url
         uni.navigateTo({
           "url":"/uni_modules/uni-id-pages-x/pages/common/webview/webview?url="+url+"&title="+title,
-          complete:e=>{
-            console.log(e);
+          fail:e=>{
+            console.error(e);
           }
         })
       },
@@ -121,7 +121,7 @@
       },
       confirm(){
         state.pendingAgreements = false;
-        console.log('state.pendingAgreements',state.pendingAgreements);
+        // console.log('state.pendingAgreements',state.pendingAgreements);
         confirmCallBack();
         this.$popupComponent!.close()
       }

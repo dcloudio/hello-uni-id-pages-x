@@ -1,8 +1,8 @@
 import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
 import config from '@/uni_modules/uni-id-pages-x/config.uts';
-export const loginSuccess = (e : UTSJSONObject) => {
-	console.log('loginSuccess', e);
-	console.log("新用户uid", e["uid"]);
+export const loginSuccess = (_ : UTSJSONObject) => {
+	// console.log('loginSuccess', e);
+	// console.log("新用户uid", e["uid"]);
 	// state.currentUserInfo = uniCloud.getCurrentUserInfo()
 	mutations.updateUserInfo(null)
 	// state.userInfo["_id"] = e["uid"]
@@ -15,7 +15,7 @@ export const loginSuccess = (e : UTSJSONObject) => {
 		const currentPage = pages[pages.length - 1]
 		const uniIdRedirectUrl = currentPage.options.get("uniIdRedirectUrl");
 		if (uniIdRedirectUrl != null) {
-			console.log('uniIdRedirectUrl', uniIdRedirectUrl);
+			// console.log('uniIdRedirectUrl', uniIdRedirectUrl);
 			uni.redirectTo({
 				url: uniIdRedirectUrl,
 				fail() {
@@ -25,7 +25,7 @@ export const loginSuccess = (e : UTSJSONObject) => {
 					})
 				},
 				success() {
-					console.log('uniIdRouter redirectTo success');
+					// console.log('uniIdRouter redirectTo success');
 				}
 			})
 		} else {
@@ -61,16 +61,6 @@ export const logout = () => {
 	state.userInfo = {}
 	state.isLogin = false
 	uni.$emit('uni-id-pages-x-logout', '')
-}
-
-export const uniIdNavigateTo = (options : NavigateToOptions) => {
-	console.error('before navigateTo', options.url, state.isLogin);
-	if (!state.isLogin && !options.url.includes('/uni_modules/uni-id-pages-x/pages/login/login')) {
-		options.url = "/uni_modules/uni-id-pages-x/pages/login/login?uniIdRedirectUrl=" + encodeURIComponent(options.url)
-		console.log("options.url:" + options.url);
-
-	}
-	uni.navigateTo(options)
 }
 
 export const checkPassword = (password : string) : UTSJSONObject => {
