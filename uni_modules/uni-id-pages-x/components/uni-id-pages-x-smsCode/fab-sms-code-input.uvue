@@ -1,8 +1,8 @@
 <template>
-	<uni-popup ref="popup">
+	<uni-popup ref="popup" :mask-click="false">
 		<view class="sms-code-content">
 			<!-- 顶部文字 -->
-			<text class="sms-code-title">请输入验证码</text>
+			<text class="sms-code-title">{{title}}</text>
 			<text class="sms-code-tip">短信验证码已发送至{{mobile}}</text>
 			<view class="code-input-list">
 				<template v-for="(item,i) in smsCodeList" :key="i">
@@ -10,8 +10,10 @@
 						class="code-input" maxlength="7" @focus="onFocus(i)" />
 				</template>
 			</view>
-			<text @click="reGetSmsCode"
-				:class="'get-sms-code-tip'+ ((reverseNumber == 0) ? '-active' : '')">{{reGetSmsCodeTip}}</text>
+      <view class="fab-sms-code-input-foot">
+        <text class="close" @click="clear();hide();">关闭</text>
+        <text @click="reGetSmsCode" :class="'get-sms-code-tip'+ ((reverseNumber == 0) ? '-active' : '')">{{reGetSmsCodeTip}}</text>
+      </view>
 		</view>
 	</uni-popup>
 </template>
@@ -27,6 +29,10 @@
 			}
 		},
 		props: {
+      title: {
+        type: String,
+        default: "请输入验证码"
+      },
 			mobile: {
 				type: String,
 				default: ""
@@ -65,7 +71,7 @@
 			hide() {
 				(this.$refs['popup'] as UniPopupComponentPublicInstance).close();
 				this.isOpen = false
-				console.log('hide success');
+				// console.log('hide success');
 			},
 			clear() {
 				this.smsCodeList = ["\u200b", "\u200b", "\u200b", "\u200b", "\u200b", "\u200b"];
@@ -73,7 +79,7 @@
 					(this.$refs["code-input"] as Element[])[0].focus();
 					console.log('clear success');
 				} else {
-					console.log('已经关了，不能清空');
+					// console.log('已经关了，不能清空');
 				}
 			},
 			setSmsCode(i : number, e : InputEvent) {
@@ -116,7 +122,7 @@
 					if (i != (this.smsCodeList.length - 1)) {
 						(this.$refs["code-input"] as Element[])[i + 1].focus();
 					} else {
-						console.log(i, (this.smsCodeList.length - 1));
+						// console.log(i, (this.smsCodeList.length - 1));
 					}
 				}
 			},
@@ -172,17 +178,29 @@
 		margin: 10px 5px;
 		text-align: center;
 	}
-
+  
+  .fab-sms-code-input-foot {
+    margin-top: 5px;
+    margin-left: 300rpx;
+    position: relative;
+    left: -15px;
+    width: 250rpx;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+  .fab-sms-code-input-foot .close {
+    width: 80rpx;
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+    margin-right: 26rpx;
+  }
+  
 	.get-sms-code-tip,
 	.get-sms-code-tip-active {
 		font-size: 12px;
 		text-align: right;
 		color: #AAA;
-		margin-top: 5px;
-		margin-left: 350rpx;
-		position: relative;
-		left: -15px;
-		width: 200rpx;
 	}
 
 	.get-sms-code-tip-active {

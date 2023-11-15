@@ -15,7 +15,7 @@
 	</view>
 	<!-- 悬浮的短信验证码输入框 -->
 	<fab-sms-code-input v-model="smsCode" :mobile="mobile" :reverseNumber="reverseNumber" ref="fab-sms-code-input"
-		@reGetSmsCode="reGetSmsCode" />
+		@reGetSmsCode="reGetSmsCode" title="验证并登录" />
 </template>
 
 <script>
@@ -132,7 +132,7 @@
 				// console.log("state.pendingAgreements", state.pendingAgreements);
 				if (state.pendingAgreements) {
 					(this.$parent as ComponentPublicInstance).$callMethod("showPopupCaptcha", () => {
-						console.log('state.pendingAgreements', state.pendingAgreements);
+						// console.log('state.pendingAgreements', state.pendingAgreements);
 						if (!state.pendingAgreements) {
 							this.sendSmsCode()
 						}
@@ -198,9 +198,8 @@
 					})
 					.catch<void>((err : any | null) : void => {
 						const error = err as UniCloudError
-						console.error(error)
-						console.error(error.message)
-						console.error(error.code)
+						// console.error(error.message)
+						// console.error(error.code)
 
 						switch (error.code) {
 							case "uni-captcha-verify-fail":
