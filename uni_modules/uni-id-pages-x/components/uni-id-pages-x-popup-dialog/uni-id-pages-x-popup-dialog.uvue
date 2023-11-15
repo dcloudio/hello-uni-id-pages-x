@@ -12,7 +12,7 @@
 </template>
 
 <script>
-	let confirmCallBack = (value : string) : void => {}// console.log('未传入回调函数，value：', value)
+	let confirmCallBack = (_ : string) : void => {}// console.log('未传入回调函数，value：', value)
 	export default {
 		emits: ["confirm"],
 		data() {
