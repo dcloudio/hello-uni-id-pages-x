@@ -4,11 +4,12 @@
 		<text v-if="hasTitleAndContent" class="title">{{title}}</text>
 		<input class="input" ref="input" :placeholder="_placeholder" :class="{'move-down':hasTitleAndContent}"
 			:value="modelValue" @input="updateValue" :type="type" :maxlength="maxlength"
-			:password="password && !showPassword" :focus="focus" @blur="onBlur" @focus="onFocus" @confirm="confirm"
+			:password="password && !visiblePwd" :focus="focus" @blur="onBlur" @focus="onFocus" @confirm="confirm"
 			:confirm-type="confirmType" />
 		<view class="my-input-icon-box" v-if="modelValue">
-			<uni-id-pages-x-icon v-if="password" :color="showPassword?'#0070ff':'#ddd'" @touchstart="showPassword = true"
-				@touchend="showPassword = false" @touchcancel="showPassword = false" type="eyes" />
+			<uni-id-pages-x-icon v-if="password" :color="visiblePwd?'#0070ff':'#ddd'" 
+        @click="setVisiblePwd('click')" @touchstart="setVisiblePwd('touchstart')" @touchend="setVisiblePwd('touchend')" @touchcancel="setVisiblePwd('touchcancel')" 
+      type="eyes" />
 			<view class="password-icon">
 				<uni-id-pages-x-icon @click="clearValue" type="clear" color="#ddd" />
 			</view>
@@ -22,7 +23,7 @@
 		emits: ["modelValue", "blur", "focus", "confirm"],
 		data() {
 			return {
-				showPassword: false
+				visiblePwd: false
 			}
 		},
 		computed: {
@@ -76,6 +77,13 @@
 				type: String,
 				default: "done"
 			},
+      /**
+       * @param touch click
+       */
+      visiblePwdOption:{
+        type: String,
+        default: "click"
+      }
 		},
 		methods: {
 			updateValue(event : InputEvent) {
@@ -104,7 +112,24 @@
 			},
 			confirm(event : InputConfirmEvent) {
 				this.$emit('confirm', event)
-			}
+			},
+      setVisiblePwd(eventName:string){
+        if(eventName == "click" && this.visiblePwdOption == 'click'){
+          this.visiblePwd = !this.visiblePwd
+        }else if(eventName == "touch"){
+          switch (eventName){
+            case "touchstart":
+              this.visiblePwd = true
+              break;
+            case "touchend":
+              this.visiblePwd = false
+              break;
+            case "touchcancel":
+              this.visiblePwd = false
+              break;
+          }
+        }
+      }
 		}
 	}
 </script>
