@@ -40,7 +40,7 @@
   type Agreement = {url:string,title:string};
   let confirmCallBack = ():void=>console.log('未传入回调函数，value：')
   export default {
-    name: "uni-agreements",
+    name: "uni-id-pages-x-agreements",
     computed: {
     	agreements():Agreement[]{
         const agreements = config.getJSON('agreements') 

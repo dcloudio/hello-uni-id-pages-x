@@ -50,11 +50,12 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile.uvue'
 		console.log('testErrRes: ',testErrRes);
 		switch (testErrRes.errCode){
 			case 'uni-id-bind-conflict':
-				const expectStr = ["此账号已被绑定","This account has been bound"]
-				expect(expectStr).toContain(testErrRes.errMsg);
+				const expectBindStr = ["此账号已被绑定","This account has been bound"]
+				expect(expectBindStr).toContain(testErrRes.errMsg);
 				break;
 			case 'uni-id-mobile-verify-code-error':
-				expect(testErrRes.errMsg).toBe('Verify code error or expired')
+				const expectCodeStr = ["手机验证码错误或已过期","Verify code error or expired"]
+				expect(expectCodeStr).toContain(testErrRes.errMsg);
 				break;
 			case 'uni-id-captcha-required':
 				expect(testErrRes.errMsg).toBe('请输入图形验证码')

@@ -52,12 +52,12 @@ describe('loginByPwd', () => {
 			return await loginByPwdEl.data('testState') === true
 		})
 		loginSuccess = await loginByPwdEl.data('testSuccess')
-		// console.log('loginSuccess:---1 ', loginSuccess);
+		console.log('loginSuccess:---1 ', loginSuccess);
 		if (loginSuccess.errCode === 0) {
 			expect(loginSuccess.uid).toHaveLength(24)
 		}
 		loginErr = await loginByPwdEl.data('testErr')
-		// console.log('loginErr:---1 ', loginErr);
+		console.log('loginErr:---1 ', loginErr);
 		if (loginErr.errCode) {
 			switch (loginErr.errCode) {
 				case 'uni-id-account-not-exists':
@@ -72,7 +72,7 @@ describe('loginByPwd', () => {
 	
 	
 	it('smsCode', async () => {
-		page = await program.navigateTo(PAGE_PATH)
+		page = await program.redirectTo(PAGE_PATH)
 		await page.waitFor(1000)
 		await page.setData({
 			loginType: "smsCode"
