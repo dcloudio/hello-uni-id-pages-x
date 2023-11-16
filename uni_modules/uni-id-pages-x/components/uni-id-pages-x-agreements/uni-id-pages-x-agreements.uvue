@@ -19,7 +19,7 @@
 		<uni-popup ref="popup">
 			<view class="popup-content">
 				<view class="popup-header">
-					<uni-id-pages-x-icon :size="18"  color="#E6A23C" type="clear" />
+					<uni-id-pages-x-icons :size="18"  color="#E6A23C" type="advert" />
 					<text class="popup-title">请先阅读并同意</text>
 				</view>
 				<view class="content">
@@ -178,12 +178,12 @@
 		padding-bottom: 0;
 		border-radius: 10px;
 		width: 600rpx;
+    padding: 15px;
 	}
 	.popup-header {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		padding-left: 15px;
 		padding-top: 5px;
 	}
 	.popup-title {
