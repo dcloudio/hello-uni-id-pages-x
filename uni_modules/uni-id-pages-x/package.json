@@ -1,17 +1,22 @@
 {
-  "id": "uni-id-pages-x-x",
-  "displayName": "uni-id-pages-x-x",
-  "version": "1.0.0",
-  "description": "uni-id-pages-x-x",
+  "id": "uni-id-pages-x",
+  "displayName": "uni-id-pages-x",
+  "version": "0.0.0",
+  "description": "适用于 uni-app-x 的云端一体简单、统一、可扩展的用户中心页面模版",
   "keywords": [
-    "uni-id-pages-x-x"
+    "用户管理",
+    "用户中心",
+    "短信验证码",
+    "login",
+    "登录",
+    "uni-id"
 ],
   "repository": "",
   "engines": {
-    "HBuilderX": "^3.1.0"
+    "HBuilderX": "^3.97"
   },
   "dcloudext": {
-    "type": "component-vue",
+    "type": "uniapp-template-page",
     "sale": {
       "regular": {
         "price": "0.00"
@@ -24,9 +29,9 @@
       "qq": ""
     },
     "declaration": {
-      "ads": "",
-      "data": "",
-      "permissions": ""
+      "ads": "无",
+      "data": "无",
+      "permissions": "无"
     },
     "npmurl": ""
   },
@@ -35,45 +40,45 @@
     "encrypt": [],
     "platforms": {
       "cloud": {
-        "tcb": "u",
-        "aliyun": "u"
+        "tcb": "y",
+        "aliyun": "y"
       },
       "client": {
         "Vue": {
-          "vue2": "u",
-          "vue3": "u"
+          "vue2": "n",
+          "vue3": "y"
         },
         "App": {
-          "app-vue": "u",
-          "app-nvue": "u"
+          "app-vue": "n",
+          "app-nvue": "n"
         },
         "H5-mobile": {
-          "Safari": "u",
-          "Android Browser": "u",
-          "微信浏览器(Android)": "u",
-          "QQ浏览器(Android)": "u"
+          "Safari": "n",
+          "Android Browser": "n",
+          "微信浏览器(Android)": "n",
+          "QQ浏览器(Android)": "n"
         },
         "H5-pc": {
-          "Chrome": "u",
-          "IE": "u",
-          "Edge": "u",
-          "Firefox": "u",
-          "Safari": "u"
+          "Chrome": "n",
+          "IE": "n",
+          "Edge": "n",
+          "Firefox": "n",
+          "Safari": "n"
         },
         "小程序": {
-          "微信": "u",
-          "阿里": "u",
-          "百度": "u",
-          "字节跳动": "u",
-          "QQ": "u",
-          "钉钉": "u",
-          "快手": "u",
-          "飞书": "u",
-          "京东": "u"
+          "微信": "n",
+          "阿里": "n",
+          "百度": "n",
+          "字节跳动": "n",
+          "QQ": "n",
+          "钉钉": "n",
+          "快手": "n",
+          "飞书": "n",
+          "京东": "n"
         },
         "快应用": {
-          "华为": "u",
-          "联盟": "u"
+          "华为": "n",
+          "联盟": "n"
         }
       }
     }
