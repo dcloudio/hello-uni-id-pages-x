@@ -168,7 +168,7 @@
 	}
 
 	.content {
-		padding: 5px 15px;
+		padding: 5px 0;
 		flex-wrap: wrap;
 		flex-direction: row;
 	}
