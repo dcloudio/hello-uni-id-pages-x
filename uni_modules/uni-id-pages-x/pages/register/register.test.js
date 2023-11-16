@@ -20,23 +20,19 @@ describe('/uni_modules/uni-id-pages-x/pages/register/register', () => {
 			captcha: "1234",
 			password2: "dcloud2023"
 		})
-		await page.callMethod('registerBefore')
-		// 等待登录结果
-		await page.waitFor(async () => {
-			return await page.data('testState') === true
-		}) 
-		const loginSuccess = await page.data('testSuccess')
-		// console.log('loginSuccess: ',loginSuccess);
-		if(loginSuccess.errCode === 0){
-			expect(loginSuccess.uid).toHaveLength(24)
+		
+		const registerRes =  await page.callMethod('register')
+		console.log('registerRes: ',registerRes);
+		
+		if(registerRes.uid){
+			expect(registerRes.uid).toHaveLength(24)
+			return;
 		}
-		const loginErr = await page.data('testErr')
-		console.log('loginErr: ',loginErr);
-		if(loginErr.errCode){
-			switch (loginErr.errCode){
+		if(registerRes.errCode){
+			switch (registerRes.errCode){
 				case 'uni-id-account-exists':
 					const expectStr = ["此账号已注册","Account exists"]
-					expect(expectStr).toContain(loginErr.errMsg);
+					expect(expectStr).toContain(registerRes.errMsg);
 					break;
 				default:
 					console.log('err--')
