@@ -12,8 +12,8 @@
 					<text class="value"
 						v-else-if="userInfo['nickname'] != null && userInfo['nickname'] != ''">{{userInfo['nickname']}}</text>
 					<text class="unset" v-else>未设置</text>
-					<uni-id-pages-x-icon v-if="isLogin" :size="16" type="right-arrow"
-						class="link-icon"></uni-id-pages-x-icon>
+					<uni-id-pages-x-icons v-if="isLogin" :size="16" type="right-arrow"
+						class="link-icon"></uni-id-pages-x-icons>
 				</view>
 			</view>
 			<view class="item">
@@ -21,18 +21,18 @@
 				<view @click="bindmobile" class="content">
 					<text class="value" v-if="userInfo['mobile'] != null">{{userInfo['mobile']}}</text>
 					<text class="unset" v-else>未绑定</text>
-					<uni-id-pages-x-icon :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icon>
+					<uni-id-pages-x-icons :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icons>
 				</view>
 			</view>
 		</view>
 		<view class="list">
 			<view @click="deactivate" class="item">
 				<text class="title">注销账号</text>
-				<uni-id-pages-x-icon :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icon>
+				<uni-id-pages-x-icons :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icons>
 			</view>
 			<view class="item"  v-if="isLogin && showLoginManage" @click="logout">
 				<text class="title">退出登录</text>
-				<uni-id-pages-x-icon :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icon>
+				<uni-id-pages-x-icons :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icons>
 			</view>
 			<view class="mask" v-if="!isLogin" @click="login"></view>
 		</view>
