@@ -28,7 +28,6 @@
 			<uni-id-pages-x-agreements class="agreements-box" ref="agreements" />
 
 			<button @click="registerBefore" type="primary">注册并登录</button>
-			<button @click="register" type="primary">注册并登录</button>
 		</view>
 	</view>
 </template>

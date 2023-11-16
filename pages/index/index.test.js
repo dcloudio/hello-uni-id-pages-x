@@ -2,30 +2,34 @@
 
 describe('pages/index/index.uvue', () => {
 
-	let page,currentPage;
+	let page,currentPage,listItems;
 	beforeAll(async () => {
 		// page = await program.reLaunch('/pages/index/index')
 		page = await program.currentPage()
 		await page.waitFor('view')
+		listItems = await page.$$('.list-item')
 	});
 	
-	it('账号密码登录', async () => {
+	it('text', async () => {
+		const itemTexts = await page.$$('.list-item-text')
+		expect(await itemTexts[0].text()).toBe('手机验证码登录')
+		expect(await itemTexts[1].text()).toBe('账号密码登录')
+	});
+	it('手机验证码登录', async () => {
 		expect(await page.data('loginType')).toBe('username')
-		await page.callMethod('toLogin')
+		await listItems[0].tap()
+		currentPage = await program.currentPage()
+		console.log('await program.currentPage(): ',await program.currentPage());
+		expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
+		expect(currentPage.query.type).toBe("smsCode")
+		await program.navigateBack()
+	});
+	it('账号密码登录', async () => {
+		await listItems[1].tap()
+		console.log('await program.currentPage(): ',await program.currentPage());
 		currentPage = await program.currentPage()
 		expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
 		expect(currentPage.query.type).toBe("username")
 	});
-	
-	it('手机验证码', async () => {
-		await page.setData({
-			loginType:"smsCode"
-		})
-		await page.callMethod('toLogin')
-		currentPage = await program.currentPage()
-		expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
-		expect(currentPage.query.type).toBe("smsCode")
-	});
-	
 });
 
