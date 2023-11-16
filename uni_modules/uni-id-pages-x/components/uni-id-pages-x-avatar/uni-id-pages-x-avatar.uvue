@@ -9,12 +9,12 @@
 				:style="{width,height}">
 			<!-- #endif -->
 
-      <!-- {{avatar_file!.getString("url")}} --> 
-    	<cloud-image v-if="avatar_file != null" :src="avatar_file!.getString('url')" :width="width" :height="height"></cloud-image>
+			<!-- {{avatar_file!.getString("url")}} --> 
+      <cloud-image v-if="avatar_file != null" :src="avatar_file!.getString('url')" :width="width" :height="height"></cloud-image>
+			<image v-else-if="readOnly" class="default-avatarUrl" src="@/uni_modules/uni-id-pages-x/static/default-avatar.png" mode="widthFix"></image>
       <view v-else class="upload-img-icon">
-        <uni-id-pages-x-icon :size="35" color="#eee" type="jiahao"></uni-id-pages-x-icon>
-      </view>
-
+				<uni-id-pages-x-icon :size="35" color="#eee" type="jiahao"></uni-id-pages-x-icon>
+			</view>
 
 			<!-- #ifndef MP-WEIXIN -->
 			</view>
@@ -52,6 +52,10 @@
 				default: "50px"
 			},
 			border: {
+				type: Boolean,
+				default: false
+			},
+      readOnly: {
 				type: Boolean,
 				default: false
 			}
@@ -109,6 +113,12 @@
 				// this.setAvatarFile(avatar_file)
 			},
 			uploadAvatarImg() {
+        
+        if(this.readOnly){
+          return 
+        }
+        
+        
 				// #ifdef MP-WEIXIN
 				return // 微信小程序走 bindchooseavatar方法
 				// #endif
