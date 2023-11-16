@@ -29,17 +29,13 @@
 					"right-arrow": "\ue8f1",
 					"jiahao": "\ue602",
 					"eyes": "\ue62b",
+					"advert": "\ue609"
 				};
 				return iconCode.getString(this.type) as string
 			}
 		},
 		data() {
-			return {
-
-			}
-		},
-		methods: {
-
+			return {}
 		}
 	}
 </script>
@@ -47,8 +43,7 @@
 <style>
 	@font-face {
 		font-family: "uni-id-icon";
-		/* src: url('/uni_modules/uni-id-pages-x/static/fonts/uni-id-icon.ttf'); */
-		src: url('https://at.alicdn.com/t/c/font_4275719_au4f4b0m7d4.ttf?t=1698219081630');
+    src: url('/uni_modules/uni-id-pages-x/static/fonts/uni-id-icon.ttf');
 	}
 
 	.uni-id-icon {
