@@ -74,6 +74,7 @@
 				if (!isPass) {
 					const errMsg = checkPasswordRes.getString("errMsg")
 					return uni.showModal({
+						title:"提示",
 						content: errMsg,
 						showCancel: false,
 						confirmText: "知道了",
@@ -85,6 +86,7 @@
 
 				if (this.password != this.password2) {
 					return uni.showModal({
+						title:"提示",
 						content: "两次输入的密码不一致",
 						showCancel: false,
 						confirmText: "知道了",
@@ -149,5 +151,8 @@
 		background-color: #FFF;
 		width: 750rpx;
 		flex: 1;
+	}
+	.form {
+	  margin:50rpx 50rpx 0 50rpx;
 	}
 </style>

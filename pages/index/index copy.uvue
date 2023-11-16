@@ -1,22 +1,15 @@
 <template>
 	<view class="content">
-		<view class="userinfo" @click="toUserInfoPage">
-			<view class="avatar"></view>
-			<view class="username">
-				<text class="username-text">未登录</text>
-			</view>
-			<view class="arrow"></view>
-		</view>
-		<view class="list">
-			<view class="list-item" hover-class="list-active" @click="toLogin('smsCode')">
-				<text class="list-item-text">手机验证码登录</text>
-				<view class="arrow"></view>
-			</view>
-			<view class="list-item" @click="toLogin('username')">
-				<text class="list-item-text">账号密码登录</text>
-				<view class="arrow"></view>
-			</view>
-		</view>
+		<!-- userInfo:{{userInfo}}-test:{{test}} -->
+		<text class="tip">请选择登录方式：</text>
+		<!-- <radio-group @change="radioChange" style="flex-direction: row;flex-wrap: wrap;">
+			<radio v-for="(item,index) in loginTypeList" :key="index" :value="item.value"
+				:checked="loginType === item.value" color="#0070ff" style="margin-right:16px;">{{item.name}}</radio>
+		</radio-group> -->
+		<button class="btn" @click="toLogin" type="primary">手机验证码登录</button>
+		<button class="btn" @click="toLogin" type="primary">账号密码登录</button>
+		<button class="btn userinfo" @click="toUserInfoPage" type="primary" :plain="true">个人资料</button>
+		<!-- <button @click=""></button> -->
 	</view>
 </template>
 
@@ -76,9 +69,9 @@
 				const selected = this.loginTypeList.find((item) : boolean => item.value == e.detail.value);
 				this.loginType = selected!.value
 			},
-			toLogin(loginType:string) {
+			toLogin() {
 				uni.navigateTo({
-					url: "/uni_modules/uni-id-pages-x/pages/login/login?type=" + loginType
+					url: "/uni_modules/uni-id-pages-x/pages/login/login?type=" + this.loginType
 				})
 			},
 			toUserInfoPage() {
@@ -92,65 +85,18 @@
 
 <style lang="scss">
 	.content {
-		height: 100%;
-		background-color: #f5f5f5;
-	}
-
-	.userinfo {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: space-between;
 		padding: 15px;
-		// padding-bottom: 30px;
-		background-color: #fff;
-
-		.avatar {
-			width: 50px;
-			height: 50px;
-			background-color: #999;
-			border-radius: 70px;
-		}
-
-		.username {
-			flex: 1;
-			padding: 0 10px;
-			.username-text {
-				font-size: 14px;
-				color: #333;
-			}
-		}
-		
-		.arrow {
-			border-color: #fff;
-		}
 	}
 
-	.list {
-		background-color: #fff;
-		margin-top: 15px;
-
-		.list-item {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			justify-content: space-between;
-			padding: 0 15px;
-			height: 50px;
-			border-bottom: 1px #f5f5f5 solid;
-
-			.list-item-text {
-				font-size: 14px;
-			}
-
-		}
+	.tip {
+		margin-bottom: 15px;
+		font-weight: 700;
 	}
 
-	.arrow {
-		width: 8px;
-		height: 8px;
-		border-right: 1px #999 solid;
-		border-top: 1px #999 solid;
-		transform: rotate(45deg);
+	.btn {
+		margin-top: 10px;
+	}
+	.userinfo {
+		margin-top: 30px;
 	}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <view class="popup-root" v-if="isOpen" v-show="isShow" @click="clickMask">
-    <view @click.stop>
+    <view class="popup-container" @click.stop>
       <slot></slot>
     </view>
   </view>
@@ -86,5 +86,8 @@
   justify-content: center;
   align-items: center;
   z-index: 99;
+}
+.popup-container {
+	margin-top: -120px;
 }
 </style>

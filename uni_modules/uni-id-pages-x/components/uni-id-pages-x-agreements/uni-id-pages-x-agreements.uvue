@@ -18,7 +18,10 @@
 		<!-- 弹出式 -->
 		<uni-popup ref="popup">
 			<view class="popup-content">
-				<text class="popup-text">请先阅读并同意</text>
+				<view class="popup-header">
+					<uni-id-pages-x-icon :size="18"  color="#E6A23C" type="clear" />
+					<text class="popup-title">请先阅读并同意</text>
+				</view>
 				<view class="content">
 					<view class="agreements-item" v-for="(agreement,index) in agreements" :key="index">
 						<text class="agreement popup-text" @click="navigateTo(index)">{{agreement.title}}</text>
@@ -154,7 +157,7 @@
 	}
 	.popup-text{
 		line-height: 30px;
-		font-size:16px;
+		font-size:14px;
 	}
 
 	.agreement {
@@ -165,16 +168,30 @@
 	}
 
 	.content {
+		padding: 5px 15px;
 		flex-wrap: wrap;
 		flex-direction: row;
 	}
 
 	.popup-content {
 		background-color: #FFF;
-		padding: 15px;
 		padding-bottom: 0;
 		border-radius: 10px;
 		width: 600rpx;
+	}
+	.popup-header {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		padding-left: 15px;
+		padding-top: 5px;
+	}
+	.popup-title {
+		font-size: 16px;
+		// text-align: center;
+		margin: 15px 0;
+		padding-left: 5px;
+		// color: #E6A23C;
 	}
 
 	.popup-content .btn-group {
@@ -190,6 +207,7 @@
 		color: #666;
 		height: 45px;
 		line-height: 45px;
+		font-size: 14px;
 	}
 
 	.popup-content .btn-group .btn.confirm {

@@ -24,16 +24,21 @@
 					<uni-id-pages-x-icon :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icon>
 				</view>
 			</view>
-			<view @click="deactivate" class="item deactivate">
+		</view>
+		<view class="list">
+			<view @click="deactivate" class="item">
 				<text class="title">注销账号</text>
 				<uni-id-pages-x-icon :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icon>
 			</view>
-
+			<view class="item"  v-if="isLogin && showLoginManage" @click="logout">
+				<text class="title">退出登录</text>
+				<uni-id-pages-x-icon :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icon>
+			</view>
 			<view class="mask" v-if="!isLogin" @click="login"></view>
 		</view>
 		<view class="btn-list" v-if="showLoginManage">
-			<button v-if="isLogin" @click="logout" class="logout">退出登录</button>
-			<button v-else @click="login" class="login">去登录</button>
+			<!-- <button v-if="isLogin" @click="logout" class="logout">退出登录</button> -->
+			<button v-if="!isLogin" @click="login" type="primary" class="login">去登录</button>
 		</view>
 		<!-- 弹出对话框组件 -->
 		<uni-id-pages-x-popup-dialog ref="popup-dialog" />
@@ -104,7 +109,7 @@
 <style>
 	.uni-content {
 		width: 750rpx;
-		background-color: #FFF;
+		background-color: #f5f5f5;
 		flex: 1;
 	}
 
@@ -115,6 +120,8 @@
 
 	.list {
 		position: relative;
+		background-color: #fff;
+		margin-top: 15px;
 	}
 
 	.mask {
@@ -124,10 +131,10 @@
 	}
 
 	.list .item {
-		border-bottom: 0.1px solid #EEE;
+		border-bottom: 1px solid #f5f5f5;
 		flex-direction: row;
 		align-items: center;
-		padding: 10px 15px;
+		padding: 15px 15px;
 	}
 
 	.list .item.deactivate {
@@ -136,8 +143,9 @@
 	}
 
 	.list .item .title {
-		font-size: 16px;
+		font-size: 14px;
 		flex: 1;
+		color: #333;
 	}
 
 	.list .item .content {
@@ -147,7 +155,8 @@
 	}
 
 	.list .item .content .value {
-		color: #555;
+		color: #999;
+		font-size: 12px;
 	}
 
 	.list .item .content .unset {
