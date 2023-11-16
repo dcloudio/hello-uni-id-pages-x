@@ -18,16 +18,6 @@
 </template>
 
 <script>
-	type TypeTestErr = {
-		errCode : string,
-		errMsg : string
-	}
-	type TypeTestSuccess = {
-		errCode : number | null,
-		uid : string,
-		newToken ?: string,
-		passwordConfirmed ?: boolean | null
-	}
 	const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: true })
 	import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
 	import { loginSuccess } from '@/uni_modules/uni-id-pages-x/common/common.uts';
@@ -39,17 +29,6 @@
 				password: "dcloud2023",
 				needCaptcha: false,
 				loginCaptcha: "",
-				testErr: {
-					errCode: '',
-					errMsg: ''
-				} as TypeTestErr,
-				testSuccess: {
-					errCode: null,
-					uid: '',
-					newToken: '',
-					passwordConfirmed: null
-				} as TypeTestSuccess,
-				testState: false
 			};
 		},
 		mounted() {
@@ -61,7 +40,7 @@
 			showPopupCaptcha(callback : () => void) {
 				(this.$refs["agreements"] as UniIdPagesXAgreementsComponentPublicInstance).showPopupAgreements(callback)
 			},
-			loginByPwd() {
+			async loginByPwd():Promise<any> {
 				if (this.username.length == 0) {
 					(this.$refs['username'] as MyInputComponentPublicInstance).setFocus(true);
 					return uni.showToast({
@@ -111,48 +90,47 @@
 							this.loginByPwd()
 						}
 					})
-					return
+					return false;
 				}
 
 				uni.showLoading({
 					title: '登录中',
 					mask: false
 				});
-				uniIdCo.login(data)
-					.finally(() : void => {
-						// uni.hideLoading()
-						this.loginCaptcha = ""
-					})
-					.then(e => {
-						this.testState = true
-						this.testSuccess.errCode = e['errCode'] as number
-						this.testSuccess.uid = (e['uid'] as string)
-						console.log(JSON.stringify(this.testSuccess))
-						// console.log('uniIdCo.login res',e);
-						loginSuccess(e)
-					})
-					.catch<void>((err : any | null) : void => {
-						this.testState = true
-						const error = err as UniCloudError
-						console.error(error)
-						console.error(error.code)
-						this.testErr.errCode = (error.errCode as string)
-						this.testErr.errMsg = (error.errMsg as string)
-						console.log(JSON.stringify(this.testErr))
-						if (error.code == 'uni-id-captcha-required') {
-							this.needCaptcha = true;
-							//登录失败，自动重新获取验证码
-							(this.$refs['popup-captcha'] as UniPopupCaptchaComponentPublicInstance).open(() => {
-								this.loginByPwd()
-							});
-						} else {
-							uni.showToast({
-								title: error.message,
-								icon: 'none',
-								duration: 3000
-							});
-						}
-					})
+				
+				let testRes = await new Promise((resolve)=>{
+					uniIdCo.login(data)
+						.finally(() : void => {
+							uni.hideLoading()
+							this.loginCaptcha = ""
+						})
+						.then(e => {
+							console.log('uniIdCo.login res',e);
+							loginSuccess(e)
+							resolve(e['uid'])
+						})
+						.catch<void>((err : any | null) : void => {
+							const error = err as UniCloudError
+							console.error(error)
+							console.error(error.code)
+							if (error.code == 'uni-id-captcha-required') {
+								this.needCaptcha = true;
+								//登录失败，自动重新获取验证码
+								(this.$refs['popup-captcha'] as UniPopupCaptchaComponentPublicInstance).open(() => {
+									this.loginByPwd()
+								});
+							} else {
+								uni.showToast({
+									title: error.message,
+									icon: 'none',
+									duration: 3000
+								});
+							}
+							resolve({errCode:error.errCode,errMsg:error.errMsg})
+						})
+				})
+				console.log('testRes: ',testRes);
+				return testRes
 			},
 			toRegister() {
 				uni.navigateTo({

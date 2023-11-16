@@ -20,12 +20,10 @@ describe('/uni_modules/uni-id-pages-x/pages/register/register', () => {
 			captcha: "1234",
 			password2: "dcloud2023"
 		})
-		
 		const registerRes =  await page.callMethod('register')
 		console.log('registerRes: ',registerRes);
-		
-		if(registerRes.uid){
-			expect(registerRes.uid).toHaveLength(24)
+		if(typeof registerRes == 'string'){
+			expect(registerRes).toHaveLength(24)
 			return;
 		}
 		if(registerRes.errCode){

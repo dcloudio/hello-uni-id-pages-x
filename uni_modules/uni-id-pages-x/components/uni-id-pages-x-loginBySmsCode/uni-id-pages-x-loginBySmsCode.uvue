@@ -75,7 +75,6 @@
 						uni.hideLoading()
 					})
 					.then<void>((e : UTSJSONObject) : void => {
-						// console.log('then');
 						// console.log(e);
 						this.$smsCodeRef!.$callMethod("hideCodeInput");
 						uni.showToast({
@@ -83,7 +82,10 @@
 							icon: 'none'
 						});
 						loginSuccess(e)
+						this.testState = true
 						this.$smsCodeRef!.$callMethod('clearCodeInput')
+						this.testSuccess.uid = (e['uid'] as string)
+						this.testSuccess.errCode = (e['errCode'] as number)
 					})
 					.catch<void>((err : any | null) : void => {
 						this.testState = true

@@ -10,8 +10,7 @@ describe('pages/index/index.uvue', () => {
 	});
 	
 	it('账号密码登录', async () => {
-		const type = await page.data('loginType')
-		expect(type).toBe('username')
+		expect(await page.data('loginType')).toBe('username')
 		await page.callMethod('toLogin')
 		currentPage = await program.currentPage()
 		expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")

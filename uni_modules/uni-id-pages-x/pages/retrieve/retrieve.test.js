@@ -7,29 +7,28 @@ describe('/uni_modules/uni-id-pages-x/pages/retrieve/retrieve.uvue', () => {
 		page = await program.navigateTo('/uni_modules/uni-id-pages-x/pages/retrieve/retrieve')
 		await page.waitFor('view')
 	});
-	
 	it('重置密码', async () => {
 		mobile = "17766666666"
-		captcha = "1234"
+		sendSmsCaptcha = "1234"
 		smsCode = "123456"
 		const smsCodeEl = await page.$('uni-id-pages-x-smsCode')
+		// console.log('smsCodeEl: ',smsCodeEl);
 		await smsCodeEl.setData({
 			mobile,
-			captcha
+			sendSmsCaptcha
 		})
 		await page.setData({
 			password:"2023dcloud",
 			password2:"2023dcloud"
 		})
-		await page.callMethod('doNext')
 		await smsCodeEl.setData({smsCode})
-		// 等待登录结果
+		await page.callMethod('doNext')
+		//等待登录结果
 		await page.waitFor(async () => {
 			return await page.data('testState') === true
 		}) 
 		const testSuccessRes = await page.data('testSuccess')
-		// console.log('testSuccessRes: ',testSuccessRes);
-		if(testSuccessRes == 0){
+		if(testSuccessRes < 100){
 			console.log('重置成功');
 			expect(testSuccessRes).toBe(0)
 			return
@@ -47,6 +46,7 @@ describe('/uni_modules/uni-id-pages-x/pages/retrieve/retrieve.uvue', () => {
 			default:
 				break;
 		}
+		
 	});
 	
 });

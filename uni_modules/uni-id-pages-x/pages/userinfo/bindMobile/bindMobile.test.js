@@ -7,8 +7,6 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile.uvue'
 		page = await program.navigateTo('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile')
 		await page.waitFor('view')
 	});
-	
-	
 	it('setData', async () => {
 		mobile = "17766666666"
 		captcha = "1234"
@@ -27,9 +25,7 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile.uvue'
 			await page.setData({captcha:captcha})
 		}
 	});
-	
 	it('绑定手机号', async () => {
-		
 		// await page.callMethod('bindMobileBySms',{
 		// 	"code": smsCode,
 		// 	"mobile":mobile,
@@ -42,7 +38,7 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile.uvue'
 		const testSuccessRes = await page.data('testSuccess')
 		// console.log('testSuccessRes: ',testSuccessRes);
 		if(testSuccessRes == 0){
-			console.log('绑定成功:');
+			console.log('绑定成功');
 			expect(testSuccessRes).toBe(0)
 			return
 		}
@@ -64,5 +60,4 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile.uvue'
 				break;
 		}
 	});
-	
 });
