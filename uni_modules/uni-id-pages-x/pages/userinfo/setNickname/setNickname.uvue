@@ -6,8 +6,8 @@
 			</template>
 		</uni-navbar-lite>
 
-		<my-input class="my-input" v-model="nickname" @confirm="setNickname" placeholder="请输入昵称" :focus="true"
-			:maxlength="25"></my-input>
+		<uni-id-pages-x-input class="my-input" v-model="nickname" @confirm="setNickname" placeholder="请输入昵称" :focus="true"
+			:maxlength="25"></uni-id-pages-x-input>
 	</view>
 </template>
 

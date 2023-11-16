@@ -3,22 +3,22 @@
 		<view class="form">
 			<view class="item">
 				<text class="required">*</text>
-				<my-input class="my-input" title="用户名" placeholder="请输入用户名（数字+字母的3~20位字符）" v-model="username"
-					ref="username"></my-input>
+				<uni-id-pages-x-input class="my-input" title="用户名" placeholder="请输入用户名（数字+字母的3~20位字符）" v-model="username"
+					ref="username"></uni-id-pages-x-input>
 			</view>
 			<view class="item">
-				<my-input class="my-input" title="昵称" placeholder="请输入用户名（限中文、数字、字母组成的3~20位字符）" v-model="nickname"
-					ref="nickname"></my-input>
-			</view>
-			<view class="item">
-				<text class="required">*</text>
-				<my-input class="my-input" title="设置密码" placeholder="请输入6位数密码" v-model="password" :password="true"
-					ref="password"></my-input>
+				<uni-id-pages-x-input class="my-input" title="昵称" placeholder="请输入用户名（限中文、数字、字母组成的3~20位字符）"
+					v-model="nickname" ref="nickname"></uni-id-pages-x-input>
 			</view>
 			<view class="item">
 				<text class="required">*</text>
-				<my-input class="my-input" title="重复密码" placeholder="请重新输入密码" v-model="password2" :password="true"
-					ref="password2"></my-input>
+				<uni-id-pages-x-input class="my-input" title="设置密码" placeholder="请输入6位数密码" v-model="password"
+					:password="true" ref="password"></uni-id-pages-x-input>
+			</view>
+			<view class="item">
+				<text class="required">*</text>
+				<uni-id-pages-x-input class="my-input" title="重复密码" placeholder="请重新输入密码" v-model="password2" :password="true"
+					ref="password2"></uni-id-pages-x-input>
 			</view>
 			<view class="item mt">
 				<uni-captcha ref="captcha" scene="register" v-model="captcha" />
@@ -38,11 +38,11 @@
 	export default {
 		data() {
 			return {
-				username: "a123456",
+				username: "",
 				nickname: "",
-				password: "a123456",
-				password2: "a123456",
-				captcha: "1234",
+				password: "",
+				password2: "",
+				captcha: ""
 			}
 		},
 		methods: {
@@ -68,7 +68,7 @@
 					let errMsg = item[1] + "不能为空";
 					if (myForm.get(key) == "") {
 						// 给出错的项聚焦
-						(this.$refs[key] as MyInputComponentPublicInstance).setFocus(true);
+						(this.$refs[key] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 						uni.showToast({
 							title: errMsg,
 							icon: "none",
@@ -83,7 +83,7 @@
 				const usernameRegExp = new RegExp("^(?=.*[a-z])(?=.*\\d)[a-z\\d]{3,20}$");
 				if (!usernameRegExp.test(this.username)) {
 					// 给出错的项聚焦
-					(this.$refs['username'] as MyInputComponentPublicInstance).setFocus(true);
+					(this.$refs['username'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 					return uni.showModal({
 						content: "用户名由数字和小写字母的3-20个字符组成",
 						showCancel: false,
@@ -96,7 +96,7 @@
 					const nicknameRegExp = new RegExp("^[\u4e00-\u9fa5a-z0-9]{3,20}$");
 					if (!nicknameRegExp.test(this.username)) {
 						// 给出错的项聚焦
-						(this.$refs['username'] as MyInputComponentPublicInstance).setFocus(true);
+						(this.$refs['username'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 						return uni.showModal({
 							content: "昵称由小写字母、数字、中文组成的3-20位字符串",
 							showCancel: false,
@@ -114,7 +114,7 @@
 						showCancel: false,
 						confirmText: "知道了",
 						complete() {
-							(this.$refs['password'] as MyInputComponentPublicInstance).setFocus(true);
+							(this.$refs['password'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 						}
 					});
 				}
@@ -125,7 +125,7 @@
 						showCancel: false,
 						confirmText: "知道了",
 						complete() {
-							(this.$refs["password2"] as MyInputComponentPublicInstance).setFocus(true);
+							(this.$refs["password2"] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 						}
 					});
 				}

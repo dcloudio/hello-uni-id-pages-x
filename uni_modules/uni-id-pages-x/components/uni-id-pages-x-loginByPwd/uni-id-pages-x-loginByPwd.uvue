@@ -1,8 +1,8 @@
 <template>
   <view class="form">
     <text class="pwd-login-title">账号密码登录</text>
-    <my-input class="my-input" title="账号" placeholder="请输入手机号/用户名/邮箱" v-model="username" ref="username"></my-input>
-    <my-input class="my-input" title="密码" v-model="password" :password="true" ref="password"></my-input>
+    <uni-id-pages-x-input class="my-input" title="账号" placeholder="请输入手机号/用户名/邮箱" v-model="username" ref="username"></uni-id-pages-x-input>
+    <uni-id-pages-x-input class="my-input" title="密码" v-model="password" :password="true" ref="password"></uni-id-pages-x-input>
     <!-- 同意隐私政策协议 -->
     <uni-id-pages-x-agreements class="agreements-box" ref="agreements" scope="login"/>
     <button class="uni-btn" :type="password.length > 0 && username.length >0 ? 'primary' : '' " @click="loginByPwd">登录</button>
@@ -25,15 +25,15 @@
 		name: "uni-id-pages-x-loginByPwd",
 		data() {
 			return {
-				username: "dcloud88",
-				password: "dcloud2023",
+				username: "",
+				password: "",
 				needCaptcha: false,
 				loginCaptcha: "",
 			};
 		},
 		mounted() {
 			setTimeout(() => {
-				(this.$refs['username'] as MyInputComponentPublicInstance).setFocus(true);
+				(this.$refs['username'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 			}, 300)
 		},
 		methods: {
@@ -42,7 +42,7 @@
 			},
 			async loginByPwd():Promise<any> {
 				if (this.username.length == 0) {
-					(this.$refs['username'] as MyInputComponentPublicInstance).setFocus(true);
+					(this.$refs['username'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 					return uni.showToast({
 						title: '请输入手机号/用户名/邮箱',
 						icon: 'none',
@@ -50,7 +50,7 @@
 					});
 				}
 				if (this.password.length == 0) {
-					(this.$refs['password'] as MyInputComponentPublicInstance).setFocus(true);
+					(this.$refs['password'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 					return uni.showToast({
 						title: '请输入密码',
 						icon: 'none',

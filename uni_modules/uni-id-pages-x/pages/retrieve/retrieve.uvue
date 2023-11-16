@@ -4,10 +4,10 @@
 			<!-- 获取验证码组件（输入手机号码+发送短信验证码所需的图形验证码，获得短信验证码） -->
 			<uni-id-pages-x-smsCode scene="reset-pwd-by-sms" ref="smsCode" @input="smsCodeInput"
 				:autoSend="false"></uni-id-pages-x-smsCode>
-			<my-input class="my-input" :border="false" v-model="password" placeholder="请输入新密码" ref="password"
-				:password="true"></my-input>
-			<my-input class="my-input" :border="false" v-model="password2" placeholder="请再次输入密码" ref="password2"
-				:password="true"></my-input>
+			<uni-id-pages-x-input class="my-input" :border="false" v-model="password" placeholder="请输入新密码" ref="password"
+				:password="true"></uni-id-pages-x-input>
+			<uni-id-pages-x-input class="my-input" :border="false" v-model="password2" placeholder="请再次输入密码" ref="password2"
+				:password="true"></uni-id-pages-x-input>
 			<button class="uni-btn" type="primary" @click="doNext">下一步</button>
 		</view>
 
@@ -44,7 +44,7 @@
 		},
 		onLoad(param : Map<string, string>) {
 			const mobile = param.get("mobile")
-			const email = param.get("email")
+			// const email = param.get("email")
 			// console.log('mobile--', mobile);
 			// console.log('email--', email);
 
@@ -61,7 +61,7 @@
 				const code = param.getString("code") as string;
 				const sendSmsCaptcha = param.getString("sendSmsCaptcha") as string;
 				if (sendSmsCaptcha.length == 4 && code.length == 0) {
-					(this.$refs["password"] as MyInputComponentPublicInstance).setFocus(true);
+					(this.$refs["password"] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 				}
 				if (mobile.length == 11 && code.length == 6) {
 					this.resetPwdBySms(param)
@@ -79,7 +79,7 @@
 						showCancel: false,
 						confirmText: "知道了",
 						complete() {
-							(this.$refs["password"] as MyInputComponentPublicInstance).setFocus(true);
+							(this.$refs["password"] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 						}
 					});
 				}
@@ -91,7 +91,7 @@
 						showCancel: false,
 						confirmText: "知道了",
 						complete() {
-							(this.$refs["password2"] as MyInputComponentPublicInstance).setFocus(true);
+							(this.$refs["password2"] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 						}
 					});
 				}
