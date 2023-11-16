@@ -12,6 +12,9 @@ export default {
       "register","login"
     ]
   },
+  "needLogin":[
+    "/uni_modules/uni-id-pages-x/pages/userinfo/*"
+  ],
   "loginTypes":[
     "username",
     "smsCode",

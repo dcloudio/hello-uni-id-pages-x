@@ -81,21 +81,40 @@ export default async function () {
   // // 解绑clientDB错误事件
   // // db.off('error', onDBError)
   
-  let whiteList = [
-    '/uni_modules/uni-id-pages-x/pages/login/login',
-    '/uni_modules/uni-id-pages-x/pages/register/register',
-    '/uni_modules/uni-id-pages-x/pages/retrieve/retrieve'
-  ]
+
+
+  const checkNeedLogin = (url:string):boolean=>{
+    if(state.isLogin){
+      return false
+    }
+    const needLogin = config.getArray<string>('needLogin')
+    if (needLogin != null) {
+      return needLogin.every((item:string):boolean => {
+        return item == url || new RegExp(item).test(url)
+      })
+    }else{
+      return false
+    }
+  }
+  
   uni.addInterceptor('navigateTo',{
     invoke:(e:NavigateToOptions)=>{
-      if (!state.isLogin && !whiteList.includes(e.url)) {
+      if (checkNeedLogin(e.url)) {
+        uni.showToast({
+          title: '请先登录',
+          icon: 'none'
+        })
         e.url = "/uni_modules/uni-id-pages-x/pages/login/login?uniIdRedirectUrl=" + encodeURIComponent(e.url)
       }
     }
   })
   uni.addInterceptor('redirectTo',{
     invoke:(e:RedirectToOptions)=>{
-      if (!state.isLogin && !whiteList.includes(e.url)) {
+      if (checkNeedLogin(e.url)) {
+        uni.showToast({
+          title: '请先登录',
+          icon: 'none'
+        })
         e.url = "/uni_modules/uni-id-pages-x/pages/login/login?uniIdRedirectUrl=" + encodeURIComponent(e.url)
       }
     }
