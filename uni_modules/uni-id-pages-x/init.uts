@@ -81,17 +81,21 @@ export default async function () {
   // // 解绑clientDB错误事件
   // // db.off('error', onDBError)
   
-
+  let whiteList = [
+    '/uni_modules/uni-id-pages-x/pages/login/login',
+    '/uni_modules/uni-id-pages-x/pages/register/register',
+    '/uni_modules/uni-id-pages-x/pages/retrieve/retrieve'
+  ]
   uni.addInterceptor('navigateTo',{
     invoke:(e:NavigateToOptions)=>{
-      if (!state.isLogin && !e.url.includes('/uni_modules/uni-id-pages-x/pages/login/login')) {
+      if (!state.isLogin && !whiteList.includes(e.url)) {
         e.url = "/uni_modules/uni-id-pages-x/pages/login/login?uniIdRedirectUrl=" + encodeURIComponent(e.url)
       }
     }
   })
   uni.addInterceptor('redirectTo',{
     invoke:(e:RedirectToOptions)=>{
-      if (!state.isLogin && !e.url.includes('/uni_modules/uni-id-pages-x/pages/login/login')) {
+      if (!state.isLogin && !whiteList.includes(e.url)) {
         e.url = "/uni_modules/uni-id-pages-x/pages/login/login?uniIdRedirectUrl=" + encodeURIComponent(e.url)
       }
     }
