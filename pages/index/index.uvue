@@ -12,7 +12,7 @@
 				<text class="list-item-text">手机验证码登录</text>
 				<view class="arrow"></view>
 			</view>
-			<view class="list-item" @click="toLogin('nickname')">
+			<view class="list-item" @click="toLogin('username')">
 				<text class="list-item-text">账号密码登录</text>
 				<view class="arrow"></view>
 			</view>
