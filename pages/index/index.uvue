@@ -1,9 +1,9 @@
 <template>
 	<view class="content">
 		<view class="userinfo" @click="toUserInfoPage">
-			<view class="avatar"></view>
-			<view class="username">
-				<text class="username-text">未登录</text>
+      <uni-id-pages-x-avatar class="avatar" ref="avatar" width="45px" height="45px" :readOnly="true" :border="false"></uni-id-pages-x-avatar>
+			<view class="nickname">
+				<text class="nickname-text">{{isLogin?userInfo['nickname']:'未登录'}}</text>
 			</view>
 			<view class="arrow"></view>
 		</view>
@@ -12,7 +12,7 @@
 				<text class="list-item-text">手机验证码登录</text>
 				<view class="arrow"></view>
 			</view>
-			<view class="list-item" @click="toLogin('username')">
+			<view class="list-item" @click="toLogin('nickname')">
 				<text class="list-item-text">账号密码登录</text>
 				<view class="arrow"></view>
 			</view>
@@ -31,19 +31,22 @@
 			userInfo() : UTSJSONObject {
 				return state.userInfo
 			},
+      isLogin() : boolean {
+      	return state.isLogin
+      },
 			test() : number {
 				return state.test
 			}
 		},
 		data() {
 			return {
-				loginType: "username" as string,
+				loginType: "nickname" as string,
 				loginTypeList: [{
 					"value": "smsCode",
 					"name": "手机验证码"
 				},
 				{
-					"value": "username",
+					"value": "nickname",
 					"name": "账号密码"
 				},
 					// 以下登录方式 uni-app x 暂不支持
@@ -105,17 +108,10 @@
 		// padding-bottom: 30px;
 		background-color: #fff;
 
-		.avatar {
-			width: 50px;
-			height: 50px;
-			background-color: #999;
-			border-radius: 70px;
-		}
-
-		.username {
+		.nickname {
 			flex: 1;
 			padding: 0 10px;
-			.username-text {
+			.nickname-text {
 				font-size: 14px;
 				color: #333;
 			}
