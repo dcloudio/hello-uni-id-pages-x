@@ -1,3 +1,5 @@
+## 0.7.3（2023-11-15）
+- 更新 uni-popup-captcha.uvue依赖的popup组件，直接使用uni_modules下的uni-popup组件
 ## 0.7.2（2023-11-07）
 - 新增 前端组件：uni-captcha.uvue、uni-popup-captcha
 ## 0.7.1（2023-11-07）
