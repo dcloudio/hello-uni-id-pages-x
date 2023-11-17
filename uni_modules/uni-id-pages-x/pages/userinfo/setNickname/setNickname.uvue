@@ -31,44 +31,53 @@
 			this.nickname = this.currentNickname
 		},
 		methods: {
-			setNickname() {
+			async setNickname():Promise<any> {
 				if (this.nickname.length == 0) {
 					uni.showToast({
 						title: '昵称不能为空',
 						icon: 'none'
 					});
 					this.nickname = this.currentNickname
-					return
+					return false
 				}
 				if (!this.hasChange) {
 					// console.log('没有变化');
-					return
+					return false
 				}
-
+			
 				uni.showLoading({
 					title: '加载中',
 					mask: false
 				});
 				const db = uniCloud.databaseForJQL()
 				const uid = uniCloud.getCurrentUserInfo().uid
+				
 				if (uid != null) {
-					db.collection('uni-id-users')
-						.doc(uid)
-						.update({
-							"nickname": this.nickname
-						})
-						.then<void>(() => {
-							mutations.updateUserInfo({ "nickname": this.nickname } as UTSJSONObject)
-							uni.navigateBack()
-						})
-						.catch<void>((err : any | null) => {
-							const error = err as UniCloudError
-							console.error('error', error);
-						})
-						.finally(() => {
-							// console.log('finally');
-							uni.hideLoading()
-						})
+					let testRes = await new Promise((resolve)=>{
+						db.collection('uni-id-users')
+							.doc(uid)
+							.update({
+								"nickname": this.nickname
+							})
+							.then<void>((e) => {
+								console.log('e: ',e);
+								mutations.updateUserInfo({ "nickname": this.nickname } as UTSJSONObject)
+								// uni.navigateBack()
+								resolve(e['updated'])
+							})
+							.catch<void>((err : any | null) => {
+								const error = err as UniCloudError
+								console.log('error', error);
+								resolve({errCode:error.errCode,errMsg:error.errMsg})
+							})
+							.finally(() => {
+								uni.hideLoading()
+							})
+					})
+					console.log('testRes: ',testRes);
+					return testRes
+				}else{
+					return false
 				}
 			}
 		}

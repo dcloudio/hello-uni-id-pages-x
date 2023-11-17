@@ -17,6 +17,10 @@
 </template>
 
 <script>
+	type TypeTestErr = {
+		errCode : string,
+		errMsg : string
+	}
 	import { checkPassword } from '@/uni_modules/uni-id-pages-x/common/common.uts';
 	const uniIdCo = uniCloud.importObject("uni-id-co", { "customUI": true })
 	export default {
@@ -26,7 +30,13 @@
 				$smsCodeRef: null as null | UniIdPagesXSmsCodeComponentPublicInstance,
 				password: "",
 				password2: "",
-				captcha: ""
+				captcha: "",
+				testErr: {
+					errCode: '',
+					errMsg: ''
+				} as TypeTestErr,
+				testSuccess:100,
+				testState: false
 			}
 		},
 		mounted() {
@@ -95,20 +105,26 @@
 					.finally(() : void => {
 						uni.hideLoading()
 					})
-					.then<void>((_ : UTSJSONObject) : void => {
-						// console.log('then');
-						// console.log(e);
+					.then<void>((e : UTSJSONObject) : void => {
+						this.testState = true
+						console.log(e);
+						this.testSuccess = e['errCode'] as number
+						console.log(this.testSuccess)
 						this.$smsCodeRef!.hideCodeInput();
 						uni.showToast({
 							title: '重置成功',
 							icon: 'none'
 						});
-						uni.navigateBack()
+						// uni.navigateBack()
 					})
 					.catch<void>((err : any | null) : void => {
+						this.testState = true
 						const error = err as UniCloudError
 						console.error(error)
 						console.error(error.code)
+						this.testErr.errCode = (error.errCode as string)
+						this.testErr.errMsg = (error.errMsg as string)
+						console.log(JSON.stringify(this.testErr))
 						if (["uni-id-captcha-required", "uni-captcha-verify-fail"].includes(error.code as string)) {
 							(this.$refs["captcha"] as UniPopupCaptchaComponentPublicInstance).open(() => {
 								this.resetPwdBySms(param)

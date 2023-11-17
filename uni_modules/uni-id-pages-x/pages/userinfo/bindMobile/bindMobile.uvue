@@ -14,13 +14,23 @@
 </template>
 
 <script>
+	type TypeTestErr = {
+		errCode : string,
+		errMsg : string
+	}
 	import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
 	export default {
 		data() {
 			return {
 				$smsCodeEl: null as null | UniIdPagesXSmsCodeComponentPublicInstance,
 				needCaptcha: false,
-				captcha: ""
+				captcha: "",
+				testErr: {
+					errCode: '',
+					errMsg: ''
+				} as TypeTestErr,
+				testSuccess:100,
+				testState: false
 			}
 		},
 		computed: {
@@ -43,6 +53,7 @@
 				}
 			},
 			bindMobileBySms(param : UTSJSONObject) {
+				console.log('param:--------- ',param);
 				// 设置(添加)验证码并重新发起
 				function setCaptchaRetry() {
 					uni.showToast({
@@ -54,7 +65,7 @@
 						this.bindMobileBySms(param)
 					});
 				}
-
+			
 				if (this.needCaptcha) {
 					if (this.captcha.length != 4) {
 						return setCaptchaRetry()
@@ -62,7 +73,7 @@
 						param.set("captcha", this.captcha)
 					}
 				}
-
+			
 				uni.showLoading({ "title": "请求中" })
 				const uniIdCo = uniCloud.importObject("uni-id-co", { "customUI": true })
 				uniIdCo.bindMobileBySms(param)
@@ -70,24 +81,33 @@
 						uni.hideLoading()
 					})
 					.then<void>((e : UTSJSONObject) : void => {
-						// console.log('then');
-						// console.log(e);
+						this.testState = true
+						console.log('then');
+						console.log(e);
+						this.testSuccess = e['errCode'] as number
+						console.log(this.testSuccess)
+						
 						uni.showToast({
 							title: '绑定成功',
 							icon: 'none',
 							duration: 3000,
-							complete() {
-								uni.navigateBack()
-							}
+							// complete() {
+							// 	uni.navigateBack()
+							// }
 						});
 						mutations.updateUserInfo({
 							"mobile": param.getString("mobile")
 						} as UTSJSONObject)
+						
 					})
 					.catch<void>((err : any | null) : void => {
+						this.testState = true
 						const error = err as UniCloudError
 						console.error(error)
 						console.error(error.code)
+						this.testErr.errCode = (error.errCode as string)
+						this.testErr.errMsg = (error.errMsg as string)
+						console.log(JSON.stringify(this.testErr))
 						if (['uni-id-captcha-required', 'uni-captcha-verify-fail'].includes(error.code as string)) {
 							this.needCaptcha = true;
 							//登录失败，自动重新获取验证码

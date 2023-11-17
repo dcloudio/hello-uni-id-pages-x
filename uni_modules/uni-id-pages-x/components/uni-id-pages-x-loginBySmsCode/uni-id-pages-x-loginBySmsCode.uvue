@@ -16,6 +16,16 @@
 </template>
 
 <script>
+	type TypeTestErr = {
+		errCode : string,
+		errMsg : string
+	}
+	type TypeTestSuccess = {
+		errCode : number | null,
+		uid : string,
+		newToken ?: string,
+		passwordConfirmed ?: boolean | null
+	}
 	import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
 	import { loginSuccess } from '@/uni_modules/uni-id-pages-x/common/common.uts';
 	const uniIdCo = uniCloud.importObject("uni-id-co", { "customUI": true })
@@ -24,7 +34,18 @@
 		data() {
 			return {
 				captcha: "",
-				$smsCodeRef: null as null | UniIdPagesXSmsCodeComponentPublicInstance
+				$smsCodeRef: null as null | UniIdPagesXSmsCodeComponentPublicInstance,
+				testErr: {
+					errCode: '',
+					errMsg: ''
+				} as TypeTestErr,
+				testSuccess: {
+					errCode: null,
+					uid: '',
+					newToken: '',
+					passwordConfirmed: null
+				} as TypeTestSuccess,
+				testState: false
 			}
 		},
 		computed: {
@@ -54,7 +75,6 @@
 						uni.hideLoading()
 					})
 					.then<void>((e : UTSJSONObject) : void => {
-						// console.log('then');
 						// console.log(e);
 						this.$smsCodeRef!.$callMethod("hideCodeInput");
 						uni.showToast({
@@ -62,9 +82,13 @@
 							icon: 'none'
 						});
 						loginSuccess(e)
+						this.testState = true
 						this.$smsCodeRef!.$callMethod('clearCodeInput')
+						this.testSuccess.uid = (e['uid'] as string)
+						this.testSuccess.errCode = (e['errCode'] as number)
 					})
 					.catch<void>((err : any | null) : void => {
+						this.testState = true
 						const error = err as UniCloudError
 						console.error(error)
 						console.error(error.code)
@@ -81,6 +105,9 @@
 							this.$smsCodeRef!.$callMethod('clearCodeInput')
 							this.captcha = ""
 						}
+						this.testErr.errCode = (error.errCode as string)
+						this.testErr.errMsg = (error.errMsg as string)
+						console.log(JSON.stringify(this.testErr))
 					})
 			}
 		}

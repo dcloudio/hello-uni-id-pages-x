@@ -152,8 +152,8 @@
 				}
 				this.register()
 			},
-			register() {
-				const data: UTSJSONObject = {
+			async register():Promise<any> {
+				const data : UTSJSONObject = {
 					"username": this.username,
 					"nickname": this.nickname,
 					"password": this.password,
@@ -163,28 +163,33 @@
 				const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: true });
 				uni.showLoading({ "title": "请求中" })
 				
-				uniIdCo.registerUser(data)
-					.finally(() => uni.hideLoading())
-					.then(e => {
-						// console.log('e: ',e);
-						uni.showToast({
-							title: '注册成功',
-							icon: 'none'
-						});
-						loginSuccess(e)
-					})
-					.catch<void>((err : any | null) : void => {
-						const error = err as UniCloudError
-						console.error(error)
-						console.error(error.code)
-						if (error.code == 'uni-captcha-verify-fail') {
-							(this.$refs["captcha"] as UniCaptchaComponentPublicInstance).getImageCaptcha(true);
-						}
-						uni.showToast({
-							title: error.message,
-							icon: 'none'
-						});
-					})
+				let testRes = await new Promise((resolve)=>{
+					uniIdCo.registerUser(data)
+						.finally(() => uni.hideLoading())
+						.then(e => {
+							console.log('e: ', e);
+							uni.showToast({
+								title: '注册成功',
+								icon: 'none'
+							});
+							loginSuccess(e)
+							resolve(e['uid'])
+						})
+						.catch<void>((err : any | null) : void => {
+							const error = err as UniCloudError
+							console.error(error)
+							if (error.code == 'uni-captcha-verify-fail') {
+								(this.$refs["captcha"] as UniCaptchaComponentPublicInstance).getImageCaptcha(true);
+							}
+							uni.showToast({
+								title: error.message,
+								icon: 'none'
+							});
+							resolve({errCode:error.errCode,errMsg:error.errMsg})
+						})
+				})
+				console.log('testRes: ',testRes);
+				return testRes
 			}
 		}
 	}

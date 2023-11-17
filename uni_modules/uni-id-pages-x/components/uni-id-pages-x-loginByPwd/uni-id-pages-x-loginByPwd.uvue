@@ -40,7 +40,7 @@
 			showPopupCaptcha(callback : () => void) {
 				(this.$refs["agreements"] as UniIdPagesXAgreementsComponentPublicInstance).showPopupAgreements(callback)
 			},
-			loginByPwd() {
+			async loginByPwd():Promise<any> {
 				if (this.username.length == 0) {
 					(this.$refs['username'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 					return uni.showToast({
@@ -67,12 +67,12 @@
 						duration: 3000
 					});
 				}
-
+			
 				const data : UTSJSONObject = {
 					"password": this.password,
 					"captcha": this.loginCaptcha
 				}
-
+			
 				let keyName = 'username'
 				if (/^1\d{10}$/.test(this.username)) {
 					keyName = "mobile"
@@ -80,9 +80,9 @@
 					keyName = "email"
 				}
 				data.set(keyName, this.username)
-
-				// console.log('data',data);
-
+			
+				console.log('data',state.pendingAgreements);
+			
 				if (state.pendingAgreements) {
 					this.showPopupCaptcha(() => {
 						// console.log('state.pendingAgreements', state.pendingAgreements);
@@ -90,40 +90,46 @@
 							this.loginByPwd()
 						}
 					})
-					return
+					return false;
 				}
-
+			
 				uni.showLoading({
 					title: '登录中',
 					mask: false
 				});
-				uniIdCo.login(data)
-					.finally(() : void => {
-						uni.hideLoading()
-						this.loginCaptcha = ""
-					})
-					.then(e => {
-						// console.log('uniIdCo.login res',e);
-						loginSuccess(e)
-					})
-					.catch<void>((err : any | null) : void => {
-						const error = err as UniCloudError
-						console.error(error)
-						console.error(error.code)
-						if (error.code == 'uni-id-captcha-required') {
-							this.needCaptcha = true;
-							//登录失败，自动重新获取验证码
-							(this.$refs['popup-captcha'] as UniPopupCaptchaComponentPublicInstance).open(() => {
-								this.loginByPwd()
-							});
-						} else {
-							uni.showToast({
-								title: error.message,
-								icon: 'none',
-								duration: 3000
-							});
-						}
-					})
+				
+				let testRes = await new Promise((resolve)=>{
+					uniIdCo.login(data)
+						.finally(() : void => {
+							uni.hideLoading()
+							this.loginCaptcha = ""
+						})
+						.then(e => {
+							console.log('uniIdCo.login res',e);
+							loginSuccess(e)
+							resolve(e['uid'])
+						})
+						.catch<void>((err : any | null) : void => {
+							const error = err as UniCloudError
+							console.error(error)
+							console.error(error.code)
+							if (error.code == 'uni-id-captcha-required') {
+								this.needCaptcha = true;
+								//登录失败，自动重新获取验证码
+								(this.$refs['popup-captcha'] as UniPopupCaptchaComponentPublicInstance).open(() => {
+									this.loginByPwd()
+								});
+							} else {
+								uni.showToast({
+									title: error.message,
+									icon: 'none',
+									duration: 3000
+								});
+							}
+							resolve({errCode:error.errCode,errMsg:error.errMsg})
+						})
+				})
+				return testRes
 			},
 			toRegister() {
 				uni.navigateTo({
