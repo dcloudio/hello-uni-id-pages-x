@@ -37,7 +37,7 @@
 		computed: {
 			//大快捷登录按钮图
 			imgSrc() : string {
-				return this.loginType == 'weixin' ? '/uni_modules/uni-id-pages-x/static/login/weixin.png' : '/uni_modules/uni-id-pages-x/static/app-plus/apple.png'
+				return this.loginType == 'weixin' ? '/uni_modules/uni-id-pages-x/static/login/weixin.png' : '/uni_modules/uni-id-pages-x/static/app/apple.png'
 			},
 			pendingAgreements() : boolean {
 				return state.pendingAgreements
