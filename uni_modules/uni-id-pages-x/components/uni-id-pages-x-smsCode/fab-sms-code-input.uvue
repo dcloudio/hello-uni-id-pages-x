@@ -1,0 +1,208 @@
+<template>
+	<uni-popup ref="popup" :mask-click="false">
+		<view class="sms-code-content">
+			<!-- 顶部文字 -->
+			<text class="sms-code-title">{{title}}</text>
+			<text class="sms-code-tip">短信验证码已发送至{{mobile}}</text>
+			<view class="code-input-list">
+				<template v-for="(item,i) in smsCodeList" :key="i">
+					<input @input="setSmsCode(i,$event as InputEvent)" :value="item" type="number" ref="code-input"
+						class="code-input" maxlength="7" @focus="onFocus(i)" />
+				</template>
+			</view>
+      <view class="fab-sms-code-input-foot">
+        <text class="close" @click="clear();hide();">关闭</text>
+        <text @click="reGetSmsCode" :class="'get-sms-code-tip'+ ((reverseNumber == 0) ? '-active' : '')">{{reGetSmsCodeTip}}</text>
+      </view>
+		</view>
+	</uni-popup>
+</template>
+
+<script>
+	export default {
+		emits: ["modelValue", "blur", "focus", "reGetSmsCode"],
+		data() {
+			return {
+				smsCodeList: ["\u200b", "\u200b", "\u200b", "\u200b", "\u200b", "\u200b"],
+				isOpen: false
+			}
+		},
+		props: {
+      title: {
+        type: String,
+        default: "请输入验证码"
+      },
+			mobile: {
+				type: String,
+				default: ""
+			},
+			modelValue: {
+				type: String,
+				default: ""
+			},
+			reverseNumber: {
+				type: Number,
+				default: 0
+			},
+		},
+		computed: {
+			reGetSmsCodeTip() : string {
+				if (this.reverseNumber == 0) return "重新获取";
+				return "重新发送" + '(' + this.reverseNumber + 's)';
+			},
+			smsCode() : string {
+				return this.smsCodeList.map((item) : string => item.replace(/\u200b/g, '')).join("")
+			}
+		},
+		watch: {
+			smsCode(smsCode) {
+				this.$emit('update:modelValue', smsCode);
+			},
+		},
+		methods: {
+			show() {
+				(this.$refs['popup'] as UniPopupComponentPublicInstance).open();
+				this.$nextTick(() => {
+					(this.$refs["code-input"] as Element[])[0].focus();
+				})
+				this.isOpen = true
+			},
+			hide() {
+				(this.$refs['popup'] as UniPopupComponentPublicInstance).close();
+				this.isOpen = false
+				// console.log('hide success');
+			},
+			clear() {
+				this.smsCodeList = ["\u200b", "\u200b", "\u200b", "\u200b", "\u200b", "\u200b"];
+				if (this.isOpen) {
+					(this.$refs["code-input"] as Element[])[0].focus();
+					// console.log('clear success');
+				} else {
+					// console.log('已经关了，不能清空');
+				}
+			},
+			setSmsCode(i : number, e : InputEvent) {
+				const { value } = e.detail
+				// console.log('~~',value,value.length);
+
+				// 已满6位数就直接调登录
+				let $value = value.replace(/\u200b/g, '')
+				if ($value.length == 6) {
+					// (this.$refs["code-input"] as Element[])[0].focus();
+					// console.log('~~~~~', $value, $value.split(''));
+					$value.split('').forEach((item : string, index : number) => {
+						// console.log('index', index, item);
+						this.smsCodeList[index] = "\u200b" + item
+					})
+					return
+				}
+
+				// 限制每个空格内的文字不超过2位
+				if (value.length > 2) {
+					this.$nextTick(() => {
+						let newValue = value.slice(value.length - 1)
+						// console.log('newValue', newValue);
+						this.smsCodeList[i] = newValue
+					})
+				}
+
+				// 被删除完就直接后退一格
+				if (value.length == 0) {
+					this.smsCodeList[i] = ""
+					this.$nextTick(() => {
+						this.smsCodeList[i] = '\u200b'
+					})
+					if (i != 0) {
+						(this.$refs["code-input"] as Element[])[i - 1].focus();
+						this.smsCodeList[i - 1] = ""
+					}
+				} else if (value != "\u200b") {
+					this.smsCodeList[i] = value;
+					if (i != (this.smsCodeList.length - 1)) {
+						(this.$refs["code-input"] as Element[])[i + 1].focus();
+					} else {
+						// console.log(i, (this.smsCodeList.length - 1));
+					}
+				}
+			},
+			codeChange(i : number, e : InputEvent) {
+				// console.log(i, e);
+			},
+			onFocus(i : number) {
+				if (this.smsCodeList[i].length == 0) {
+					// console.log('i', i);
+					this.smsCodeList[i] = '\u200b'
+				}
+			},
+			reGetSmsCode() {
+				this.$emit("reGetSmsCode")
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.sms-code-content {
+		background-color: #FFF;
+		width: 550rpx;
+		justify-content: center;
+		align-items: center;
+		padding: 15px 20px;
+		border-radius: 5px;
+	}
+
+	.sms-code-title,
+	.sms-code-tip {
+		text-align: left;
+		padding-left:20px;
+		width: 550rpx;
+	}
+
+	.sms-code-tip {
+		color: #555;
+		font-weight: 400;
+		font-size: 12px;
+		margin-top: 5px;
+	}
+
+	.code-input-list {
+		flex-direction: row;
+	}
+
+	.code-input-list .code-input {
+		width: 30px;
+		height: 30px;
+		border: 1px solid #eee;
+		border-radius: 5px;
+		margin: 10px 5px;
+		text-align: center;
+	}
+  
+  .fab-sms-code-input-foot {
+    margin-top: 5px;
+    margin-left: 300rpx;
+    position: relative;
+    left: -15px;
+    width: 250rpx;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+  .fab-sms-code-input-foot .close {
+    width: 80rpx;
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+    margin-right: 26rpx;
+  }
+  
+	.get-sms-code-tip,
+	.get-sms-code-tip-active {
+		font-size: 12px;
+		text-align: right;
+		color: #AAA;
+	}
+
+	.get-sms-code-tip-active {
+		color: #005eca;
+	}
+</style>
