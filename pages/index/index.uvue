@@ -32,11 +32,18 @@
       },
       openName():string{
         if(this.isLogin){
-          const nickname = userInfo['nickname'] as string;
+          let nickname = userInfo.getString("nickname")
+          let username = userInfo.getString("username")
+          if(nickname == null){
+            nickname = "";
+          }
+          if(username == null){
+            username = "";
+          }
           if(nickname.length != 0){
             return nickname
           }else{
-            return userInfo['username'] as string
+            return username
           }
         }else{
           return '未登录'
