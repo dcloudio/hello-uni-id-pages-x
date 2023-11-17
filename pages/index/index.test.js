@@ -16,7 +16,6 @@ describe('pages/index/index.uvue', () => {
 		expect(await itemTexts[1].text()).toBe('账号密码登录')
 	});
 	it('手机验证码登录', async () => {
-		expect(await page.data('loginType')).toBe('username')
 		await listItems[0].tap()
 		currentPage = await program.currentPage()
 		console.log('await program.currentPage(): ',await program.currentPage());
@@ -25,6 +24,7 @@ describe('pages/index/index.uvue', () => {
 		await program.navigateBack()
 	});
 	it('账号密码登录', async () => {
+		expect(await page.data('loginType')).toBe('nickname')
 		await listItems[1].tap()
 		console.log('await program.currentPage(): ',await program.currentPage());
 		currentPage = await program.currentPage()

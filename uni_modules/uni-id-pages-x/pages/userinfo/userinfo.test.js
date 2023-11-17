@@ -12,8 +12,9 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/userinfo.uvue', () => {
 		expect(await values[1].text()).toHaveLength(11)
 	});
 	it('退出登录', async () => {
-		const isLogin = await page.data('isLogin')
-		console.log('isLogin: ',isLogin);
+		const titleList = await page.$$('.title')
+		expect(titleList.length).toBe(5)
+		expect(await titleList[4].text()).toBe('退出登录')
 		await page.callMethod('logout')
 	});
 });
