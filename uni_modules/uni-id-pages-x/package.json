@@ -1,17 +1,16 @@
 {
   "id": "uni-id-pages-x",
   "displayName": "uni-id-pages-x",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "适用于 uni-app-x 的云端一体简单、统一、可扩展的用户中心页面模版",
   "keywords": [
-    "用户管理",
     "用户中心",
     "短信验证码",
     "login",
     "登录",
     "uni-id"
 ],
-  "repository": "",
+  "repository": "https://gitcode.net/dcloud/hello_uni-id-pages-x",
   "engines": {
     "HBuilderX": "^3.97"
   },
