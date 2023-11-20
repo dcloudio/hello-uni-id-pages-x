@@ -72,6 +72,13 @@
 				//   }
 				// }
 			}
+		},
+		{
+			"path": "uni_modules/uni-id-pages-x/pages/userinfo/realnameAuth/realnameAuth",
+			"style": {
+				"navigationBarTitleText": "实名认证",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"globalStyle": {
