@@ -49,8 +49,8 @@
 				logo: "/static/logo.png"
 			}
 		},
-		onLoad(param : Map<string, string>) {
-			const type = param.get("type")
+		onLoad(param) {
+			const type = param["type"]
 			// 如果传递了参数就按参数指定的登录方式，否则指定为 config 中配置的第一项
 			if (type != null) {
 				this.loginType = type
