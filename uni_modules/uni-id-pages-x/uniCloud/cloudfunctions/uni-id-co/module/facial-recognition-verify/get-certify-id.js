@@ -45,11 +45,9 @@ module.exports = async function (params) {
 
   // 查询已经使用同一个身份证认证的账号数量，如果超过限制则不能认证
   const idCardAccount = await userCollection.where({
-    realname_auth: {
-      type: 0, // 用户认证状态是个人
-      auth_status: REAL_NAME_STATUS.CERTIFIED, // 认证状态为已认证
-      identity: idCard // 身份证号码和传入参数的身份证号码相同
-    }
+    'realname_auth.type': 0,
+    'realname_auth.auth_status': REAL_NAME_STATUS.CERTIFIED,
+    'realname_auth.identity': idCard
   }).get()
   if (idCardAccount.data.length >= idCardCertifyLimit) {
     throw {

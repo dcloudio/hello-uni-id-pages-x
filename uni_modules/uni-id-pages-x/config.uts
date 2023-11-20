@@ -3,13 +3,13 @@ export default {
   "agreements":{
     "serviceUrl": "https://uniapp.dcloud.io/", // 用户服务协议链接
     "privacyUrl": "https://uniapp.dcloud.io/", // 隐私政策条款链接
-    /* 
+    /*
     * 哪些场景下显示
     * 1. register注册（包括登录并注册，如：短信验证码登录，一键登录）
     * 2. login登录（如：用户名密码登录，短信验证码登录）
     */
     "scopeList": [
-      "register","login"
+      "register","login","realNameVerify"
     ]
   },
   "needLogin":[

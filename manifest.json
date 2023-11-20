@@ -1,10 +1,14 @@
 {
     "name" : "hello uni-id-pages",
-    "appid" : "__UNI__17D54C2",
+    "appid" : "__UNI__1108543",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
-    "uni-app-x" : {},
+    "uni-app-x" : {
+        "modules" : {
+            "FacialRecognitionVerify" : {}
+        }
+    },
     /* 快应用特有相关 */
     "quickapp" : {},
     /* 小程序特有相关 */
