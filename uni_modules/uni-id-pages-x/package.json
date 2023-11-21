@@ -57,7 +57,8 @@
         },
         "App": {
           "app-vue": "n",
-          "app-nvue": "n"
+          "app-nvue": "n",
+          "app-uvue": "y"
         },
         "H5-mobile": {
           "Safari": "n",
