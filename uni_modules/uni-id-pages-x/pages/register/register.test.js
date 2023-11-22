@@ -21,12 +21,11 @@ describe('/uni_modules/uni-id-pages-x/pages/register/register', () => {
 			password2: "dcloud2023"
 		})
 		const registerRes =  await page.callMethod('register')
-		console.log('registerRes: ',registerRes);
+		console.log('registerRes: ',registerRes,typeof registerRes);
 		if(typeof registerRes == 'string'){
 			expect(registerRes).toHaveLength(24)
-			return;
-		}
-		if(registerRes.errCode){
+			return
+		}else{
 			switch (registerRes.errCode){
 				case 'uni-id-account-exists':
 					const expectStr = ["此账号已注册","Account exists"]
@@ -38,5 +37,4 @@ describe('/uni_modules/uni-id-pages-x/pages/register/register', () => {
 			}
 		}
 	});
-
 });

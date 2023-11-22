@@ -30,7 +30,8 @@
 					errMsg: ''
 				} as TypeTestErr,
 				testSuccess:100,
-				testState: false
+				testState: false,
+				isTest:false
 			}
 		},
 		computed: {
@@ -81,33 +82,27 @@
 						uni.hideLoading()
 					})
 					.then<void>((e : UTSJSONObject) : void => {
-						this.testState = true
-						console.log('then');
 						console.log(e);
+						this.testState = true
 						this.testSuccess = e['errCode'] as number
-						console.log(this.testSuccess)
-						
 						uni.showToast({
 							title: '绑定成功',
 							icon: 'none',
 							duration: 3000,
-							// complete() {
-							// 	uni.navigateBack()
-							// }
+							complete() {
+								if(!this.isTest)uni.navigateBack()
+							}
 						});
 						mutations.updateUserInfo({
 							"mobile": param.getString("mobile")
 						} as UTSJSONObject)
-						
 					})
 					.catch<void>((err : any | null) : void => {
-						this.testState = true
 						const error = err as UniCloudError
 						console.error(error)
-						console.error(error.code)
+						this.testState = true
 						this.testErr.errCode = (error.errCode as string)
 						this.testErr.errMsg = (error.errMsg as string)
-						console.log(JSON.stringify(this.testErr))
 						if (['uni-id-captcha-required', 'uni-captcha-verify-fail'].includes(error.code as string)) {
 							this.needCaptcha = true;
 							//登录失败，自动重新获取验证码

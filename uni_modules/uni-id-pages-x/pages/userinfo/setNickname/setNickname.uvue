@@ -74,7 +74,6 @@
 								uni.hideLoading()
 							})
 					})
-					console.log('testRes: ',testRes);
 					return testRes
 				}else{
 					return false

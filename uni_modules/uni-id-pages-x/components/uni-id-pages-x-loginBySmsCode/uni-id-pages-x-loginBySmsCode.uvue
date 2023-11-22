@@ -20,12 +20,6 @@
 		errCode : string,
 		errMsg : string
 	}
-	type TypeTestSuccess = {
-		errCode : number | null,
-		uid : string,
-		newToken ?: string,
-		passwordConfirmed ?: boolean | null
-	}
 	import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
 	import { loginSuccess } from '@/uni_modules/uni-id-pages-x/common/common.uts';
 	const uniIdCo = uniCloud.importObject("uni-id-co", { "customUI": true })
@@ -39,12 +33,7 @@
 					errCode: '',
 					errMsg: ''
 				} as TypeTestErr,
-				testSuccess: {
-					errCode: null,
-					uid: '',
-					newToken: '',
-					passwordConfirmed: null
-				} as TypeTestSuccess,
+				testSuccess:'',
 				testState: false
 			}
 		},
@@ -76,22 +65,20 @@
 					})
 					.then<void>((e : UTSJSONObject) : void => {
 						// console.log(e);
+						this.testState = true
 						this.$smsCodeRef!.$callMethod("hideCodeInput");
 						uni.showToast({
 							title: '登录成功',
 							icon: 'none'
 						});
 						loginSuccess(e)
-						this.testState = true
 						this.$smsCodeRef!.$callMethod('clearCodeInput')
-						this.testSuccess.uid = (e['uid'] as string)
-						this.testSuccess.errCode = (e['errCode'] as number)
+						this.testSuccess = (e['uid'] as string)
 					})
 					.catch<void>((err : any | null) : void => {
 						this.testState = true
 						const error = err as UniCloudError
 						console.error(error)
-						console.error(error.code)
 						if (["uni-id-captcha-required", "uni-captcha-verify-fail"].includes(error.code as string)) {
 							(this.$refs["captcha"] as UniPopupCaptchaComponentPublicInstance).open(() => {
 								this.login(param)
@@ -107,7 +94,6 @@
 						}
 						this.testErr.errCode = (error.errCode as string)
 						this.testErr.errMsg = (error.errMsg as string)
-						console.log(JSON.stringify(this.testErr))
 					})
 			}
 		}

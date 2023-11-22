@@ -2,17 +2,14 @@
 const PAGE_PATH = '/uni_modules/uni-id-pages-x/pages/login/login'
 
 describe('loginByPwd', () => {
-	let page,loginType,agreeEl,loginByPwdEl,loginBySmsCodeEl,smsCodeEl,loginSuccess,loginErr;
+	let page,agreeEl,loginByPwdEl,loginBySmsCodeEl,smsCodeEl,loginSuccess,loginErr;
 	beforeAll(async () => {
 		page = await program.reLaunch(PAGE_PATH)
 		await page.waitFor('view')
-		// console.log('pageStack: ',await program.pageStack());
-		// console.log('currentPage: ',await program.currentPage());
+		loginByPwdEl = await page.$('uni-id-pages-x-loginByPwd')
 	});
 	it('账号密码登录', async () => {
-		loginType = await page.data('loginType')
-		expect(loginType).toBe('username')
-		loginByPwdEl = await page.$('uni-id-pages-x-loginByPwd')
+		expect(await page.data('loginType')).toBe('username')
 		const title = await page.$('.pwd-login-title')
 		expect(await title.text()).toBe('账号密码登录')
 	});
@@ -43,13 +40,20 @@ describe('loginByPwd', () => {
 		})
 		const loginByPwdRes = await loginByPwdEl.callMethod('loginByPwd')
 		console.log('loginByPwdRes: ',loginByPwdRes);
-		if(loginByPwdRes.uid){
-			expect(loginByPwdRes.uid).toHaveLength(24)
+		if(typeof loginByPwdRes == 'string'){
+			expect(loginByPwdRes).toHaveLength(24)
 			return;
 		}else{
 			switch (loginByPwdRes.errCode) {
 				case 'uni-id-account-not-exists':
-					expect(loginByPwdRes.errMsg).toBe('Account does not exists')
+					const expectStr = ["此账号未注册","Account does not exists"]
+					expect(expectStr).toContain(loginByPwdRes.errMsg);
+					break;
+				case 'uni-id-password-error':
+					expect(loginByPwdRes.errMsg).toBe('密码错误')
+					break;
+				case 'uni-id-captcha-required':
+					expect(loginByPwdRes.errMsg).toBe('请输入图形验证码')
 					break;
 				default:
 					console.log('err--')
@@ -92,13 +96,13 @@ describe('loginByPwd', () => {
 			return await loginBySmsCodeEl.data('testState') === true
 		})
 		loginSuccess = await loginBySmsCodeEl.data('testSuccess')
-		console.log('loginSuccess:---2 ', loginSuccess);
-		if (loginSuccess.errCode === 0) {
-			expect(loginSuccess.uid).toHaveLength(24)
-		}
-		loginErr = await loginBySmsCodeEl.data('testErr')
-		console.log('loginErr:---2 ', loginErr);
-		if (loginErr.errCode) {
+		console.log('loginSuccess:---2 ', loginSuccess,typeof loginSuccess);
+		if (typeof loginSuccess == 'string') {
+			expect(loginSuccess).toHaveLength(24)
+			return
+		}else{
+			loginErr = await loginBySmsCodeEl.data('testErr')
+			console.log('loginErr:---2 ', loginErr);
 			switch (loginErr.errCode) {
 				case 'uni-id-account-not-exists':
 					expect(loginErr.errMsg).toBe('Account does not exists')

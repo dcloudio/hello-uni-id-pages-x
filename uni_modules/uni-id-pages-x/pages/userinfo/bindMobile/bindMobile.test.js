@@ -6,6 +6,7 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile.uvue'
 	beforeAll(async () => {
 		page = await program.navigateTo('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile')
 		await page.waitFor('view')
+		await page.setData({isTest:true})
 	});
 	it('setData', async () => {
 		mobile = "17766666666"
@@ -36,28 +37,29 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile.uvue'
 			return await page.data('testState') === true
 		}) 
 		const testSuccessRes = await page.data('testSuccess')
-		// console.log('testSuccessRes: ',testSuccessRes);
-		if(testSuccessRes == 0){
+		console.log('testSuccessRes: ',testSuccessRes);
+		if(testSuccessRes<100){
 			console.log('绑定成功');
 			expect(testSuccessRes).toBe(0)
 			return
-		}
-		const testErrRes = await page.data('testErr')
-		console.log('testErrRes: ',testErrRes);
-		switch (testErrRes.errCode){
-			case 'uni-id-bind-conflict':
-				const expectBindStr = ["此账号已被绑定","This account has been bound"]
-				expect(expectBindStr).toContain(testErrRes.errMsg);
-				break;
-			case 'uni-id-mobile-verify-code-error':
-				const expectCodeStr = ["手机验证码错误或已过期","Verify code error or expired"]
-				expect(expectCodeStr).toContain(testErrRes.errMsg);
-				break;
-			case 'uni-id-captcha-required':
-				expect(testErrRes.errMsg).toBe('请输入图形验证码')
-				break;
-			default:
-				break;
+		}else{
+			const testErrRes = await page.data('testErr')
+			console.log('testErrRes: ',testErrRes);
+			switch (testErrRes.errCode){
+				case 'uni-id-bind-conflict':
+					const expectBindStr = ["此账号已被绑定","This account has been bound"]
+					expect(expectBindStr).toContain(testErrRes.errMsg);
+					break;
+				case 'uni-id-mobile-verify-code-error':
+					const expectCodeStr = ["手机验证码错误或已过期","Verify code error or expired"]
+					expect(expectCodeStr).toContain(testErrRes.errMsg);
+					break;
+				case 'uni-id-captcha-required':
+					expect(testErrRes.errMsg).toBe('请输入图形验证码')
+					break;
+				default:
+					break;
+			}
 		}
 	});
 });

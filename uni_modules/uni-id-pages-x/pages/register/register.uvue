@@ -188,7 +188,6 @@
 							resolve({errCode:error.errCode,errMsg:error.errMsg})
 						})
 				})
-				console.log('testRes: ',testRes);
 				return testRes
 			}
 		}

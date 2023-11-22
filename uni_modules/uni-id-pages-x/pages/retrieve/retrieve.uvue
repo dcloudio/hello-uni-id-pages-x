@@ -36,7 +36,8 @@
 					errMsg: ''
 				} as TypeTestErr,
 				testSuccess:100,
-				testState: false
+				testState: false,
+				isTest:false
 			}
 		},
 		mounted() {
@@ -47,7 +48,6 @@
 			// const email = param.get("email")
 			// console.log('mobile--', mobile);
 			// console.log('email--', email);
-
 			if (mobile != null) {
 				this.$nextTick(() => {
 					this.$smsCodeRef!.mobile = mobile
@@ -106,25 +106,22 @@
 						uni.hideLoading()
 					})
 					.then<void>((e : UTSJSONObject) : void => {
-						this.testState = true
 						console.log(e);
+						this.testState = true
 						this.testSuccess = e['errCode'] as number
-						console.log(this.testSuccess)
 						this.$smsCodeRef!.hideCodeInput();
 						uni.showToast({
 							title: '重置成功',
 							icon: 'none'
 						});
-						// uni.navigateBack()
+						if(!this.isTest)uni.navigateBack()
 					})
 					.catch<void>((err : any | null) : void => {
-						this.testState = true
 						const error = err as UniCloudError
 						console.error(error)
-						console.error(error.code)
+						this.testState = true
 						this.testErr.errCode = (error.errCode as string)
 						this.testErr.errMsg = (error.errMsg as string)
-						console.log(JSON.stringify(this.testErr))
 						if (["uni-id-captcha-required", "uni-captcha-verify-fail"].includes(error.code as string)) {
 							(this.$refs["captcha"] as UniPopupCaptchaComponentPublicInstance).open(() => {
 								this.resetPwdBySms(param)
