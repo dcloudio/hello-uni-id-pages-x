@@ -10,6 +10,9 @@
 	"forceInviteCode": false,
 	"preferedAppPlatform": "app",
   "requestAuthSecret":"testSecret",
+  "idCardCertifyLimit": 1,
+  "realNameCertifyLimit": 5,
+  "sensitiveInfoEncryptSecret": "",
 	"app": {
 		"tokenExpiresIn": 2592000,
 		"oauth": {
