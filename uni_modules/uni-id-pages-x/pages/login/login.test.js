@@ -15,7 +15,7 @@ describe('loginByPwd', () => {
 	});
 	it('跳转到注册账号页面', async () => {
 		await loginByPwdEl.callMethod('toRegister')
-		await page.waitFor(500)
+		await page.waitFor(1000)
 		expect((await program.currentPage()).path).toBe(
 			'uni_modules/uni-id-pages-x/pages/register/register')
 		// 执行 navigateBack 验证是否返回
@@ -62,8 +62,11 @@ describe('loginByPwd', () => {
 		}
 	});
 	it('smsCode-setData', async () => {
-		page = await program.redirectTo(PAGE_PATH)
-		await page.waitFor(1000)
+		// page = await program.redirectTo(PAGE_PATH)
+		// await page.waitFor(1000)
+		const fabLogin = await page.$('uni-id-pages-x-fab-login')
+		await fabLogin.tap()
+		// console.log('fabLogin: ',await page.data('loginType'));
 		await page.setData({
 			loginType: "smsCode"
 		})

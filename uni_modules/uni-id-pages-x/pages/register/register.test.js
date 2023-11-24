@@ -7,7 +7,6 @@ describe('/uni_modules/uni-id-pages-x/pages/register/register', () => {
 		page = await program.navigateTo('/uni_modules/uni-id-pages-x/pages/register/register')
 		await page.waitFor('view')
 	});
-
 	it('register', async () => {
 		const agreeEl = await page.$('uni-id-pages-x-agreements')
 		expect(await agreeEl.data('needAgreements')).toBe(true)
