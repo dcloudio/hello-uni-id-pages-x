@@ -7,7 +7,7 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/setNickname/setNickname.uvu
 		await page.waitFor('view')
 	});
 	it('设置昵称', async () => {
-		// expect.assertions(1);
+		expect.assertions(1);
 		nickname = await page.data('nickname')
 		console.log('nickname: ',nickname,nickname == null);
 		if(!nickname || nickname == "dcloud99"){
@@ -19,6 +19,6 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/setNickname/setNickname.uvu
 		await page.waitFor(300)
 		const res = await page.callMethod('setNickname')
 		console.log('res: ',nickname,res);
-		// expect(res).toBe(1)
+		expect(res).toBe(1)
 	});
 });
