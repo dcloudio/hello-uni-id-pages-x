@@ -23,7 +23,7 @@ describe('pages/index/index.uvue', () => {
 	it('手机验证码登录', async () => {
 		await listItems[0].tap()
 		currentPage = await program.currentPage()
-		// console.log('await program.currentPage(): ',await program.currentPage());
+		// console.log('currentPage: ',await program.currentPage());
 		expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
 		expect(currentPage.query.type).toBe("smsCode")
 		await program.navigateBack()

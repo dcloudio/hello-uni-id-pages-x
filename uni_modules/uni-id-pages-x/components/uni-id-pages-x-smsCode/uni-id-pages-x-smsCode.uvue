@@ -78,9 +78,9 @@
 			}, 300)
 		},
 		methods: {
-      setMobileInputFocus(val:boolean){
-        (this.$refs['mobileInput'] as UniIdPagesXInputComponentPublicInstance).setFocus(val);
-      },
+			setMobileInputFocus(val:boolean){
+			  (this.$refs['mobileInput'] as UniIdPagesXInputComponentPublicInstance).setFocus(val);
+			},
 			showCodeInput() {
 				if (reverseNumber == 0) {
 					this.reverseNumber = 6
@@ -132,12 +132,12 @@
 				// console.log('reset');
 			},
 			sendSmsCode() {
-				// console.log("state.pendingAgreements", state.pendingAgreements);
+				console.log("state.pendingAgreements", state.pendingAgreements);
 				if (state.pendingAgreements) {
           // uni.hideKeyboard();
-          this.$sendSmsCaptchaCP!.setFocus(false);
+				this.$sendSmsCaptchaCP!.setFocus(false);
 					(this.$parent as ComponentPublicInstance).$callMethod("showPopupCaptcha", () => {
-						// console.log('state.pendingAgreements', state.pendingAgreements);
+						console.log('state.pendingAgreements', state.pendingAgreements);
 						if (!state.pendingAgreements) {
 							this.sendSmsCode()
 						}

@@ -28,7 +28,8 @@
 				username: "",
 				password: "",
 				needCaptcha: false,
-				loginCaptcha: ""
+				loginCaptcha: "",
+				isTest:false
 			}
 		},
 		mounted() {
@@ -106,6 +107,7 @@
 						})
 						.then(e => {
 							console.log('uniIdCo.login res',e);
+							// if(!this.isTest){loginSuccess(e)}
 							loginSuccess(e)
 							resolve(e['uid'])
 						})

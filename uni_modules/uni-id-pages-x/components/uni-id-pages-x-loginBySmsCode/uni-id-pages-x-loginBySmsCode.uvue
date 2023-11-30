@@ -58,6 +58,7 @@
 				(this.$refs["agreements"] as UniIdPagesXAgreementsComponentPublicInstance).showPopupAgreements(callback)
 			},
 			login(param : UTSJSONObject) {
+				console.log('param: ',param);
 				uni.showLoading({ "title": "登录中" })
 				uniIdCo.loginBySms(param)
 					.finally(() : void => {
@@ -66,19 +67,21 @@
 					.then<void>((e : UTSJSONObject) : void => {
 						// console.log(e);
 						this.testState = true
+						this.testSuccess = (e['uid'] as string)
 						this.$smsCodeRef!.$callMethod("hideCodeInput");
 						uni.showToast({
 							title: '登录成功',
 							icon: 'none'
 						});
+						// if(!this.testState){loginSuccess(e)}
 						loginSuccess(e)
 						this.$smsCodeRef!.$callMethod('clearCodeInput')
-						this.testSuccess = (e['uid'] as string)
 					})
 					.catch<void>((err : any | null) : void => {
 						this.testState = true
 						const error = err as UniCloudError
 						console.error(error)
+						console.log("error.errCode",error.errCode);
 						if (["uni-id-captcha-required", "uni-captcha-verify-fail"].includes(error.code as string)) {
 							(this.$refs["captcha"] as UniPopupCaptchaComponentPublicInstance).open(() => {
 								this.login(param)

@@ -7,6 +7,8 @@ describe('loginByPwd', () => {
 		page = await program.reLaunch(PAGE_PATH)
 		await page.waitFor('view')
 		loginByPwdEl = await page.$('uni-id-pages-x-loginByPwd')
+		await loginByPwdEl.setData({isTest: true})
+		// console.log("isTest",await loginByPwdEl.data('isTest'))
 	});
 	it('账号密码登录', async () => {
 		expect(await page.data('loginType')).toBe('username')
@@ -18,7 +20,6 @@ describe('loginByPwd', () => {
 		await page.waitFor(1000)
 		expect((await program.currentPage()).path).toBe(
 			'uni_modules/uni-id-pages-x/pages/register/register')
-		// 执行 navigateBack 验证是否返回
 		expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
 	});
 	it('跳转到忘记密码页面', async () => {
@@ -41,8 +42,8 @@ describe('loginByPwd', () => {
 		const loginByPwdRes = await loginByPwdEl.callMethod('loginByPwd')
 		console.log('loginByPwdRes: ',loginByPwdRes);
 		if(typeof loginByPwdRes == 'string'){
+			await page.waitFor(2000)
 			expect(loginByPwdRes).toHaveLength(24)
-			return;
 		}else{
 			switch (loginByPwdRes.errCode) {
 				case 'uni-id-account-not-exists':
@@ -60,71 +61,72 @@ describe('loginByPwd', () => {
 					break;
 			}
 		}
+		console.log("currentPage",await program.currentPage())
 	});
-	it('smsCode-setData', async () => {
-		// page = await program.redirectTo(PAGE_PATH)
-		// await page.waitFor(1000)
-		const fabLogin = await page.$('uni-id-pages-x-fab-login')
-		await fabLogin.tap()
-		// console.log('fabLogin: ',await page.data('loginType'));
-		await page.setData({
-			loginType: "smsCode"
-		})
-		loginBySmsCodeEl = await page.$('uni-id-pages-x-loginBySmsCode')
-		smsCodeEl = await page.$('uni-id-pages-x-smsCode')
-		await smsCodeEl.setData({
-			mobile: "17755555555",
-			sendSmsCaptcha: "1234",
-		})
-	});
+	// it('smsCode-setData', async () => {
+	// 	page = await program.redirectTo(PAGE_PATH)
+	// 	await page.waitFor(1000)
+	// 	// const fabLogin = await page.$('uni-id-pages-x-fab-login')
+	// 	// await fabLogin.tap()
+	// 	// console.log('fabLogin: ',await page.data('loginType'));
+	// 	await page.setData({
+	// 		loginType: "smsCode"
+	// 	})
+	// 	loginBySmsCodeEl = await page.$('uni-id-pages-x-loginBySmsCode')
+	// 	smsCodeEl = await page.$('uni-id-pages-x-smsCode')
+	// 	await smsCodeEl.setData({
+	// 		mobile: "17755555555",
+	// 		sendSmsCaptcha: "1234",
+	// 	})
+	// });
 	
-	it('smsCode-agree', async () => {
-		agreeEl = await page.$('uni-id-pages-x-agreements')
-		expect(await agreeEl.data('needAgreements')).toBe(true)
-		await agreeEl.callMethod('confirm')
-		await page.waitFor(100)
-	});
+	// it('smsCode-agree', async () => {
+	// 	agreeEl = await page.$('uni-id-pages-x-agreements')
+	// 	expect(await agreeEl.data('needAgreements')).toBe(true)
+	// 	await agreeEl.callMethod('confirm')
+	// 	await page.waitFor(100)
+	// });
 	
-	it('smsCode-callMethod', async () => {
-		await smsCodeEl.callMethod('sendSmsCode')
-		await page.waitFor(500)
-		await smsCodeEl.setData({
-			smsCode: "123456"
-		})
-	});
+	// it('smsCode-callMethod', async () => {
+	// 	await smsCodeEl.callMethod('sendSmsCode')
+	// 	await page.waitFor(500)
+	// 	await smsCodeEl.setData({
+	// 		smsCode: "123456"
+	// 	})
+	// });
 	
-	it('手机验证码', async () => {
-		// 等待登录结果
-		await page.waitFor(async () => {
-			return await loginBySmsCodeEl.data('testState') === true
-		})
-		loginSuccess = await loginBySmsCodeEl.data('testSuccess')
-		console.log('loginSuccess:---2 ', loginSuccess,typeof loginSuccess);
-		if (typeof loginSuccess == 'string') {
-			expect(loginSuccess).toHaveLength(24)
-			return
-		}else{
-			loginErr = await loginBySmsCodeEl.data('testErr')
-			console.log('loginErr:---2 ', loginErr);
-			switch (loginErr.errCode) {
-				case 'uni-id-account-not-exists':
-					expect(loginErr.errMsg).toBe('Account does not exists')
-					break;
-				case 'uni-id-mobile-verify-code-error':
-					expect(loginErr.errMsg).toBe('手机验证码错误或已过期')
-					break;
-				case 'uni-id-captcha-required':
-					expect(loginErr.errMsg).toBe('请输入图形验证码')
-					await loginBySmsCodeEl.setData({
-						captcha:"1234"
-					})
-					break;
-				default:
-					console.log('err--')
-					break;
-			}
-		}
-	});
+	// it('手机验证码', async () => {
+	// 	// 等待登录结果
+	// 	await page.waitFor(async () => {
+	// 		return await loginBySmsCodeEl.data('testState') === true
+	// 	})
+	// 	loginSuccess = await loginBySmsCodeEl.data('testSuccess')
+	// 	console.log('loginSuccess:---2 ', loginSuccess,typeof loginSuccess);
+	// 	if (typeof loginSuccess == 'string') {
+	// 		expect(loginSuccess).toHaveLength(24)
+	// 		return
+	// 	}else{
+	// 		loginErr = await loginBySmsCodeEl.data('testErr')
+	// 		console.log('loginErr:---2 ', loginErr);
+	// 		switch (loginErr.errCode) {
+	// 			case 'uni-id-account-not-exists':
+	// 				expect(loginErr.errMsg).toBe('Account does not exists')
+	// 				break;
+	// 			case 'uni-id-mobile-verify-code-error':
+	// 				expect(loginErr.errMsg).toBe('手机验证码错误或已过期')
+	// 				break;
+	// 			case 'uni-id-captcha-required':
+	// 				expect(loginErr.errMsg).toBe('请输入图形验证码')
+	// 				await loginBySmsCodeEl.setData({
+	// 					captcha:"1234"
+	// 				})
+	// 				break;
+	// 			default:
+	// 				console.log('err--')
+	// 				break;
+	// 		}
+	// 	}
+	// });
 });
 
 

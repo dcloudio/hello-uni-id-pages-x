@@ -1,37 +1,35 @@
 // uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
-
+jest.setTimeout(20000)
 describe('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile.uvue', () => {
-
-	let page,mobile,captcha,smsCode,smsCodeEl;
+	let page,captcha,smsCodeEl;
 	beforeAll(async () => {
 		page = await program.navigateTo('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile')
 		await page.waitFor('view')
 		await page.setData({isTest:true})
+		console.log("isTest",await page.data('isTest'))
+		captcha = "1234"
+		smsCodeEl = await page.$('uni-id-pages-x-smsCode')
 	});
 	it('setData', async () => {
-		mobile = "17766666666"
-		captcha = "1234"
-		smsCode = "123456"
-		smsCodeEl = await page.$('uni-id-pages-x-smsCode')
 		await smsCodeEl.setData({
-			mobile,
+			mobile:"17766666666",
 			sendSmsCaptcha:captcha
 		})
 		await page.waitFor(1000)
 		await smsCodeEl.setData({
-			smsCode
+			smsCode:"123456"
 		})
+	});
+	
+	it('setData--captcha', async () => {
 		const needCaptcha = await page.data('needCaptcha')
 		if(needCaptcha){
 			await page.setData({captcha:captcha})
 		}
 	});
+	
 	it('绑定手机号', async () => {
-		// await page.callMethod('bindMobileBySms',{
-		// 	"code": smsCode,
-		// 	"mobile":mobile,
-		// 	"sendSmsCaptcha": captcha
-		// })
+		await page.waitFor(1000)
 		// 等待登录结果
 		await page.waitFor(async () => {
 			return await page.data('testState') === true

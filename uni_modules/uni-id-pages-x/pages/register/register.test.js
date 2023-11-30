@@ -6,6 +6,8 @@ describe('/uni_modules/uni-id-pages-x/pages/register/register', () => {
 	beforeAll(async () => {
 		page = await program.navigateTo('/uni_modules/uni-id-pages-x/pages/register/register')
 		await page.waitFor('view')
+		await page.setData({isTest: true})
+		// console.log("isTest",await page.data('isTest'))
 	});
 	it('register', async () => {
 		const agreeEl = await page.$('uni-id-pages-x-agreements')
@@ -20,7 +22,7 @@ describe('/uni_modules/uni-id-pages-x/pages/register/register', () => {
 			password2: "dcloud2023"
 		})
 		const registerRes =  await page.callMethod('register')
-		console.log('registerRes: ',registerRes,typeof registerRes);
+		console.log('registerRes: ',registerRes);
 		if(typeof registerRes == 'string'){
 			expect(registerRes).toHaveLength(24)
 			return
