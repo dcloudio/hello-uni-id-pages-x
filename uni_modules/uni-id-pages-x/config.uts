@@ -12,9 +12,6 @@ export default {
       "register","login","realNameVerify"
     ]
   },
-  "needLogin":[
-    "/uni_modules/uni-id-pages-x/pages/userinfo/*"
-  ],
   "loginTypes":[
     "username",
     "smsCode",
