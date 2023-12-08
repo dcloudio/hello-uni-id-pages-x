@@ -152,7 +152,7 @@
   }
 
   .mask {
-    position: absolute;
+    position: fixed;
     width: 750rpx;
     height: 100%;
   }
