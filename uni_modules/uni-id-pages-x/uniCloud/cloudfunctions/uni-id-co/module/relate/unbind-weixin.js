@@ -11,7 +11,7 @@ const {
 
 /**
  * 解绑微信
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#unbind-weixin
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#unbind-weixin
  * @returns
  */
 module.exports = async function () {

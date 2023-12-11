@@ -4,7 +4,7 @@ const { ERROR } = require('../../common/error')
 
 /**
  * 外部用户登录
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#external-login
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#external-login
  * @param {object} params
  * @param {string} params.uid  uni-id体系用户id
  * @param {string} params.externalUid   业务系统的用户id

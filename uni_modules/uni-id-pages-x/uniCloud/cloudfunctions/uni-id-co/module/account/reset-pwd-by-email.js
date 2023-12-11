@@ -21,7 +21,7 @@ const PasswordUtils = require('../../lib/utils/password')
 
 /**
  * 通过邮箱验证码重置密码
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#reset-pwd-by-email
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#reset-pwd-by-email
  * @param {object} params
  * @param {string} params.email   邮箱
  * @param {string} params.code   邮箱验证码

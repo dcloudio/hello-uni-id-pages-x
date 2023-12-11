@@ -11,7 +11,7 @@ const {
 const loginByWeixin = require('../login/login-by-weixin')
 /**
  * 微信安全网络握手
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#set-push-cid
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#set-push-cid
  * @param {object} params
  * @param {string} params.code                微信登录返回的code
  * @param {boolean} params.callLoginByWeixin  是否同时调用一次微信登录

@@ -14,7 +14,7 @@ const { ERROR } = require('../../common/error')
 
 /**
  * 通过微信绑定手机号
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#bind-mobile-by-mp-weixin
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#bind-mobile-by-mp-weixin
  * @param {Object} params
  * @param {String} params.encryptedData   微信获取手机号返回的加密信息
  * @param {String} params.iv              微信获取手机号返回的初始向量
@@ -62,9 +62,9 @@ module.exports = async function (params = {}) {
     // 区分客户端类型 小程序还是App
     const accessToken = await getWeixinAccessToken.call(this)
     const weixinApi = initWeixin.call(this)
-    const res = await weixinApi.getmobileNumber(accessToken, code)
+    const res = await weixinApi.getPhoneNumber(accessToken, code)
 
-    mobile = res.puremobileNumber
+    mobile = res.purePhoneNumber
   } else {
     const sessionKey = await getWeixinCache.call(this, {
       uid,
@@ -79,7 +79,7 @@ module.exports = async function (params = {}) {
       iv
     })
 
-    mobile = res.puremobileNumber
+    mobile = res.purePhoneNumber
   }
 
   const bindAccount = {

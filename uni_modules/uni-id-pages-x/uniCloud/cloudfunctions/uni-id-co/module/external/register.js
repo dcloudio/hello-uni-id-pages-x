@@ -4,7 +4,7 @@ const { EXTERNAL_DIRECT_CONNECT_PROVIDER } = require('../../common/constants')
 
 /**
  * 外部注册用户
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#external-register
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#external-register
  * @param {object} params
  * @param {string} params.externalUid   业务系统的用户id
  * @param {string} params.nickname  昵称
