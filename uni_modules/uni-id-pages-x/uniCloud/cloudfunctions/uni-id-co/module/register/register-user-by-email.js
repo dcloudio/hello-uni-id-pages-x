@@ -16,7 +16,7 @@ const {
 
 /**
  * 通过邮箱+验证码注册普通用户
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#register-user-by-email
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#register-user-by-email
  * @param {Object} params
  * @param {String} params.email    邮箱
  * @param {String} params.password      密码

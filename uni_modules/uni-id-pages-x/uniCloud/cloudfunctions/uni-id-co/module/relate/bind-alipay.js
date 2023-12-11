@@ -14,7 +14,7 @@ const {
 
 /**
  * 绑定支付宝账号
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#bind-alipay
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#bind-alipay
  * @param {Object} params
  * @param {String} params.code  支付宝小程序登录返回的code参数
  * @returns

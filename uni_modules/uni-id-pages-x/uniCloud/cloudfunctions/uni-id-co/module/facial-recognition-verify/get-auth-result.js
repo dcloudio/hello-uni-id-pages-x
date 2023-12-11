@@ -5,7 +5,7 @@ const { ERROR } = require('../../common/error')
 
 /**
  * 查询认证结果
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#get-frv-auth-result
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#get-frv-auth-result
  * @param {Object} params
  * @param {String} params.certifyId       认证ID
  * @returns

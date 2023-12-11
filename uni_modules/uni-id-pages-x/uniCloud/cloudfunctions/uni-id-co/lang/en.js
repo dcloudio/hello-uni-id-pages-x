@@ -1,6 +1,6 @@
 const word = {
   login: 'login',
-  'verify-mobile': 'verify mobile number'
+  'verify-mobile': 'verify phone number'
 }
 
 const sentence = {
@@ -21,7 +21,7 @@ const sentence = {
   'uni-id-invalid-password-strong': 'Passwords must have 8-16 characters and contain letters, numbers and symbols.',
   'uni-id-invalid-password-medium': 'Passwords must have 8-16 characters and contain at least two of the following: letters, numbers, and symbols.',
   'uni-id-invalid-password-weak': 'Passwords must have 6-16 characters and contain letters and numbers.',
-  'uni-id-invalid-mobile': 'Invalid mobile mobile number',
+  'uni-id-invalid-mobile': 'Invalid mobile phone number',
   'uni-id-invalid-email': 'Invalid email address',
   'uni-id-invalid-nickname': 'Invalid nickname',
   'uni-id-invalid-param': 'Invalid parameter',
@@ -40,7 +40,7 @@ const sentence = {
   'uni-id-admin-exist-in-other-apps': 'Administrator is registered in other consoles',
   'uni-id-unbind-failed': 'Please bind first and then unbind',
   'uni-id-unbind-not-supported': 'Unbinding is not supported',
-  'uni-id-unbind-mobile-not-exists': 'This is the only way to login at the moment, please bind your mobile number and then try to unbind',
+  'uni-id-unbind-mobile-not-exists': 'This is the only way to login at the moment, please bind your phone number and then try to unbind',
   'uni-id-unbind-password-not-exists': 'Please set a password first',
   'uni-id-unsupported-request': 'Unsupported request',
   'uni-id-illegal-request': 'Illegal request',

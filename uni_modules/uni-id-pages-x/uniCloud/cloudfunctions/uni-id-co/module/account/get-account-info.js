@@ -41,7 +41,7 @@ function isAppleBound (userRecord) {
 
 /**
  * 获取账户账户简略信息
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#get-account-info
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#get-account-info
  */
 module.exports = async function () {
   const {
