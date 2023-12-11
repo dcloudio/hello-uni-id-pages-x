@@ -7,7 +7,7 @@ const {
 
 /**
  * 注销账户
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#close-account
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#close-account
  * @returns
  */
 module.exports = async function () {

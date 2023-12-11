@@ -5,7 +5,7 @@ const { dataDesensitization } = require('../../common/utils')
 
 /**
  * 获取实名信息
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#get-realname-info
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#get-realname-info
  * @param {Object} params
  * @param {Boolean} params.decryptData 是否解密数据
  * @returns

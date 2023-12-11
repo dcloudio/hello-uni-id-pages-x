@@ -7,7 +7,7 @@ const {
 } = require('../../common/constants')
 /**
  * 解绑QQ
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#unbind-qq
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#unbind-qq
  * @returns
  */
 module.exports = async function () {

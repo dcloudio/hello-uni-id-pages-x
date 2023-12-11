@@ -7,7 +7,7 @@ const {
 
 /**
  * 获取受邀用户
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#get-invited-user
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#get-invited-user
  * @param {Object} params
  * @param {Number} params.level       获取受邀用户的级数，1表示直接邀请的用户
  * @param {Number} params.limit       返回数据大小

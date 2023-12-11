@@ -11,7 +11,7 @@ const PasswordUtils = require('../../lib/utils/password')
 
 /**
  * 新增用户
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#add-user
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#add-user
  * @param {Object}  params
  * @param {String}  params.username       用户名
  * @param {String}  params.password       密码

@@ -22,8 +22,6 @@ async function sendSmsCode ({
 } = {}) {
   const requiredParams = [
     'name',
-    'smsKey',
-    'smsSecret',
     'codeExpiresIn'
   ]
   const smsConfig = (this.config.service && this.config.service.sms) || {}
@@ -62,7 +60,7 @@ async function sendSmsCode ({
   await uniCloud.sendSms({
     smsKey: smsConfig.smsKey,
     smsSecret: smsConfig.smsSecret,
-    mobile: mobile,
+    phone: mobile,
     templateId,
     data: {
       name: smsConfig.name,

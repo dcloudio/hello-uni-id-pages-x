@@ -19,7 +19,7 @@ const {
 
 /**
  * 绑定微信
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#bind-weixin
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#bind-weixin
  * @param {Object} params
  * @param {String} params.code  微信登录返回的code
  * @returns

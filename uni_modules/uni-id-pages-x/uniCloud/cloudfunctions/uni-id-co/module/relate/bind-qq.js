@@ -19,7 +19,7 @@ const {
 
 /**
  * 绑定QQ
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#bind-qq
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#bind-qq
  * @param {Object} params
  * @param {String} params.code          小程序端QQ登录返回的code
  * @param {String} params.accessToken   APP端QQ登录返回的accessToken

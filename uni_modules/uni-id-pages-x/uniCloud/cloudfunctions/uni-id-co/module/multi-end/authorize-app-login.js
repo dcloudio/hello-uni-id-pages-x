@@ -8,7 +8,7 @@ const {
 
 /**
  * 授权用户登录应用
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#authorize-app-login
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#authorize-app-login
  * @param {Object} params
  * @param {String} params.uid   用户id
  * @param {String} params.appId 授权的应用的AppId
