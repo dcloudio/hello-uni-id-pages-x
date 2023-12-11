@@ -88,9 +88,9 @@
     "backgroundColor": "#F8F8F8"
   },
   "uniIdRouter": {
-    "loginPage": "/uni_modules/uni-id-pages-x/pages/login/login",
+    "loginPage": "uni_modules/uni-id-pages-x/pages/login/login",
     "needLogin": [
-      "/uni_modules/uni-id-pages-x/pages/userinfo/*"
+      "uni_modules/uni-id-pages-x/pages/userinfo/*"
     ]
   }
 }
