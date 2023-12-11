@@ -43,17 +43,20 @@ export const loginSuccess = (_ : UTSJSONObject) => {
 
 }
 
-export const logout = () => {
+export const logout = async () => {
 	// console.log("logout");
 	// 1. 已经过期就不需要调用服务端的注销接口	2.即使调用注销接口失败，不能阻塞客户端
 	if (uniCloud.getCurrentUserInfo().tokenExpired > Date.now()) {
 		const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: false })
-		uniIdCo.logout().finally(() => {
-			// 调完注销接口 跳转至登录页面
-			uni.redirectTo({
-				url: "/uni_modules/uni-id-pages-x/pages/login/login"
-			})
-		})
+		try{
+		  await uniIdCo.logout()
+		}catch(_){
+		  //TODO handle the exception
+		}
+    // 调完注销接口 跳转至登录页面
+    uni.redirectTo({
+    	url: "/uni_modules/uni-id-pages-x/pages/login/login"
+    })
 	}
 	uni.removeStorageSync('uni_id_token');
 	uni.setStorageSync('uni_id_token_expired', 0)
