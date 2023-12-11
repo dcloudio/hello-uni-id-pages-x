@@ -15,7 +15,7 @@ const {
 
 /**
  * 用户名密码登录
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#login
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#login
  * @param {Object} params
  * @param {String} params.username  用户名
  * @param {String} params.mobile    手机号

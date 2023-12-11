@@ -87,10 +87,10 @@ module.exports = class Auth {
     }
   }
 
-  async getmobileNumber (accessToken, code) {
-    const url = `/wxa/business/getusermobilenumber?access_token=${accessToken}`
-    const { mobileInfo } = await this._requestWxOpenapi({
-      name: 'getmobileNumber',
+  async getPhoneNumber (accessToken, code) {
+    const url = `/wxa/business/getuserphonenumber?access_token=${accessToken}`
+    const { phoneInfo } = await this._requestWxOpenapi({
+      name: 'getPhoneNumber',
       url,
       data: {
         code
@@ -105,7 +105,7 @@ module.exports = class Auth {
     })
 
     return {
-      puremobileNumber: mobileInfo.puremobileNumber
+      purePhoneNumber: phoneInfo.purePhoneNumber
     }
   }
 }

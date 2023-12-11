@@ -4,7 +4,7 @@ const {
 
 /**
  * 接受邀请
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#accept-invite
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#accept-invite
  * @param {Object} params
  * @param {String} params.inviteCode  邀请码
  * @returns

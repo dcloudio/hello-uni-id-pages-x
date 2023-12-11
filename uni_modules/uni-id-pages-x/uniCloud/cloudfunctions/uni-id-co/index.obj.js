@@ -180,21 +180,21 @@ module.exports = {
     //   }
     // })
     // // 新增规则同样可以在数组验证规则中使用
-    // this.validator.valdate({
+    // this.validator.validate({
     //   timestamp: 123456789
     // }, {
     //   timestamp: 'timestamp'
     // })
-    // this.validator.valdate({
+    // this.validator.validate({
     //   timestampList: [123456789, 123123123123]
     // }, {
     //   timestampList: 'array<timestamp>'
     // })
     // // 甚至更复杂的写法
-    // this.validator.valdate({
-    //   timestamp: [123456789, 123123123123]
+    // this.validator.validate({
+    //   timestamp: [123456789123123123, 123123123123]
     // }, {
-    //   timestamp: 'timestamp|array<timestamp>'
+    //   timestamp: 'timestamp|array<timestamp|number>'
     // })
 
     // 挂载uni-captcha到this上，方便后续调用
@@ -215,11 +215,10 @@ module.exports = {
     const messages = require('./lang/index')
     const fallbackLocale = 'zh-Hans'
     const i18n = uniCloud.initI18n({
-      locale: clientInfo.locale || 'zh-Hans',
+      locale: clientInfo.locale,
       fallbackLocale,
       messages: JSON.parse(JSON.stringify(messages))
     })
-    // console.log('i18n.locale',i18n.locale);
     if (!messages[i18n.locale]) {
       i18n.setLocale(fallbackLocale)      
     }
@@ -252,7 +251,7 @@ module.exports = {
   },
   /**
    * 注册管理员
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#register-admin
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#register-admin
    * @param {Object} params
    * @param {String} params.username   用户名
    * @param {String} params.password   密码
@@ -262,7 +261,7 @@ module.exports = {
   registerAdmin,
   /**
    * 新增用户
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#add-user
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#add-user
    * @param {Object}  params
    * @param {String}  params.username       用户名
    * @param {String}  params.password       密码
@@ -278,7 +277,7 @@ module.exports = {
   addUser,
   /**
    * 修改用户
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#update-user
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#update-user
    * @param {Object}  params
    * @param {String} params.id              要更新的用户id
    * @param {String}  params.username       用户名
@@ -295,7 +294,7 @@ module.exports = {
   updateUser,
   /**
    * 授权用户登录应用
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#authorize-app-login
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#authorize-app-login
    * @param {Object} params
    * @param {String} params.uid   用户id
    * @param {String} params.appId 授权的应用的AppId
@@ -304,7 +303,7 @@ module.exports = {
   authorizeAppLogin,
   /**
    * 移除用户登录授权
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#remove-authorized-app
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#remove-authorized-app
    * @param {Object} params
    * @param {String} params.uid   用户id
    * @param {String} params.appId 取消授权的应用的AppId
@@ -313,7 +312,7 @@ module.exports = {
   removeAuthorizedApp,
   /**
    * 设置用户允许登录的应用列表
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#set-authorized-app
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#set-authorized-app
    * @param {Object} params
    * @param {String} params.uid       用户id
    * @param {Array} params.appIdList 允许登录的应用AppId列表
@@ -322,7 +321,7 @@ module.exports = {
   setAuthorizedApp,
   /**
    * 注册普通用户
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#register-user
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#register-user
    * @param {Object} params
    * @param {String} params.username    用户名
    * @param {String} params.password    密码
@@ -345,7 +344,7 @@ module.exports = {
   registerUserByEmail,
   /**
    * 用户名密码登录
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#login
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#login
    * @param {Object} params
    * @param {String} params.username  用户名
    * @param {String} params.mobile    手机号
@@ -357,7 +356,7 @@ module.exports = {
   login,
   /**
    * 短信验证码登录
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#login-by-sms
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#login-by-sms
    * @param {Object} params
    * @param {String} params.mobile      手机号
    * @param {String} params.code        短信验证码
@@ -368,7 +367,7 @@ module.exports = {
   loginBySms,
   /**
    * App端一键登录
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#login-by-univerify
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#login-by-univerify
    * @param {Object} params
    * @param {String} params.access_token  APP端一键登录返回的access_token
    * @param {String} params.openid        APP端一键登录返回的openid
@@ -378,7 +377,7 @@ module.exports = {
   loginByUniverify,
   /**
    * 微信登录
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#login-by-weixin
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#login-by-weixin
    * @param {Object} params
    * @param {String} params.code          微信登录返回的code
    * @param {String} params.inviteCode    邀请码
@@ -387,7 +386,7 @@ module.exports = {
   loginByWeixin,
   /**
    * 支付宝登录
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#login-by-alipay
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#login-by-alipay
    * @param {Object} params
    * @param {String} params.code        支付宝小程序客户端登录返回的code
    * @param {String} params.inviteCode  邀请码
@@ -396,7 +395,7 @@ module.exports = {
   loginByAlipay,
   /**
    * QQ登录
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#login-by-qq
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#login-by-qq
    * @param {Object} params
    * @param {String} params.code                  QQ小程序登录返回的code参数
    * @param {String} params.accessToken           App端QQ登录返回的accessToken参数
@@ -407,7 +406,7 @@ module.exports = {
   loginByQQ,
   /**
    * 苹果登录
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#login-by-apple
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#login-by-apple
    * @param {Object} params
    * @param {String} params.identityToken 苹果登录返回的identityToken
    * @param {String} params.nickname      用户昵称
@@ -418,13 +417,13 @@ module.exports = {
   loginByWeixinMobile,
   /**
    * 用户退出登录
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#logout
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#logout
    * @returns
    */
   logout,
   /**
    * 通过短信验证码绑定手机号
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#bind-mobile-by-sms
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#bind-mobile-by-sms
    * @param {Object} params
    * @param {String} params.mobile    手机号
    * @param {String} params.code      短信验证码
@@ -434,7 +433,7 @@ module.exports = {
   bindMobileBySms,
   /**
    * 通过一键登录绑定手机号
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#bind-mobile-by-univerify
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#bind-mobile-by-univerify
    * @param {Object} params
    * @param {String} params.openid        APP端一键登录返回的openid
    * @param {String} params.access_token  APP端一键登录返回的access_token
@@ -443,7 +442,7 @@ module.exports = {
   bindMobileByUniverify,
   /**
    * 通过微信绑定手机号
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#bind-mobile-by-mp-weixin
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#bind-mobile-by-mp-weixin
    * @param {Object} params
    * @param {String} params.encryptedData   微信获取手机号返回的加密信息
    * @param {String} params.iv              微信获取手机号返回的初始向量
@@ -452,7 +451,7 @@ module.exports = {
   bindMobileByMpWeixin,
   /**
    * 绑定微信
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#bind-weixin
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#bind-weixin
    * @param {Object} params
    * @param {String} params.code  微信登录返回的code
    * @returns
@@ -460,7 +459,7 @@ module.exports = {
   bindWeixin,
   /**
    * 绑定QQ
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#bind-qq
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#bind-qq
    * @param {Object} params
    * @param {String} params.code          小程序端QQ登录返回的code
    * @param {String} params.accessToken   APP端QQ登录返回的accessToken
@@ -470,7 +469,7 @@ module.exports = {
   bindQQ,
   /**
    * 绑定支付宝账号
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#bind-alipay
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#bind-alipay
    * @param {Object} params
    * @param {String} params.code  支付宝小程序登录返回的code参数
    * @returns
@@ -478,7 +477,7 @@ module.exports = {
   bindAlipay,
   /**
    * 绑定苹果账号
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#bind-apple
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#bind-apple
    * @param {Object} params
    * @param {String} params.identityToken 苹果登录返回identityToken
    * @returns
@@ -486,7 +485,7 @@ module.exports = {
   bindApple,
   /**
    * 更新密码
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#update-pwd
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#update-pwd
    * @param {object} params
    * @param {string} params.oldPassword 旧密码
    * @param {string} params.newPassword 新密码
@@ -495,7 +494,7 @@ module.exports = {
   updatePwd,
   /**
    * 通过短信验证码重置密码
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#reset-pwd-by-sms
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#reset-pwd-by-sms
    * @param {object} params
    * @param {string} params.mobile   手机号
    * @param {string} params.mobile   短信验证码
@@ -516,18 +515,18 @@ module.exports = {
   resetPwdByEmail,
   /**
    * 注销账户
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#close-account
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#close-account
    * @returns
    */
   closeAccount,
   /**
    * 获取账户账户简略信息
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#get-account-info
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#get-account-info
    */
   getAccountInfo,
   /**
    * 创建图形验证码
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#create-captcha
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#create-captcha
    * @param {Object} params
    * @param {String} params.scene   图形验证码使用场景
    * @returns
@@ -535,7 +534,7 @@ module.exports = {
   createCaptcha,
   /**
    * 刷新图形验证码
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#refresh-captcha
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#refresh-captcha
    * @param {Object} params
    * @param {String} params.scene   图形验证码使用场景
    * @returns
@@ -543,7 +542,7 @@ module.exports = {
   refreshCaptcha,
   /**
    * 发送短信验证码
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#send-sms-code
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#send-sms-code
    * @param {Object} params
    * @param {String} params.mobile    手机号
    * @param {String} params.captcha   图形验证码
@@ -563,12 +562,12 @@ module.exports = {
   sendEmailCode,
   /**
    * 刷新token
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#refresh-token
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#refresh-token
    */
   refreshToken,
   /**
    * 接受邀请
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#accept-invite
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#accept-invite
    * @param {Object} params
    * @param {String} params.inviteCode  邀请码
    * @returns
@@ -576,7 +575,7 @@ module.exports = {
   acceptInvite,
   /**
    * 获取受邀用户
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#get-invited-user
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#get-invited-user
    * @param {Object} params
    * @param {Number} params.level       获取受邀用户的级数，1表示直接邀请的用户
    * @param {Number} params.limit       返回数据大小
@@ -587,7 +586,7 @@ module.exports = {
   getInvitedUser,
   /**
    * 更新device表的push_clien_id
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#set-push-cid
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#set-push-cid
    * @param {object} params
    * @param {string} params.pushClientId  客户端pushClientId
    * @returns
@@ -595,32 +594,32 @@ module.exports = {
   setPushCid,
   /**
    * 获取支持的登录方式
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#get-supported-login-type
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#get-supported-login-type
    * @returns
    */
   getSupportedLoginType,
 
   /**
    * 解绑微信
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#unbind-weixin
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#unbind-weixin
    * @returns
    */
   unbindWeixin,
   /**
    * 解绑支付宝
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#unbind-alipay
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#unbind-alipay
    * @returns
    */
   unbindAlipay,
   /**
    * 解绑QQ
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#unbind-qq
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#unbind-qq
    * @returns
    */
   unbindQQ,
   /**
    * 解绑Apple
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#unbind-apple
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#unbind-apple
    * @returns
    */
   unbindApple,
@@ -630,13 +629,13 @@ module.exports = {
   secureNetworkHandshakeByWeixin,
   /**
    * 设置密码
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#set-pwd
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#set-pwd
    * @returns
    */
   setPwd,
   /**
    * 外部注册用户
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#external-register
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#external-register
    * @param {object} params
    * @param {string} params.externalUid   业务系统的用户id
    * @param {string} params.nickname  昵称
@@ -647,7 +646,7 @@ module.exports = {
   externalRegister,
   /**
    * 外部用户登录
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#external-login
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#external-login
    * @param {object} params
    * @param {string} params.userId  uni-id体系用户id
    * @param {string} params.externalUid   业务系统的用户id
@@ -656,7 +655,7 @@ module.exports = {
   externalLogin,
   /**
    * 使用 userId 或 externalUid 获取用户信息
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#external-update-userinfo
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#external-update-userinfo
    * @param {object} params
    * @param {string} params.userId   uni-id体系的用户id
    * @param {string} params.externalUid   业务系统的用户id
@@ -668,7 +667,7 @@ module.exports = {
   updateUserInfoByExternal,
   /**
    * 获取认证ID
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#get-frv-certify-id
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#get-frv-certify-id
    * @param {Object} params
    * @param {String} params.realName  真实姓名
    * @param {String} params.idCard    身份证号码
@@ -677,7 +676,7 @@ module.exports = {
   getFrvCertifyId,
   /**
    * 查询认证结果
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#get-frv-auth-result
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#get-frv-auth-result
    * @param {Object} params
    * @param {String} params.certifyId       认证ID
    * @param {String} params.needAlivePhoto  是否获取认证照片，Y_O （原始图片）、Y_M（虚化，背景马赛克）、N（不返图）
@@ -686,7 +685,7 @@ module.exports = {
   getFrvAuthResult,
   /**
    * 获取实名信息
-   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#get-realname-info
+   * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#get-realname-info
    * @param {Object} params
    * @param {Boolean} params.decryptData 是否解密数据
    * @returns

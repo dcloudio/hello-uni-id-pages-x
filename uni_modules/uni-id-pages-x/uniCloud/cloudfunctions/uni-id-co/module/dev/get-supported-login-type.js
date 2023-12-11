@@ -4,8 +4,7 @@ function isMobileCodeSupported () {
 }
 
 function isUniverifySupport () {
-  const config = this.config
-  return !!(config.service && config.service.univerify && config.service.univerify.apiKey)
+  return true
 }
 
 function isWeixinSupported () {
@@ -47,7 +46,7 @@ const loginTypeTester = {
 
 /**
  * 获取支持的登录方式
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#get-supported-login-type
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#get-supported-login-type
  * @returns
  */
 module.exports = async function () {
