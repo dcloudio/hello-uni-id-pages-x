@@ -14,57 +14,92 @@ const uniIdCo = uniCloud.importObject('uni-id-co', {
 const loginTypes = config.getArray<string>('loginTypes');
 const debug = config.getBoolean('debug') as boolean;
 
+import Univerify from '@/uni_modules/uni-id-pages-x/lib/Univerify.uts'
+
 export default async function () {
   // 有打开调试模式的情况下
   if (debug) {
     // 1. 检查本地uni-id-pages中配置的登录方式，服务器端是否已经配置正确。否则提醒并引导去配置
     // 调用云对象，获取服务端已正确配置的登录方式
-    const res = await uniIdCo.getSupportedLoginType()
-    let supportedLoginType = res.getArray<string>('supportedLoginType')
-    if(supportedLoginType == null){
-      supportedLoginType = []
-    }
-    // 登录方式，服务端和客户端的映射关系
-    const data:UTSJSONObject = {
-      "smsCode": 'mobile-code',
-      "univerify": 'univerify',
-      "username": 'username-password',
-      "weixin": 'weixin',
-      "qq": 'qq',
-      "xiaomi": 'xiaomi',
-      "sinaweibo": 'sinaweibo',
-      "taobao": 'taobao',
-      "facebook": 'facebook',
-      "google": 'google',
-      "alipay": 'alipay',
-      "apple": 'apple',
-      "weixinMobile": 'weixin'
-    };
-    // 遍历客户端配置的登录方式，与服务端比对。并在错误时抛出错误提示
-    const list = loginTypes?.filter((type:string):boolean =>{
-      let currentType = data.getString(type);
-      if(currentType == null){
-        currentType = ""
+    uniIdCo.getSupportedLoginType().then(res=>{
+      // console.log('7777res',res)
+      let supportedLoginType = res.getArray<string>('supportedLoginType')
+      if(supportedLoginType == null){
+        supportedLoginType = []
       }
-      return !(supportedLoginType.includes(currentType))
+      // 登录方式，服务端和客户端的映射关系
+      const data:UTSJSONObject = {
+        "smsCode": 'mobile-code',
+        "univerify": 'univerify',
+        "username": 'username-password',
+        "weixin": 'weixin',
+        "qq": 'qq',
+        "xiaomi": 'xiaomi',
+        "sinaweibo": 'sinaweibo',
+        "taobao": 'taobao',
+        "facebook": 'facebook',
+        "google": 'google',
+        "alipay": 'alipay',
+        "apple": 'apple',
+        "weixinMobile": 'weixin'
+      };
+      // 遍历客户端配置的登录方式，与服务端比对。并在错误时抛出错误提示
+      const list = loginTypes?.filter((type:string):boolean =>{
+        let currentType = data.getString(type);
+        if(currentType == null){
+          currentType = ""
+        }
+        return !(supportedLoginType.includes(currentType))
+      })
+      if (list?.length != 0) {
+        console.error(
+      		`错误：前端启用的登录方式:${list?.join('，')};没有在服务端完成配置。配置文件路径："/uni_modules/uni-config-center/uniCloud/cloudfunctions/common/uni-config-center/uni-id/config.json"`
+        )
+      }
     })
-    if (list?.length != 0) {
-      console.error(
-    		`错误：前端启用的登录方式:${list?.join('，')};没有在服务端完成配置。配置文件路径："/uni_modules/uni-config-center/uniCloud/cloudfunctions/common/uni-config-center/uni-id/config.json"`
-      )
-    }
   }
 
-  // #ifdef UNI-APP-X
+  // #ifdef uniVersion > 3.99 || uniVersion == 3.99
   // 如果uni-id-pages配置的登录功能有一键登录，有则执行预登录（异步）
-  // if (loginTypes.includes('univerify')) {
-  //   // uni.preLogin({
-  //   //   provider: 'univerify',
-  //   //   complete: e => {
-  //   //     // console.log(e);
-  //   //   }
-  //   // })
-  // }
+  if (loginTypes != null && loginTypes.includes('univerify')) {
+    const myUniverify = new Univerify()
+    const univerifyManager = uni.getUniverifyManager();
+    univerifyManager.preLogin({
+      success() {
+        console.log("pre login success");
+      },
+      fail(err : PreLoginFail) {
+        console.error("pre login fail => " + JSON.stringify(err));
+      }
+    } as PreLoginOptions);
+
+
+    uni.addInterceptor('navigateTo',{
+      invoke:(e:NavigateToOptions)=>{
+        if (e.url.indexOf("/uni_modules/uni-id-pages-x/pages/login/login") == 0) {
+          let url = decodeURIComponent(e.url)
+          let param:UTSJSONObject = {};
+          // 获取链接后面的参数部分
+          let keyValuePairs = url!.split('?')[1].split('&'); // 将参数按&分隔为键值对数组
+          keyValuePairs.forEach(keyValuePair => {
+            let [key, value] = keyValuePair.split('='); // 将键值对按等号分隔为键和值
+            param[key] = value;
+          });
+          let type = param["type"]
+          if(type == null){
+            type = loginTypes[0];
+          }
+
+          if(type == "univerify"){
+            myUniverify.verify(true)
+            throw Error('第一优先级是一键登录（且可用），就直接调用一键登录，不打开登录页面')
+          }
+
+        }
+      }
+    })
+
+  }
   // #endif
 
   // // 3. 绑定clientDB错误事件
