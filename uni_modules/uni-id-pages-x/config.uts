@@ -9,26 +9,31 @@ export default {
     * 2. login登录（如：用户名密码登录，短信验证码登录）
     */
     "scopeList": [
-      "register","login","realNameVerify"
+      "register","login","realNameVerify","univerify"
     ]
   },
   "loginTypes":[
-    "username",
-    "smsCode",
-    // 以下登录方式 uni-app x 暂不支持
-    // "qq",
-    // "xiaomi",
-    // "sinaweibo",
-    // "taobao",
-    // "facebook",
-    // "google",
-    // "alipay",
-    // "douyin",
-    // "weixin",
-    // #ifdef APP
-    // "univerify",
-    // "apple"
+    // #ifdef APP && ( uniVersion > 3.99 || uniVersion == 3.99)
+    "univerify",
     // #endif
+    "smsCode",
+    "username",
+    // 以下登录方式 uni-app x 暂不支持
+    /*
+      "qq",
+      "xiaomi",
+      "sinaweibo",
+      "taobao",
+      "facebook",
+      "google",
+      "alipay",
+      "douyin",
+      "weixin",
+      // #ifdef APP
+      "univerify",
+      "apple"
+      // #endif
+    */
   ],
   /**
    * 密码强度
