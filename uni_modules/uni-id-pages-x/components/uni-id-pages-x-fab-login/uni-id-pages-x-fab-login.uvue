@@ -16,11 +16,8 @@
 
 	import config from '@/uni_modules/uni-id-pages-x/config.uts';
 	import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
-	type Services = {
-		id : string,
-		text : string,
-		logo : string
-	}
+  import {servicesList,Services} from '@/uni_modules/uni-id-pages-x/lib/servicesList.uts';
+  // console.log('servicesList',servicesList)
 	export default {
 		name: "uni-id-pages-x-fab-login",
 		props: {
@@ -47,145 +44,40 @@
 				// 	}
 				// ]
 			},
-			servicesList() : Services[] {
-				const servicesList = [{
-					"id": "username",
-					"text": "账号登录",
-					"logo": "/uni_modules/uni-id-pages-x/static/login/uni-fab-login/user.png",
-				},
-				{
-					"id": "smsCode",
-					"text": "短信验证码",
-					"logo": "/uni_modules/uni-id-pages-x/static/login/uni-fab-login/sms.png",
-				},
-				{
-					"id": "weixin",
-					"text": "微信登录",
-					"logo": "/uni_modules/uni-id-pages-x/static/login/uni-fab-login/weixin.png",
-				},
-				{
-					"id": "weixinMobile",
-					"text": "微信手机号",
-					"logo": "/uni_modules/uni-id-pages-x/static/login/uni-fab-login/weixin.png",
-				},
-				// #ifndef MP-WEIXIN
-				{
-					"id": "apple",
-					"text": "苹果登录",
-					"logo": "/uni_modules/uni-id-pages-x/static/app/uni-fab-login/apple.png",
-				},
-				{
-					"id": "univerify",
-					"text": "一键登录",
-					"logo": "/uni_modules/uni-id-pages-x/static/app/uni-fab-login/univerify.png",
-				},
-				{
-					"id": "taobao",
-					"text": "淘宝登录", //暂未提供该登录方式的接口示例
-					"logo": "/uni_modules/uni-id-pages-x/static/app/uni-fab-login/taobao.png",
-				},
-				{
-					"id": "facebook",
-					"text": "脸书登录", //暂未提供该登录方式的接口示例
-					"logo": "/uni_modules/uni-id-pages-x/static/app/uni-fab-login/facebook.png",
-				},
-				{
-					"id": "alipay",
-					"text": "支付宝登录", //暂未提供该登录方式的接口示例
-					"logo": "/uni_modules/uni-id-pages-x/static/app/uni-fab-login/alipay.png",
-				},
-				{
-					"id": "qq",
-					"text": "QQ登录", //暂未提供该登录方式的接口示例
-					"logo": "/uni_modules/uni-id-pages-x/static/app/uni-fab-login/qq.png",
-				},
-				{
-					"id": "google",
-					"text": "谷歌登录", //暂未提供该登录方式的接口示例
-					"logo": "/uni_modules/uni-id-pages-x/static/app/uni-fab-login/google.png",
-				},
-				{
-					"id": "douyin",
-					"text": "抖音登录", //暂未提供该登录方式的接口示例
-					"logo": "/uni_modules/uni-id-pages-x/static/app/uni-fab-login/douyin.png",
-				},
-				{
-					"id": "sinaweibo",
-					"text": "新浪微博", //暂未提供该登录方式的接口示例
-					"logo": "/uni_modules/uni-id-pages-x/static/app/uni-fab-login/sinaweibo.png",
-				}
-					// #endif
-				] as Services[]
-				const loginTypes = config.getArray<string>('loginTypes')
-				return servicesList.filter((item) : boolean => {
-					// #ifndef APP
-					//非app端去掉apple登录
-					if (item.id == 'apple') {
-						return false
-					}
-					// #endif
-
-					// #ifdef APP
-					//去掉非ios系统上的apple登录
-					if (item.id == 'apple' && uni.getSystemInfoSync().osName != 'ios') {
-						return false
-					}
-					// #endif
-
-					//  不能是当前已经显示的登录方式 && 必须是配置了的
-					return item.id != this.currentLoginType && loginTypes!.includes(item.id)
-				})
-			}
+      servicesList():Services[]{
+        // 过滤当前已经显示的
+        return (servicesList as Services[]).filter((item:Services):boolean => item['id'] != this.currentLoginType)
+      }
 		},
 		data() {
 			return {
-				// univerifyStyle: { //一键登录弹出窗的样式配置参数
-				// 	"fullScreen": true, // 是否全屏显示，true表示全屏模式，false表示非全屏模式，默认值为false。
-				// 	"backgroundColor": "#ffffff", // 授权页面背景颜色，默认值：#ffffff
-				// 	"buttons": { // 自定义登录按钮
-				// 		"iconWidth": "45px", // 图标宽度（高度等比例缩放） 默认值：45px
-				// 		"list": []
-				// 	},
-				// 	"privacyTerms": {
-				// 		"defaultCheckBoxState": false, // 条款勾选框初始状态 默认值： true
-				// 		"textColor": "#BBBBBB", // 文字颜色 默认值：#BBBBBB
-				// 		"termsColor": "#5496E3", //  协议文字颜色 默认值： #5496E3
-				// 		"prefix": "我已阅读并同意", // 条款前的文案 默认值：“我已阅读并同意”
-				// 		"suffix": "并使用本机号码登录", // 条款后的文案 默认值：“并使用本机号码登录”
-				// 		"privacyItems": []
-				// 	}
-				// }
+				univerifyStyle:{ //一键登录弹出窗的样式配置参数
+          "fullScreen": true, // 是否全屏显示，true表示全屏模式，false表示非全屏模式，默认值为false。
+          "backgroundColor": "#ffffff", // 授权页面背景颜色，默认值：#ffffff
+          "buttons": { // 自定义登录按钮
+            "iconWidth": "45px", // 图标宽度（高度等比例缩放） 默认值：45px
+            // "list": [] as Array
+          },
+          "privacyTerms": {
+            "defaultCheckBoxState": false, // 条款勾选框初始状态 默认值： true
+            "textColor": "#BBBBBB", // 文字颜色 默认值：#BBBBBB
+            "termsColor": "#5496E3", //  协议文字颜色 默认值： #5496E3
+            "prefix": "我已阅读并同意", // 条款前的文案 默认值：“我已阅读并同意”
+            "suffix": "并使用本机号码登录", // 条款后的文案 默认值：“并使用本机号码登录”
+            // "privacyItems": []
+          }
+        } as UTSJSONObject
 			}
 		},
 		watch: {
-			// TODO----
-			// agree(agree) {
-			// 	this.univerifyStyle.privacyTerms.defaultCheckBoxState = agree
-			// }
-		},
-		created() {
-			//处理一键登录
-			if (this.servicesList.map((i) : string => i.id).includes('univerify')) {
-				// console.log('处理一键登录');
-				// this.univerifyStyle.privacyTerms.privacyItems = this.agreements
-				// //设置一键登录功能底下的快捷登录按钮
-				// servicesList.forEach(({
-				// 	id,
-				// 	logo,
-				// }) => {
-				// 	if (id != 'univerify') {
-				// 		this.univerifyStyle.buttons.list.push({
-				// 			"iconPath": logo,
-				// 			"provider": id,
-				// 		})
-				// 	}
-				// })
+			agree(agree) {
+				this.univerifyStyle.privacyTerms.defaultCheckBoxState = agree
 			}
 		},
 		methods: {
 			changeLoginType(index : number) {
 				const id = this.servicesList[index].id
-				if (!["username", "smsCode"].includes(id)) {
+				if (!["username", "smsCode","univerify"].includes(id)) {
 					return uni.showToast({
 						title: 'uni-app x暂未支持此登录方式',
 						icon: 'none',
@@ -200,11 +92,11 @@
 				}
 			},
 			login_before(type : string) {
-				// console.log(type);
+				console.log(type);
 				// 提示空实现
 				if (["qq", "xiaomi", "sinaweibo", "taobao", "facebook", "google", "alipay", "douyin"].includes(type)) {
 					return uni.showToast({
-						title: '该登录方式暂未实现，欢迎提交pr',
+						title: '该登录方式暂未支持',
 						icon: 'none',
 						duration: 3000
 					});
@@ -212,49 +104,20 @@
 				//检查当前环境是否支持这种登录方式
 
 				//判断是否需要弹出隐私协议授权框
-				const scope = config.getAny('agreements.scope') as string[]
+				const scopeList = config.getArray<string>('agreements.scopeList')
 				// 配置中，当前类型是否需要，用户同意隐私协议
-				let needAgreements = scope.includes('register')
+				let needAgreements = scopeList!.includes('register')
+        // console.log('needAgreements',needAgreements)
+
 				// 排除一键登录的情况（在一键登录的弹出层中选择） && !this.agree 未同意 && 需要同意
 				if (type != 'univerify' && needAgreements && !state.pendingAgreements) {
 					return uni.showToast({
 						title: '你未同意隐私政策协议',
 						icon: 'none'
 					});
-					// console.log('弹出申请同意隐私协议的框');
+					// console.log('晃动申请同意隐私协议的框');
 					// uni.$emit("uni-id-pages-x-agreements-shake",'')
 				}
-
-				uni.showToast({
-					title: 'login_type:' + type,
-					icon: 'none'
-				});
-
-				// uni.login({
-				// 	"provider": type,
-				// 	"onlyAuthorize": true,
-				// 	// #ifdef APP
-				// 	// "univerifyStyle": this.univerifyStyle,
-				// 	// #endif
-				// 	success: async (e:any) => {
-				//     console.log('eeeee',e);
-				// 		// if (type == 'apple') {
-				// 		// 	let res = await this.getUserInfo({
-				// 		// 		provider: "apple"
-				// 		// 	})
-				// 		// 	Object.assign(e.authResult, res.userInfo)
-				// 		// 	uni.hideLoading()
-				// 		// }
-				// 		// this.login(type == 'weixin' ? {
-				// 		// 	code: e.code
-				// 		// } : e.authResult, type)
-				// 	}
-				// 	// fail: async (err) => {
-				// 	// 	console.log(err);
-				// 	// 	uni.hideLoading()
-				// 	// }
-				// })
-
 			}
 		}
 	}
