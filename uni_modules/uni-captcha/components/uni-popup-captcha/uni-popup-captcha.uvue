@@ -14,12 +14,8 @@
 </template>
 
 <script>
-  import uniPopup from './uni-popup/uni-popup.uvue';
   let confirmCallBack = ():void=>console.log('未传入回调函数')
   export default {
-    components: {
-      uniPopup
-    },
     emits:["modelValue","confirm","cancel"],
     data() {
       return {
