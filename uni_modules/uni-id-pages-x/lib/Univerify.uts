@@ -45,9 +45,10 @@ export default class Univerify {
           const currentPage = pages[pages.length - 1]
           const loginPageRoute = "uni_modules/uni-id-pages-x/pages/login/login"
           if(currentPage.route === loginPageRoute){
-            uni.showToast({
-              title: err.errMsg,
-              icon: 'none'
+            uni.showModal({
+              title: '预登录失败',
+              content: JSON.parseObject(err.cause?.cause?.message ?? "")?.getString("errorDesc") ?? err.errMsg,
+              showCancel: false
             });
           }else{
             // 获取除一键登录以外的登录方式
