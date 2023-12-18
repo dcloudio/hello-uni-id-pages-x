@@ -5,3 +5,4 @@
 /vue.config.js
 .DS_Store
 .idea
+package-lock.json
