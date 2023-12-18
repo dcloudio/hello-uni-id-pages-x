@@ -52,18 +52,5 @@
 				"privateKey": "支付宝小程序登录用到的appid、privateKey请参考支付宝小程序的文档进行设置或者获取，https://opendocs.alipay.com/open/291/105971#LDsXr"
 			}
 		}
-	},
-	"service": {
-		"sms": {
-			"name": "应用名称，对应短信模版的name",
-			"codeExpiresIn": 300,
-			"smsKey": "短信密钥key，开通短信服务处可以看到",
-			"smsSecret": "短信密钥secret，开通短信服务处可以看到"
-		},
-		"univerify": {
-			"appid": "",
-			"apiKey": "",
-			"apiSecret": ""
-		}
 	}
 }
