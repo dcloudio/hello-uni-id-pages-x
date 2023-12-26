@@ -21,16 +21,16 @@ describe('pages/index/index.uvue', () => {
 		await listItems[0].tap()
 		currentPage = await program.currentPage()
 		console.log('currentPage: ',currentPage);
-		// expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
-		// expect(currentPage.query.type).toBe("smsCode")
+		expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
+		expect(currentPage.query.type).toBe("smsCode")
 		await program.navigateBack()
 	});
 	it('账号密码登录', async () => {
 		await listItems[1].tap()
 		currentPage = await program.currentPage()
 		console.log('currentPage:----- ',currentPage);
-		// expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
-		// expect(currentPage.query.type).toBe("username")
+		expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
+		expect(currentPage.query.type).toBe("username")
 	});
 });
 
