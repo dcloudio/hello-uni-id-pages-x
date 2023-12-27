@@ -74,32 +74,47 @@ export default async function () {
     } as PreLoginOptions);
 
 
-    uni.addInterceptor('navigateTo',{
-      invoke:(e:NavigateToOptions)=>{
-        if (e.url.indexOf("/uni_modules/uni-id-pages-x/pages/login/login") == 0) {
-          let url = decodeURIComponent(e.url)
-          let param:UTSJSONObject = {};
-          // 获取链接后面的参数部分
-          let keyValuePairs = url!.split('?')[1].split('&'); // 将参数按&分隔为键值对数组
+    const handleInterceptor = (geturl:string)=>{
+      if (geturl.indexOf("/uni_modules/uni-id-pages-x/pages/login/login") == 0) {
+        let url = decodeURIComponent(geturl)
+        let param:UTSJSONObject = {};
+        // 获取链接后面的参数部分
+        let urlSplit = url!.split('?')
+        let type = '';
+        if(urlSplit.length > 1){
+          let keyValuePairs = urlSplit[1].split('&'); // 将参数按&分隔为键值对数组
+          // console.log('keyValuePairs: ',keyValuePairs);
           keyValuePairs.forEach(keyValuePair => {
             let [key, value] = keyValuePair.split('='); // 将键值对按等号分隔为键和值
             param[key] = value;
           });
-          let type = param["type"]
-          if(type == null){
-            type = loginTypes[0];
+          if(typeof param["type"] == 'string'){
+            type = param["type"] as string
           }
-
-          if(type == "univerify"){
-            myUniverify.verify(true)
-            throw Error('第一优先级是一键登录（且可用），就直接调用一键登录，不打开登录页面')
-          }
-
         }
+        if(type == ''){
+          type = loginTypes[0];
+        }
+        if(type == "univerify"){
+          myUniverify.verify(true)
+          throw new Error('第一优先级是一键登录（且可用），就直接调用一键登录，不打开登录页面')
+        }
+      }
+    }
+
+    uni.addInterceptor('navigateTo',{
+      invoke:(e:NavigateToOptions)=>{
+        handleInterceptor(e.url)
+      }
+    })
+    uni.addInterceptor('redirectTo',{
+      invoke:(e:RedirectToOptions)=>{
+        handleInterceptor(e.url)
       }
     })
 
   }
+
   // #endif
 
   // // 3. 绑定clientDB错误事件

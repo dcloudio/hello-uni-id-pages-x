@@ -1,104 +1,105 @@
 import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
 import config from '@/uni_modules/uni-id-pages-x/config.uts';
 export const loginSuccess = (_ : UTSJSONObject) => {
-	// console.log('loginSuccess', e);
-	// console.log("新用户uid", e["uid"]);
-	// state.currentUserInfo = uniCloud.getCurrentUserInfo()
-	mutations.updateUserInfo(null)
-	// state.userInfo["_id"] = e["uid"]
-	state.isLogin = true
-	uni.$emit('uni-id-pages-x-login-success', '')
+  // console.log('loginSuccess', e);
+  // console.log("新用户uid", e["uid"]);
+  // state.currentUserInfo = uniCloud.getCurrentUserInfo()
+  mutations.updateUserInfo(null)
+  // state.userInfo["_id"] = e["uid"]
+  state.isLogin = true
+  uni.$emit('uni-id-pages-x-login-success', '')
 
-	// 登录后重定向设置
-	function loginAfterToPage() {
-		const pages = getCurrentPages()
-		const currentPage = pages[pages.length - 1]
-		const uniIdRedirectUrl = currentPage.options.get("uniIdRedirectUrl");
-		if (uniIdRedirectUrl != null) {
-			// console.log('uniIdRedirectUrl', uniIdRedirectUrl);
-			uni.redirectTo({
-				url: uniIdRedirectUrl,
-				fail() {
-					console.error("uniIdRouter redirectTo fail");
-					uni.switchTab({
-						"url": uniIdRedirectUrl
-					})
-				},
-				success() {
-					// console.log('uniIdRouter redirectTo success');
-				}
-			})
-		} else if(currentPage.route == "uni_modules/uni-id-pages-x/pages/login/login") {
-			uni.navigateBack()
-		}
-	};
-	const toastDuration = 1500
-	uni.showToast({
-		title: '登录成功',
-		duration: toastDuration,
-		icon: 'none'
-	});
-	// 避免 showToast 还没结束就跳转引起的崩溃
-	setTimeout(() => loginAfterToPage(), toastDuration);
+  // 登录后重定向设置
+  function loginAfterToPage() {
+    const pages = getCurrentPages()
+    const currentPage = pages[pages.length - 1]
+    const uniIdRedirectUrl = currentPage.options.get("uniIdRedirectUrl");
+    if (uniIdRedirectUrl != null) {
+      // console.log('uniIdRedirectUrl', uniIdRedirectUrl);
+      uni.redirectTo({
+        url: uniIdRedirectUrl,
+        fail() {
+          console.error("uniIdRouter redirectTo fail");
+          uni.switchTab({
+            "url": uniIdRedirectUrl
+          })
+        },
+        success() {
+          // console.log('uniIdRouter redirectTo success');
+        }
+      })
+    } else if (currentPage.route == "uni_modules/uni-id-pages-x/pages/login/login") {
+      uni.navigateBack()
+    }
+  };
+  const toastDuration = 1500
+  uni.showToast({
+    title: '登录成功',
+    duration: toastDuration,
+    icon: 'none'
+  });
+  // 避免 showToast 还没结束就跳转引起的崩溃
+  setTimeout(() => loginAfterToPage(), toastDuration);
 
 }
 
 export const logout = async () => {
-	// console.log("logout");
-	// 1. 已经过期就不需要调用服务端的注销接口	2.即使调用注销接口失败，不能阻塞客户端
-	if (uniCloud.getCurrentUserInfo().tokenExpired > Date.now()) {
-		const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: false })
-		try{
-		  await uniIdCo.logout()
-		}catch(_){
-		  //TODO handle the exception
-		}
-    // 调完注销接口 跳转至登录页面
-    uni.redirectTo({
-    	url: "/uni_modules/uni-id-pages-x/pages/login/login"
-    })
-	}
-	uni.removeStorageSync('uni_id_token');
-	uni.setStorageSync('uni_id_token_expired', 0)
+  console.log("logout");
+  // 1. 已经过期就不需要调用服务端的注销接口	2.即使调用注销接口失败，不能阻塞客户端
+  if (uniCloud.getCurrentUserInfo().tokenExpired > Date.now()) {
+    const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: false })
+    try {
+      await uniIdCo.logout()
+    } catch (err) {
+      //TODO handle the exception
+      console.log('err: ', err);
+    }
+  }
+  uni.removeStorageSync('uni_id_token');
+  uni.setStorageSync('uni_id_token_expired', 0)
+  state.userInfo = {}
+  state.isLogin = false
+  uni.$emit('uni-id-pages-x-logout', '')
+  // 调完注销接口 跳转至登录页面
+  uni.redirectTo({
+    url: "/uni_modules/uni-id-pages-x/pages/login/login"
+  })
 
-	state.userInfo = {}
-	state.isLogin = false
-	uni.$emit('uni-id-pages-x-logout', '')
 }
 
 export const checkPassword = (password : string) : UTSJSONObject => {
   let res : UTSJSONObject = {
-  	"pass": true,
-  	"errMsg": null
+    "pass": true,
+    "errMsg": null
   }
-	// console.log("checkPassword", password);
-	// 根据配置的密码强度校验
-	let passwordStrength = config.getString("passwordStrength")
-	if (passwordStrength == null) {
-		return res
-	}
-	// 密码强度表达式
-	const passwordRules : UTSJSONObject = {
-		"super": {
-			"rule": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&_\\-+=`|\\(){}\\[\\]:;\"'<>,.?/])[0-9a-zA-Z~!@#$%^&_\\-+=`|\\(){}\\[\\]:;\"'<>,.?/]{8,16}$",
-			"errMsg": "密码必须包含大小写字母、数字和特殊符号，长度范围：8-16位之间"
-		},
-		"strong": {
-			"rule": "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[~!@#$%^&_\\-+=`|\\(){}\\[\\]:;\"'<>,.?/])[0-9a-zA-Z~!@#$%^&_\\-+=`|\\(){}\\[\\]:;\"'<>,.?/]{8,16}$",
-			"errMsg": "密密码必须包含字母、数字和特殊符号，长度范围：8-16位之间"
-		},
-		"medium": {
-			"rule": "^(?!.*[0-9]+$)(?!.*[a-zA-Z]+$)(?!.*[~!@#$%^&_\\-+=`|\\(){}\\[\\]:;\"'<>,.?/]+$)[0-9a-zA-Z~!@#$%^&_\\-+=`|\\(){}\\[\\]:;\"'<>,.?/]{8,16}$",
-			"errMsg": "密码必须为字母、数字和特殊符号任意两种的组合，长度范围：8-16位之间"
-		},
-		"weak": {
-			"rule": "^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z~!@#$%^&_\\-+=`|\\(){}\\[\\]:;\"'<>,.?/]{6,16}$",
-			"errMsg": "密码必须包含字母和数字，长度范围：6-16位之间"
-		}
-	}
-	let passwordRule = passwordRules.getString(passwordStrength + '.rule');
-	let passwordRegExp = new RegExp(passwordRule as string);
+  // console.log("checkPassword", password);
+  // 根据配置的密码强度校验
+  let passwordStrength = config.getString("passwordStrength")
+  if (passwordStrength == null) {
+    return res
+  }
+  // 密码强度表达式
+  const passwordRules : UTSJSONObject = {
+    "super": {
+      "rule": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&_\\-+=`|\\(){}\\[\\]:;\"'<>,.?/])[0-9a-zA-Z~!@#$%^&_\\-+=`|\\(){}\\[\\]:;\"'<>,.?/]{8,16}$",
+      "errMsg": "密码必须包含大小写字母、数字和特殊符号，长度范围：8-16位之间"
+    },
+    "strong": {
+      "rule": "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[~!@#$%^&_\\-+=`|\\(){}\\[\\]:;\"'<>,.?/])[0-9a-zA-Z~!@#$%^&_\\-+=`|\\(){}\\[\\]:;\"'<>,.?/]{8,16}$",
+      "errMsg": "密密码必须包含字母、数字和特殊符号，长度范围：8-16位之间"
+    },
+    "medium": {
+      "rule": "^(?!.*[0-9]+$)(?!.*[a-zA-Z]+$)(?!.*[~!@#$%^&_\\-+=`|\\(){}\\[\\]:;\"'<>,.?/]+$)[0-9a-zA-Z~!@#$%^&_\\-+=`|\\(){}\\[\\]:;\"'<>,.?/]{8,16}$",
+      "errMsg": "密码必须为字母、数字和特殊符号任意两种的组合，长度范围：8-16位之间"
+    },
+    "weak": {
+      "rule": "^(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z~!@#$%^&_\\-+=`|\\(){}\\[\\]:;\"'<>,.?/]{6,16}$",
+      "errMsg": "密码必须包含字母和数字，长度范围：6-16位之间"
+    }
+  }
+  let passwordRule = passwordRules.getString(passwordStrength + '.rule');
+  let passwordRegExp = new RegExp(passwordRule as string);
   res["pass"] = passwordRegExp.test(password);
   res["errMsg"] = passwordRules.getString(passwordStrength + '.errMsg');
-	return res
+  return res
 }
