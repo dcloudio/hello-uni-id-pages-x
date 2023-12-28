@@ -1,9 +1,9 @@
 // uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
-
-describe('/uni_modules/uni-id-pages-x/pages/userinfo/setNickname/setNickname.uvue', () => {
+const PAGE_PATH = '/uni_modules/uni-id-pages-x/pages/userinfo/setNickname/setNickname'
+describe('setNickname', () => {
 	let page,nickname;
 	beforeAll(async () => {
-		page = await program.redirectTo('/uni_modules/uni-id-pages-x/pages/userinfo/setNickname/setNickname')
+		page = await program.redirectTo(PAGE_PATH)
 		await page.waitFor('view')
 	});
 	it('设置昵称', async () => {
@@ -13,7 +13,7 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/setNickname/setNickname.uvu
 		if(!nickname || nickname == "dcloud99"){
 			nickname = "dcloud00";
 		}else{
-			nickname = "dcloud99";  
+			nickname = "dcloud99";
 		}
 		await page.setData({nickname})
 		await page.waitFor(300)

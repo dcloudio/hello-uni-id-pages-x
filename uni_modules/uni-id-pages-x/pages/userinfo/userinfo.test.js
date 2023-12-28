@@ -1,9 +1,9 @@
 // uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
-
-describe('/uni_modules/uni-id-pages-x/pages/userinfo/userinfo.uvue', () => {
+const PAGE_PATH = '/uni_modules/uni-id-pages-x/pages/userinfo/userinfo'
+describe('userinfo', () => {
 	let page;
 	beforeAll(async () => {
-		page = await program.navigateTo('/uni_modules/uni-id-pages-x/pages/userinfo/userinfo')
+		page = await program.navigateTo(PAGE_PATH)
 		await page.waitFor('view')
 		// console.log("pageStack",await program.pageStack())
 	});
@@ -21,6 +21,5 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/userinfo.uvue', () => {
 		expect(titleList.length).toBe(6)
 		expect(await titleList[5].text()).toBe('退出登录')
 		await page.callMethod('logout')
-		// console.log("currentPage",await program.currentPage())
 	});
 });

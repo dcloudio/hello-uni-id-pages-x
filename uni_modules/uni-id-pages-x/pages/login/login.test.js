@@ -1,6 +1,6 @@
 // uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
+jest.setTimeout(20000)
 const PAGE_PATH = '/uni_modules/uni-id-pages-x/pages/login/login'
-
 describe('loginByPwd', () => {
 	let page,agreeEl,loginByPwdEl,loginBySmsCodeEl,smsCodeEl,loginSuccess,loginErr;
 	beforeAll(async () => {
@@ -62,70 +62,70 @@ describe('loginByPwd', () => {
 			}
 		}
 	});
-	// it('smsCode-setData', async () => {
-	// 	page = await program.redirectTo(PAGE_PATH)
-	// 	await page.waitFor(1000)
-	// 	// const fabLogin = await page.$('uni-id-pages-x-fab-login')
-	// 	// await fabLogin.tap()
-	// 	// console.log('fabLogin: ',await page.data('loginType'));
-	// 	await page.setData({
-	// 		loginType: "smsCode"
-	// 	})
-	// 	loginBySmsCodeEl = await page.$('uni-id-pages-x-loginBySmsCode')
-	// 	smsCodeEl = await page.$('uni-id-pages-x-smsCode')
-	// 	await smsCodeEl.setData({
-	// 		mobile: "17755555555",
-	// 		sendSmsCaptcha: "1234",
-	// 	})
-	// });
+	it('smsCode-setData', async () => {
+		page = await program.redirectTo(PAGE_PATH)
+		await page.waitFor(1000)
+		// const fabLogin = await page.$('uni-id-pages-x-fab-login')
+		// await fabLogin.tap()
+		// console.log('fabLogin: ',await page.data('loginType'));
+		await page.setData({
+			loginType: "smsCode"
+		})
+		loginBySmsCodeEl = await page.$('uni-id-pages-x-loginBySmsCode')
+		smsCodeEl = await page.$('uni-id-pages-x-smsCode')
+		await smsCodeEl.setData({
+			mobile: "17755555555",
+			sendSmsCaptcha: "1234",
+		})
+	});
 
-	// it('smsCode-agree', async () => {
-	// 	agreeEl = await page.$('uni-id-pages-x-agreements')
-	// 	expect(await agreeEl.data('needAgreements')).toBe(true)
-	// 	await agreeEl.callMethod('confirm')
-	// 	await page.waitFor(100)
-	// });
+	it('smsCode-agree', async () => {
+		agreeEl = await page.$('uni-id-pages-x-agreements')
+		expect(await agreeEl.data('needAgreements')).toBe(true)
+		await agreeEl.callMethod('confirm')
+		await page.waitFor(100)
+	});
 
-	// it('smsCode-callMethod', async () => {
-	// 	await smsCodeEl.callMethod('sendSmsCode')
-	// 	await page.waitFor(500)
-	// 	await smsCodeEl.setData({
-	// 		smsCode: "123456"
-	// 	})
-	// });
+	it('smsCode-callMethod', async () => {
+		await smsCodeEl.callMethod('sendSmsCode')
+		await page.waitFor(500)
+		await smsCodeEl.setData({
+			smsCode: "123456"
+		})
+	});
 
-	// it('手机验证码', async () => {
-	// 	// 等待登录结果
-	// 	await page.waitFor(async () => {
-	// 		return await loginBySmsCodeEl.data('testState') === true
-	// 	})
-	// 	loginSuccess = await loginBySmsCodeEl.data('testSuccess')
-	// 	console.log('loginSuccess:---2 ', loginSuccess,typeof loginSuccess);
-	// 	if (typeof loginSuccess == 'string') {
-	// 		expect(loginSuccess).toHaveLength(24)
-	// 		return
-	// 	}else{
-	// 		loginErr = await loginBySmsCodeEl.data('testErr')
-	// 		console.log('loginErr:---2 ', loginErr);
-	// 		switch (loginErr.errCode) {
-	// 			case 'uni-id-account-not-exists':
-	// 				expect(loginErr.errMsg).toBe('Account does not exists')
-	// 				break;
-	// 			case 'uni-id-mobile-verify-code-error':
-	// 				expect(loginErr.errMsg).toBe('手机验证码错误或已过期')
-	// 				break;
-	// 			case 'uni-id-captcha-required':
-	// 				expect(loginErr.errMsg).toBe('请输入图形验证码')
-	// 				await loginBySmsCodeEl.setData({
-	// 					captcha:"1234"
-	// 				})
-	// 				break;
-	// 			default:
-	// 				console.log('err--')
-	// 				break;
-	// 		}
-	// 	}
-	// });
+	it('手机验证码', async () => {
+		// 等待登录结果
+		await page.waitFor(async () => {
+			return await loginBySmsCodeEl.data('testState') === true
+		})
+		loginSuccess = await loginBySmsCodeEl.data('testSuccess')
+		console.log('loginSuccess:---2 ', loginSuccess);
+		if (typeof loginSuccess == 'string') {
+			expect(loginSuccess).toHaveLength(24)
+			return
+		}else{
+			loginErr = await loginBySmsCodeEl.data('testErr')
+			console.log('loginErr:---2 ', loginErr);
+			switch (loginErr.errCode) {
+				case 'uni-id-account-not-exists':
+					expect(loginErr.errMsg).toBe('Account does not exists')
+					break;
+				case 'uni-id-mobile-verify-code-error':
+					expect(loginErr.errMsg).toBe('手机验证码错误或已过期')
+					break;
+				case 'uni-id-captcha-required':
+					expect(loginErr.errMsg).toBe('请输入图形验证码')
+					await loginBySmsCodeEl.setData({
+						captcha:"1234"
+					})
+					break;
+				default:
+					console.log('err--')
+					break;
+			}
+		}
+	});
 });
 
 

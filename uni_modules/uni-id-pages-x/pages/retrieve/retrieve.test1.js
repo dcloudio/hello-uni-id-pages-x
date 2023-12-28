@@ -1,9 +1,10 @@
 // uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
 jest.setTimeout(20000)
-describe('/uni_modules/uni-id-pages-x/pages/retrieve/retrieve.uvue', () => {
+const PAGE_PATH = '/uni_modules/uni-id-pages-x/pages/retrieve/retrieve'
+describe('retrieve', () => {
 	let page,mobile,captcha,smsCode,smsCodeEl;
 	beforeAll(async () => {
-		page = await program.navigateTo('/uni_modules/uni-id-pages-x/pages/retrieve/retrieve')
+		page = await program.navigateTo(PAGE_PATH)
 		await page.waitFor('view')
 		await page.setData({isTest:true})
 		smsCodeEl = await page.$('uni-id-pages-x-smsCode')
@@ -28,7 +29,7 @@ describe('/uni_modules/uni-id-pages-x/pages/retrieve/retrieve.uvue', () => {
 		//等待登录结果
 		await page.waitFor(async () => {
 			return await page.data('testState') === true
-		}) 
+		})
 		const testSuccessRes = await page.data('testSuccess')
 		if(testSuccessRes < 100){
 			console.log('重置成功');
@@ -50,5 +51,5 @@ describe('/uni_modules/uni-id-pages-x/pages/retrieve/retrieve.uvue', () => {
 			}
 		}
 	});
-	
+
 });
