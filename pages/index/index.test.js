@@ -16,11 +16,11 @@ describe('pages/index/index.uvue', () => {
 		const itemTexts = await page.$$('.list-item-text')
 		expect(await itemTexts[0].text()).toBe('手机验证码登录')
 		expect(await itemTexts[1].text()).toBe('账号密码登录')
+    expect(await itemTexts[2].text()).toBe('一键登录')
 	});
 	it('手机验证码登录', async () => {
 		await listItems[0].tap()
 		currentPage = await program.currentPage()
-		console.log('currentPage: ',currentPage);
 		expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
 		expect(currentPage.query.type).toBe("smsCode")
 		await program.navigateBack()
@@ -28,7 +28,6 @@ describe('pages/index/index.uvue', () => {
 	it('账号密码登录', async () => {
 		await listItems[1].tap()
 		currentPage = await program.currentPage()
-		console.log('currentPage:----- ',currentPage);
 		expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
 		expect(currentPage.query.type).toBe("username")
 	});

@@ -61,7 +61,6 @@ describe('loginByPwd', () => {
 					break;
 			}
 		}
-		console.log("currentPage",await program.currentPage())
 	});
 	// it('smsCode-setData', async () => {
 	// 	page = await program.redirectTo(PAGE_PATH)
@@ -79,14 +78,14 @@ describe('loginByPwd', () => {
 	// 		sendSmsCaptcha: "1234",
 	// 	})
 	// });
-	
+
 	// it('smsCode-agree', async () => {
 	// 	agreeEl = await page.$('uni-id-pages-x-agreements')
 	// 	expect(await agreeEl.data('needAgreements')).toBe(true)
 	// 	await agreeEl.callMethod('confirm')
 	// 	await page.waitFor(100)
 	// });
-	
+
 	// it('smsCode-callMethod', async () => {
 	// 	await smsCodeEl.callMethod('sendSmsCode')
 	// 	await page.waitFor(500)
@@ -94,7 +93,7 @@ describe('loginByPwd', () => {
 	// 		smsCode: "123456"
 	// 	})
 	// });
-	
+
 	// it('手机验证码', async () => {
 	// 	// 等待登录结果
 	// 	await page.waitFor(async () => {
