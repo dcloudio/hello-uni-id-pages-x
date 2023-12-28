@@ -54,20 +54,18 @@
 		}
 	},
   "service": {
-      "sms": {
-        "name": "应用名称，对应短信模版的name",
-        "codeExpiresIn": 180,
-        "smsKey": "短信密钥key，开通短信服务处可以看到",
-        "smsSecret": "短信密钥secret，开通短信服务处可以看到",
-        "scene": {
-          "bind-mobile-by-sms": {
-            "templateId": "绑定手机号使用的短信验证码模板",
-            "codeExpiresIn": 240
-          }
+    "sms": {
+      "name": "应用名称，对应短信模版的name",
+      "codeExpiresIn": 180,
+      "scene": {
+        "bind-mobile-by-sms": {
+          "templateId": "绑定手机号使用的短信验证码模板",
+          "codeExpiresIn": 240
         }
-      },
-      "univerify": {
-        "appid": "当前应用的appid，使用云函数URL化，此项必须配置"
       }
+    },
+    "univerify": {
+      "appid": "当前应用的appid，使用云函数URL化，此项必须配置"
     }
+  }
 }
