@@ -21,7 +21,7 @@ const loginTypes = config.getArray<string>('loginTypes');
 
 // #endif
 
-// #ifdef uniVersion > 3.99 || uniVersion == 3.99
+// #ifdef APP && (uniVersion > 3.99 || uniVersion == 3.99)
 
 const univerifyManager = uni.getUniverifyManager();
 export default class Univerify {

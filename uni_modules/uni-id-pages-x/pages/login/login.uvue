@@ -33,7 +33,9 @@
 <script>
 	import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
 	import config from '@/uni_modules/uni-id-pages-x/config.uts';
+  // #ifdef APP
   import Univerify from '@/uni_modules/uni-id-pages-x/lib/Univerify.uts'
+  // #endif
   export default {
 		computed: {
 			//大快捷登录按钮图
@@ -62,7 +64,7 @@
 		methods: {
       login(){},
       verify(){
-        // #ifdef uniVersion > 3.99 || uniVersion == 3.99
+        // #ifdef APP
         const univerifyManager = new Univerify()
         univerifyManager.verify(true)
         // #endif
