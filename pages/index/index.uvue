@@ -40,9 +40,9 @@
       },
       openName():string{
         if(this.isLogin){
-          let nickname = userInfo.getString("nickname")
-          let username = userInfo.getString("username")
-          let mobile = userInfo.getString("mobile")
+          let nickname = this.userInfo.getString("nickname")
+          let username = this.userInfo.getString("username")
+          let mobile = this.userInfo.getString("mobile")
 
           if(nickname == null){
             nickname = "";

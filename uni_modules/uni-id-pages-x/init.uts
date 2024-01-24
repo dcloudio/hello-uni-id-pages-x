@@ -14,7 +14,9 @@ const uniIdCo = uniCloud.importObject('uni-id-co', {
 const loginTypes = config.getArray<string>('loginTypes');
 const debug = config.getBoolean('debug') as boolean;
 
+// #ifdef APP
 import Univerify from '@/uni_modules/uni-id-pages-x/lib/Univerify.uts'
+// #endif
 
 export default async function () {
   // 有打开调试模式的情况下
@@ -23,7 +25,7 @@ export default async function () {
     // 调用云对象，获取服务端已正确配置的登录方式
     uniIdCo.getSupportedLoginType().then(res=>{
       // console.log('7777res',res)
-      let supportedLoginType = res.getArray<string>('supportedLoginType')
+      let supportedLoginType = res.getArray('supportedLoginType')
       if(supportedLoginType == null){
         supportedLoginType = []
       }
@@ -59,7 +61,7 @@ export default async function () {
     })
   }
 
-  // #ifdef uniVersion > 3.99 || uniVersion == 3.99
+  // #ifdef APP
   // 如果uni-id-pages配置的登录功能有一键登录，有则执行预登录（异步）
   if (loginTypes != null && loginTypes.includes('univerify')) {
     const myUniverify = new Univerify()
@@ -134,7 +136,7 @@ export default async function () {
 
   // needLogin相关代码-start（此代码仅为版本兼容提示使用，如已知晓可删除）
   const needLogin = config.getArray<string>('needLogin')
-  const uniCompileVersionCode = uni.getSystemInfoSync().get('uniCompileVersionCode') as number
+  const uniCompileVersionCode = uni.getSystemInfoSync().uniCompileVersionCode as number
   if(needLogin != null && (uniCompileVersionCode > 3.99 || uniCompileVersionCode == 3.99) ){
     const tipText = "uni-id-pages x v1.0.4+ 不再支持配置项config.needLogin，请升级HBuilderX 版本为3.99+，使用更强大 uni-id-router替代。详情查看：https://uniapp.dcloud.net.cn/uniCloud/uni-id/summary.html#uni-id-router"
     console.error(tipText)

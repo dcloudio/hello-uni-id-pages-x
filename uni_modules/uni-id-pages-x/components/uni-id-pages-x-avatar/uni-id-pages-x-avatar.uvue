@@ -26,7 +26,7 @@
 </template>
 
 <script>
-	import { state, mutations, UserInfo, AvatarFile } from '@/uni_modules/uni-id-pages-x/store.uts';
+	import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
 	/**
 	* uni-id-pages-x-avatar 
 	* @description 用户头像组件
@@ -67,7 +67,7 @@
 		},
 		computed: {
 			hasLogin() : boolean {
-				return state.isLogin as Boolean
+				return state.isLogin as boolean
 			},
 			userInfo() : UTSJSONObject {
 				return state.userInfo
