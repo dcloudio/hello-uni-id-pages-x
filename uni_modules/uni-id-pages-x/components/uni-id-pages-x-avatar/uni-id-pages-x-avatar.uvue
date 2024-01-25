@@ -143,7 +143,7 @@
 						// console.log('res', res);
 						let tempFiles = res.tempFiles as UTSJSONObject[];
 						let tempFile = tempFiles[0];
-						let tempFileName = tempFile.getString('name')
+            let tempFileName = tempFile.getString('name')
 						let tempFilePath = tempFile.getString('path')
 						if (tempFileName == null) {
 							tempFileName = ""
@@ -151,26 +151,26 @@
 						if (tempFilePath == null) {
 							tempFilePath = ""
 						}
-						// console.log(9527,tempFileName.length);
-						// console.error('tempFileName',tempFileName);
-						// console.error('tempFilePath',tempFilePath);
+						console.log(9527,tempFileName.length);
+						console.log('tempFileName',tempFileName);
+						console.log('tempFilePath',tempFilePath);
 						let avatar_file = {
-							// #ifdef H5
+							// #ifdef WEB
 							extname: tempFileName.split(".")[tempFileName.split(".").length - 1],
 							// #endif
-							// #ifndef H5
+							// #ifndef WEB
 							extname: tempFilePath.split(".")[tempFilePath.split(".").length - 1],
 							// #endif
 							name: tempFileName,
 							url: tempFilePath
 						} as UTSJSONObject
-						console.error('avatar_file', avatar_file);
+						console.log('avatar_file', avatar_file);
 
 						let filePath = res.tempFilePaths[0]
 						//非app端剪裁头像，app端用内置的原生裁剪
 						// #ifndef UNI-APP-X
 						filePath = await new Promise((callback) => {
-							// #ifdef H5
+							// #ifdef WEB
 							if (!this.isPC) {
 								callback(filePath)
 							}
@@ -192,7 +192,13 @@
 						})
 						// #endif
 
+
+            console.log("state",state)
+            console.log("state.userInfo",state.userInfo)
+            console.log("this.userInfo",this.userInfo)
+
 						let _id = this.userInfo["_id"] as string
+            console.log("id",_id)
 						// if(_id != null){
 						//   _id = "" as string
 						// }
