@@ -35,6 +35,8 @@
 </script>
 
 <style>
+
+@import url("/uni_modules/uni-id-pages-x/common/common.scss");
 /*每个页面公共css */
 .uni-row {
 	flex-direction: row;

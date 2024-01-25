@@ -57,7 +57,7 @@
 					password2: this.password2,
 					captcha:this.captcha
 				};
-				
+
 				// 校验是否为空，并聚焦 (注意：这里使用数组格式，以确保校验按顺序执行)
 				[
 					["username", "用户名",],
@@ -77,8 +77,8 @@
 						throw Error(errMsg)
 					}
 				});
-				
-				
+
+
 				// 校验用户名规则
 				const usernameRegExp = new RegExp("^(?=.*[a-z])(?=.*\\d)[a-z\\d]{3,20}$");
 				if (!usernameRegExp.test(this.username)) {
@@ -90,7 +90,7 @@
 						confirmText: "知道了"
 					});
 				}
-				
+
 				// 校验昵称规则
 				if (this.nickname.length > 0) {
 					const nicknameRegExp = new RegExp("^[\u4e00-\u9fa5a-z0-9]{3,20}$");
@@ -104,7 +104,7 @@
 						});
 					}
 				}
-				
+
 				let checkPasswordRes = checkPassword(this.password);
 				let isPass = checkPasswordRes.getBoolean("pass") as Boolean
 				if (!isPass) {
@@ -162,7 +162,7 @@
 				}
 				const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: true });
 				uni.showLoading({ "title": "请求中" })
-				
+
 				uniIdCo.registerUser(data)
 					.finally(() => uni.hideLoading())
 					.then(e => {
@@ -173,7 +173,7 @@
 						});
 						loginSuccess(e)
 					})
-					.catch<void>((err : any | null) : void => {
+					.catch((err : any | null) : void => {
 						const error = err as UniCloudError
 						console.error(error)
 						console.error(error.code)

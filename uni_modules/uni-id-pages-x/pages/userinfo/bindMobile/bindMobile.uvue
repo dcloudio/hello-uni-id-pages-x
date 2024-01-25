@@ -18,7 +18,7 @@
 	export default {
 		data() {
 			return {
-				$smsCodeEl: null as null | UniIdPagesXSmsCodeComponentPublicInstance,
+				smsCodeEl: null as null | UniIdPagesXSmsCodeComponentPublicInstance,
 				needCaptcha: false,
 				captcha: ""
 			}
@@ -28,11 +28,11 @@
 		watch: {
 		},
 		mounted() {
-			this.$smsCodeEl = (this.$refs["smsCode"] as UniIdPagesXSmsCodeComponentPublicInstance)
+			this.smsCodeEl = (this.$refs["smsCode"] as UniIdPagesXSmsCodeComponentPublicInstance)
 		},
 		methods: {
 			sendSmsCode() {
-				this.$smsCodeEl!.sendSmsCode();
+				this.smsCodeEl!.sendSmsCode();
 			},
 			smsCodeInput(param : UTSJSONObject) {
 				// console.log('smsCodeInput param', param);
@@ -69,9 +69,9 @@
 					.finally(() : void => {
 						uni.hideLoading()
 					})
-					.then<void>((e : UTSJSONObject) : void => {
+					.then((e : UTSJSONObject) : void => {
 						// console.log('then');
-						// console.log(e);
+						console.log(e);
 						uni.showToast({
 							title: '绑定成功',
 							icon: 'none',
@@ -84,7 +84,7 @@
 							"mobile": param.getString("mobile")
 						} as UTSJSONObject)
 					})
-					.catch<void>((err : any | null) : void => {
+					.catch((err : any | null) : void => {
 						const error = err as UniCloudError
 						console.error(error)
 						console.error(error.code)
@@ -93,9 +93,9 @@
 							//登录失败，自动重新获取验证码
 							return setCaptchaRetry()
 						} else if (error.code == "uni-id-mobile-verify-code-error") {
-							this.$smsCodeEl!.clearCodeInput();
+							this.smsCodeEl!.clearCodeInput();
 						} else {
-							this.$smsCodeEl!.reset();
+							this.smsCodeEl!.reset();
 							this.captcha = ""
 						}
 						uni.showToast({
@@ -108,7 +108,7 @@
 			},
 			popupCaptchaCancel() {
 				// console.log('popupCaptchaCancel');
-				this.$smsCodeEl!.reset();
+				this.smsCodeEl!.reset();
 				this.captcha = ""
 			}
 		}

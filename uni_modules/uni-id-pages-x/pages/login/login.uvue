@@ -80,7 +80,7 @@
 	}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	@import url("/uni_modules/uni-id-pages-x/common/common.scss");
 
 	.app-logo {
