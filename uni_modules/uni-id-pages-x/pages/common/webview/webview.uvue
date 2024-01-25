@@ -5,9 +5,9 @@
 
 <script>
 	export default {
-		onLoad(param : Map<string, string>) {
-			const url = param.get("url") as string;
-			let title = param.get("title") as string;
+		onLoad(param) {
+			const url = param["url"] as string;
+			let title = param["title"] as string;
 			// console.log('url', url);
 			if (url.substring(0, 4) != 'http') {
 				uni.showModal({
