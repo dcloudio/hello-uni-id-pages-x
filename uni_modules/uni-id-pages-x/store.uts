@@ -34,7 +34,7 @@ type Mutations = {
   updateUserInfo(param: null | UTSJSONObject): void
 }
 export const mutations = {
-  updateUserInfo(param: null | UTSJSONObject) {
+  updateUserInfo: function (param: null | UTSJSONObject) {
     console.log('updateUserInfo', param); // param为 null 时从云端获取数据更新，为UTSJSONObject时直接根据传入的值来更新
     function afterUpdateUserInfo() {
       // console.log('afterUpdateUserInfo', state.userInfo);

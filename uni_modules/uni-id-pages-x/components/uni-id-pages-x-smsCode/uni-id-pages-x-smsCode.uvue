@@ -137,11 +137,18 @@
 				if (state.pendingAgreements) {
           // uni.hideKeyboard();
           this.sendSmsCaptchaCP!.setFocus(false);
-					(this.$parent as ComponentPublicInstance).$callMethod("showPopupCaptcha", () => {
-						if (!state.pendingAgreements) {
-							this.sendSmsCode()
-						}
-					});
+          // web端尚未完全支持
+					// (this.$parent as ComponentPublicInstance).$callMethod("showPopupCaptcha", () => {
+					// 	if (!state.pendingAgreements) {
+					// 		this.sendSmsCode()
+					// 	}
+					// });
+          // 临时方案
+          uni.$emit('uni-id-pages-x-loginBySmsCode-showPopupCaptcha',()=>{
+            if (!state.pendingAgreements) {
+            	this.sendSmsCode()
+            }
+          })
 					uni.showToast({
 						title: '未同意隐私政策协议',
 						icon: 'none'

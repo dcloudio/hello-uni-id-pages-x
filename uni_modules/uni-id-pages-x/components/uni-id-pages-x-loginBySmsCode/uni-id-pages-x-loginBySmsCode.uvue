@@ -39,6 +39,9 @@
 		},
 		mounted() {
 			this.smsCodeRef = (this.$refs["smsCode"] as UniIdPagesXSmsCodeComponentPublicInstance)
+      uni.$on('uni-id-pages-x-loginBySmsCode-showPopupCaptcha',(callback : () => void)=>{
+        this.showPopupCaptcha(callback)
+      })
 		},
 		methods: {
 			sendSmsCode() {
