@@ -14,7 +14,7 @@
 <script>
 	let confirmCallBack = (_ : string) : void => {}// console.log('未传入回调函数，value：', value)
 	export default {
-		emits: ["confirm"],
+		emits: ["confirm","cancel"],
 		data() {
 			return {
 				title: "默认标题" as string,

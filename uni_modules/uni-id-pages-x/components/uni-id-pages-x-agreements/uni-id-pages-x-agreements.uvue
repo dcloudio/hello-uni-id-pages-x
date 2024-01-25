@@ -46,7 +46,7 @@
     name: "uni-id-pages-x-agreements",
     computed: {
     	agreements():Agreement[]{
-        const agreements = config.getJSON('agreements') 
+        const agreements = config.getJSON('agreements')
     		if(agreements === null){
     			return []
     		}else{
@@ -75,11 +75,11 @@
     data() {
       return {
         needAgreements:true,
-        $popupComponent:null as null | UniPopupComponentPublicInstance
+        popupComponent:null as null | UniPopupComponentPublicInstance
       }
     },
     mounted() {
-      
+
       const scopeList = config.getArray<string>('agreements.scopeList')
       if(scopeList == null){
         this.needAgreements = false
@@ -87,8 +87,8 @@
         this.needAgreements = scopeList.includes(this.scope)
       }
       state.pendingAgreements = this.needAgreements;
-      
-      this.$popupComponent = (this.$refs['popup'] as UniPopupComponentPublicInstance)
+
+      this.popupComponent = (this.$refs['popup'] as UniPopupComponentPublicInstance)
       // this.showPopupAgreements(()=>{
       //   console.log('showPopupAgreements after');
       // })
@@ -116,17 +116,17 @@
       },
       showPopupAgreements(callback: () => void){
         confirmCallBack = callback;
-        this.$popupComponent!.open()
+        this.popupComponent!.open()
       },
       cancel(){
         state.pendingAgreements = true;
-        this.$popupComponent!.close()
+        this.popupComponent!.close()
       },
       confirm(){
         state.pendingAgreements = false;
         // console.log('state.pendingAgreements',state.pendingAgreements);
         confirmCallBack();
-        this.$popupComponent!.close()
+        this.popupComponent!.close()
       }
     },
   }

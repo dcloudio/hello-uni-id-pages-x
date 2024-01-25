@@ -71,7 +71,7 @@
 		},
 		watch: {
 			agree(agree) {
-				this.univerifyStyle.privacyTerms.defaultCheckBoxState = agree
+				this.univerifyStyle.privacyTerms!.defaultCheckBoxState = agree
 			}
 		},
 		methods: {
@@ -127,8 +127,8 @@
 	.fab-login-box {
 		width: 750rpx;
 		position: fixed;
-		bottom: 30;
-		left: 0;
+		bottom: 30px;
+		left: 0px;
 		flex-direction: row;
 		flex-wrap: wrap;
 		justify-content: space-around;

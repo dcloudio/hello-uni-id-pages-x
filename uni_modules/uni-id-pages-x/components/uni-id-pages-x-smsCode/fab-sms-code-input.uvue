@@ -20,7 +20,7 @@
 
 <script>
 	export default {
-		emits: ["modelValue", "blur", "focus", "reGetSmsCode"],
+		emits: ["update:modelValue","reGetSmsCode","blur", "focus" ],
 		data() {
 			return {
 				smsCodeList: ["\u200b", "\u200b", "\u200b", "\u200b", "\u200b", "\u200b"],
@@ -177,7 +177,7 @@
 		margin: 10px 5px;
 		text-align: center;
 	}
-  
+
   .fab-sms-code-input-foot {
     margin-top: 5px;
     margin-left: 300rpx;
@@ -194,7 +194,7 @@
     text-align: center;
     margin-right: 26rpx;
   }
-  
+
 	.get-sms-code-tip,
 	.get-sms-code-tip-active {
 		font-size: 12px;

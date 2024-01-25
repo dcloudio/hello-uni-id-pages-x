@@ -57,11 +57,11 @@
 						.update({
 							"nickname": this.nickname
 						})
-						.then<void>(() => {
+						.then(() => {
 							mutations.updateUserInfo({ "nickname": this.nickname } as UTSJSONObject)
 							uni.navigateBack()
 						})
-						.catch<void>((err : any | null) => {
+						.catch((err : any | null) => {
 							const error = err as UniCloudError
 							console.error('error', error);
 						})

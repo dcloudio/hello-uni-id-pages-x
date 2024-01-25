@@ -11,7 +11,7 @@
 
 <script>
   export default {
-    emits: ["modelValue"],
+    emits: ["update:modelValue"],
     props: {
       cursorSpacing: {
         type: Number,
@@ -101,7 +101,7 @@
         }).then((result : UTSJSONObject) => {
           this.captchaBase64 = (result.getString('captchaBase64') as string)
         })
-       .catch<void>((err : any | null) : void => {
+       .catch((err : any | null) : void => {
          const error = err as UniCloudError
          console.error(error)
          console.error(error.code)
