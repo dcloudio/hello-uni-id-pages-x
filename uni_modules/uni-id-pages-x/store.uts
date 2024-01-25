@@ -35,7 +35,7 @@ type Mutations = {
 }
 export const mutations = {
   updateUserInfo(param: null | UTSJSONObject) {
-    // console.log('updateUserInfo', param); // param为 null 时从云端获取数据更新，为UTSJSONObject时直接根据传入的值来更新
+    console.log('updateUserInfo', param); // param为 null 时从云端获取数据更新，为UTSJSONObject时直接根据传入的值来更新
     function afterUpdateUserInfo() {
       // console.log('afterUpdateUserInfo', state.userInfo);
       uni.setStorageSync('uni-id-pages-x-userInfo', state.userInfo)
@@ -50,7 +50,7 @@ export const mutations = {
           .doc(user_id)
           .field('_id,username,nickname,avatar_file,mobile')
           .get()
-          .then<void>(res => {
+          .then(res => {
             const uniIdCo = uniCloud.importObject('uni-id-co', {
               customUI: true
             })
@@ -65,14 +65,14 @@ export const mutations = {
               afterUpdateUserInfo()
             })
           })
-          .catch<void>((err: any | null) => {
+          .catch((err: any | null) => {
             const error = err as UniCloudError
             console.error(error.errMsg, '错误')
           })
       }
     } else {
       param.toMap().forEach((value, key) => {
-        // console.log("updateUserInfo.", key, value)
+        console.log("updateUserInfo.", key, value)
         state.userInfo.set(key, value)
       })
       afterUpdateUserInfo()

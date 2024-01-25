@@ -27,7 +27,7 @@
 		data() {
 			return {
 				smsCode: "",
-				$smsCodeRef: null as null | UniIdPagesXSmsCodeComponentPublicInstance,
+				smsCodeRef: null as null | UniIdPagesXSmsCodeComponentPublicInstance,
 				password: "",
 				password2: "",
 				captcha: "",
@@ -41,7 +41,7 @@
 			}
 		},
 		mounted() {
-			this.$smsCodeRef = (this.$refs["smsCode"] as UniIdPagesXSmsCodeComponentPublicInstance)
+			this.smsCodeRef = (this.$refs["smsCode"] as UniIdPagesXSmsCodeComponentPublicInstance)
 		},
 		onLoad(param : Map<string, string>) {
 			const mobile = param.get("mobile")
@@ -50,7 +50,7 @@
 			// console.log('email--', email);
 			if (mobile != null) {
 				this.$nextTick(() => {
-					this.$smsCodeRef!.mobile = mobile
+					this.smsCodeRef!.mobile = mobile
 				})
 			}
 		},
@@ -95,7 +95,7 @@
 						}
 					});
 				}
-				this.$smsCodeRef!.sendSmsCode();
+				this.smsCodeRef!.sendSmsCode();
 			},
 			resetPwdBySms(param : UTSJSONObject) {
 				uni.showLoading({ "title": "请求中" })
@@ -105,18 +105,19 @@
 					.finally(() : void => {
 						uni.hideLoading()
 					})
-					.then<void>((e : UTSJSONObject) : void => {
-						console.log(e);
+					.then((_ : UTSJSONObject) : void => {
+						// console.log('then');
+						// console.log(e);
 						this.testState = true
 						this.testSuccess = e['errCode'] as number
-						this.$smsCodeRef!.hideCodeInput();
+						this.smsCodeRef!.hideCodeInput();
 						uni.showToast({
 							title: '重置成功',
 							icon: 'none'
 						});
 						if(!this.isTest)uni.navigateBack()
 					})
-					.catch<void>((err : any | null) : void => {
+					.catch((err : any | null) : void => {
 						const error = err as UniCloudError
 						console.error(error)
 						this.testState = true
@@ -132,7 +133,7 @@
 								icon: 'none',
 								mask: false
 							});
-							this.$smsCodeRef!.clearCodeInput()
+							this.smsCodeRef!.clearCodeInput()
 							this.captcha = ""
 						}
 					})

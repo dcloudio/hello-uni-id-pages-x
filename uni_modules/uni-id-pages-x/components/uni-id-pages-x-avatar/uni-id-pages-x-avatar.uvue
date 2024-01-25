@@ -9,7 +9,7 @@
 				:style="{width,height}">
 			<!-- #endif -->
 
-			<!-- {{avatar_file!.getString("url")}} --> 
+			<!-- {{avatar_file!.getString("url")}} -->
       <cloud-image v-if="avatar_file != null" :src="avatar_file!.getString('url')" :width="width" :height="height"></cloud-image>
 			<image v-else-if="readOnly" class="default-avatarUrl" src="@/uni_modules/uni-id-pages-x/static/default-avatar.png" mode="widthFix"></image>
       <view v-else class="upload-img-icon">
@@ -28,7 +28,7 @@
 <script>
 	import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
 	/**
-	* uni-id-pages-x-avatar 
+	* uni-id-pages-x-avatar
 	* @description 用户头像组件
 	* @property {String} width	图片的宽，默认为：50px
 	* @property {String} height	图片的高，默认为：50px
@@ -113,12 +113,12 @@
 				// this.setAvatarFile(avatar_file)
 			},
 			uploadAvatarImg() {
-        
+
         if(this.readOnly){
-          return 
+          return
         }
-        
-        
+
+
 				// #ifdef MP-WEIXIN
 				return // 微信小程序走 bindchooseavatar方法
 				// #endif
@@ -151,11 +151,9 @@
 						if (tempFilePath == null) {
 							tempFilePath = ""
 						}
-
 						// console.log(9527,tempFileName.length);
 						// console.error('tempFileName',tempFileName);
 						// console.error('tempFilePath',tempFilePath);
-
 						let avatar_file = {
 							// #ifdef H5
 							extname: tempFileName.split(".")[tempFileName.split(".").length - 1],
@@ -211,13 +209,13 @@
 							filePath,
 							cloudPath,
 						})
-							.then<void>(function (res) {
+							.then(function (res) {
 								// console.log('res777777777',res);
 								avatar_file.url = res.fileID
 								// console.log('avatar_file111', avatar_file);
 								mutations.updateUserInfo({ avatar_file } as UTSJSONObject)
 							})
-							.catch<void>(function (err : any | null) {
+							.catch(function (err : any | null) {
 								const error = err as UniCloudError
 								uni.showModal({
 									content: '上传失败，' + error.errMsg,
@@ -243,6 +241,10 @@
 </script>
 
 <style>
+  .default-avatarUrl{
+    width:44px;
+    height:44px;
+  }
 	.avatar-box-root {
 		background-color: #fff;
 	}
@@ -257,7 +259,6 @@
 		display: inline-block;
 		box-sizing: border-box;
 		/* #endif */
-
 		border-radius: 100px;
 		text-align: center;
 		padding: 1px;
