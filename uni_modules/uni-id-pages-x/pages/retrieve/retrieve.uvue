@@ -32,12 +32,11 @@
 		mounted() {
 			this.smsCodeRef = (this.$refs["smsCode"] as UniIdPagesXSmsCodeComponentPublicInstance)
 		},
-		onLoad(param : Map<string, string>) {
-			const mobile = param.get("mobile")
+		onLoad(param) {
+			const mobile = param["mobile"]
 			// const email = param.get("email")
 			// console.log('mobile--', mobile);
 			// console.log('email--', email);
-
 			if (mobile != null) {
 				this.$nextTick(() => {
 					this.smsCodeRef!.mobile = mobile
