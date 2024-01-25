@@ -83,8 +83,6 @@
         return authStatus as number
       }
     },
-    onShow() {
-    },
     props: {
       showLoginManage: {
         type: Boolean,

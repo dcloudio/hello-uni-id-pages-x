@@ -13,11 +13,11 @@ export default {
     ]
   },
   "loginTypes":[
-    "username",
     "smsCode",
     // #ifdef APP && ( uniVersion > 3.99 || uniVersion == 3.99)
     "univerify",
     // #endif
+    "username",
     // 以下登录方式 uni-app x 暂不支持
     /*
       "qq",

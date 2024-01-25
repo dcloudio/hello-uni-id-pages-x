@@ -14,24 +14,25 @@ const uniIdCo = uniCloud.importObject('uni-id-co', {
 const loginTypes = config.getArray<string>('loginTypes');
 const debug = config.getBoolean('debug') as boolean;
 
-// #ifdef APP
+// #ifdef APP && ( uniVersion > 3.99 || uniVersion == 3.99)
 import Univerify from '@/uni_modules/uni-id-pages-x/lib/Univerify.uts'
 // #endif
+
 
 export default async function () {
   // 有打开调试模式的情况下
   if (debug) {
     // 1. 检查本地uni-id-pages中配置的登录方式，服务器端是否已经配置正确。否则提醒并引导去配置
     // 调用云对象，获取服务端已正确配置的登录方式
-    uniIdCo.getSupportedLoginType().then(res=>{
+    uniIdCo.getSupportedLoginType().then((res:UTSJSONObject)=>{
       // console.log('7777res',res)
-      let supportedLoginType = res.getArray('supportedLoginType')
+      let supportedLoginType = res.getArray<string>('supportedLoginType')
+      console.log('supportedLoginType: ',supportedLoginType);
       if(supportedLoginType == null){
         supportedLoginType = []
       }
       // 登录方式，服务端和客户端的映射关系
       const data:UTSJSONObject = {
-        "smsCode": 'mobile-code',
         "univerify": 'univerify',
         "username": 'username-password',
         "weixin": 'weixin',
@@ -46,12 +47,13 @@ export default async function () {
         "weixinMobile": 'weixin'
       };
       // 遍历客户端配置的登录方式，与服务端比对。并在错误时抛出错误提示
-      const list = loginTypes?.filter((type:string):boolean =>{
+      const list = loginTypes?.filter((type:string):boolean =>type != 'smsCode')
+      ?.filter((type:string):boolean =>{
         let currentType = data.getString(type);
         if(currentType == null){
           currentType = ""
         }
-        return !(supportedLoginType.includes(currentType))
+        return supportedLoginType?.includes(currentType) != true
       })
       if (list?.length != 0) {
         console.error(
@@ -114,7 +116,6 @@ export default async function () {
         handleInterceptor(e.url)
       }
     })
-
   }
 
   // #endif

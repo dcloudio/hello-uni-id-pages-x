@@ -7,8 +7,8 @@
 			:password="password && !visiblePwd" :focus="focus" @blur="onBlur" @focus="onFocus" @confirm="confirm"
 			:confirm-type="confirmType" />
 		<view class="my-input-icon-box" v-if="modelValue">
-			<uni-id-pages-x-icons v-if="password" :color="visiblePwd?'#0070ff':'#ddd'" 
-        @click="setVisiblePwd('click')" @touchstart="setVisiblePwd('touchstart')" @touchend="setVisiblePwd('touchend')" @touchcancel="setVisiblePwd('touchcancel')" 
+			<uni-id-pages-x-icons v-if="password" :color="visiblePwd?'#0070ff':'#ddd'"
+        @click="setVisiblePwd('click')" @touchstart="setVisiblePwd('touchstart')" @touchend="setVisiblePwd('touchend')" @touchcancel="setVisiblePwd('touchcancel')"
       type="eyes" />
 			<view class="password-icon">
 				<uni-id-pages-x-icons @click="clearValue" type="clear" color="#ddd" />
@@ -20,7 +20,7 @@
 <script>
 	export default {
 		name: 'MyInput',
-		emits: ["modelValue", "blur", "focus", "confirm"],
+		emits: ["blur", "focus", "confirm", "update:modelValue"],
 		data() {
 			return {
 				visiblePwd: false
@@ -117,17 +117,17 @@
         if(eventName == "click" && this.visiblePwdOption == 'click'){
           this.visiblePwd = !this.visiblePwd
         }else if(eventName == "touch"){
-          switch (eventName){
-            case "touchstart":
-              this.visiblePwd = true
-              break;
-            case "touchend":
-              this.visiblePwd = false
-              break;
-            case "touchcancel":
-              this.visiblePwd = false
-              break;
-          }
+          // switch (eventName){
+          //   case "touchstart":
+          //     this.visiblePwd = true
+          //     break;
+          //   case "touchend":
+          //     this.visiblePwd = false
+          //     break;
+          //   case "touchcancel":
+          //     this.visiblePwd = false
+          //     break;
+          // }
         }
       }
 		}

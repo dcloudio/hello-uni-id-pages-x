@@ -24,13 +24,14 @@
 	export default {
 		name: "uni-id-pages-x-smsCode",
 		components: { fabSmsCodeInput },
+    emits:["input"],
 		data() {
 			return {
 				mobile: "",
 				sendSmsCaptcha: "",
 				smsCode: "",
-				$fabSmsCodeInputEl: null as null | ComponentPublicInstance,
-				$sendSmsCaptchaCP: null as null | UniCaptchaComponentPublicInstance,
+				fabSmsCodeInputEl: null as null | ComponentPublicInstance,
+				sendSmsCaptchaCP: null as null | UniCaptchaComponentPublicInstance,
 				reverseNumber: 0
 			}
 		},
@@ -51,7 +52,7 @@
 			mobile(mobile) {
 				this.emitInput()
 				if (mobile.length == 11) {
-					this.$sendSmsCaptchaCP!.setFocus(true);
+					this.sendSmsCaptchaCP!.setFocus(true);
 					// 倒计时归零，允许再次发送
 					this.reverseNumber = 0
 				}
@@ -68,8 +69,8 @@
 			}
 		},
 		mounted() {
-			this.$fabSmsCodeInputEl = this.$refs["fab-sms-code-input"] as ComponentPublicInstance;
-			this.$sendSmsCaptchaCP = this.$refs["sendSmsCaptcha"] as UniCaptchaComponentPublicInstance;
+			this.fabSmsCodeInputEl = this.$refs["fab-sms-code-input"] as ComponentPublicInstance;
+			this.sendSmsCaptchaCP = this.$refs["sendSmsCaptcha"] as UniCaptchaComponentPublicInstance;
 
 			// 加载好，手机号码输入框就自动获取焦点
 			// TO 临时方案解决 this.$nextTick 无效，由setTimeout 300 代替
@@ -82,7 +83,7 @@
 			  (this.$refs['mobileInput'] as UniIdPagesXInputComponentPublicInstance).setFocus(val);
 			},
 			showCodeInput() {
-				if (reverseNumber == 0) {
+				if (this.reverseNumber == 0) {
 					this.reverseNumber = 6
 					//开始倒计时
 					let reverseTimer = function () { }
@@ -96,7 +97,7 @@
 					}
 					reverseTimer()
 				}
-				this.$fabSmsCodeInputEl?.$callMethod('show', true);
+				this.fabSmsCodeInputEl?.$callMethod('show', true);
 			},
 			emitInput() {
 				const param : UTSJSONObject = {
@@ -116,13 +117,13 @@
 			reGetSmsCode() {
 				this.hideCodeInput();
 				this.clearCodeInput();
-				this.$sendSmsCaptchaCP!.getImageCaptcha(true);
+				this.sendSmsCaptchaCP!.getImageCaptcha(true);
 			},
 			hideCodeInput() {
-				this.$fabSmsCodeInputEl!.$callMethod("hide");
+				this.fabSmsCodeInputEl!.$callMethod("hide");
 			},
 			clearCodeInput() {
-				this.$fabSmsCodeInputEl!.$callMethod('clear')
+				this.fabSmsCodeInputEl!.$callMethod('clear')
 			},
 			reset() {
 				this.smsCode = ""
@@ -135,9 +136,8 @@
 				console.log("state.pendingAgreements", state.pendingAgreements);
 				if (state.pendingAgreements) {
           // uni.hideKeyboard();
-				this.$sendSmsCaptchaCP!.setFocus(false);
+          this.sendSmsCaptchaCP!.setFocus(false);
 					(this.$parent as ComponentPublicInstance).$callMethod("showPopupCaptcha", () => {
-						console.log('state.pendingAgreements', state.pendingAgreements);
 						if (!state.pendingAgreements) {
 							this.sendSmsCode()
 						}
@@ -166,7 +166,7 @@
 				}
 
 				if (this.sendSmsCaptcha.length != 4) {
-					this.$sendSmsCaptchaCP!.setFocus(true)
+					this.sendSmsCaptchaCP!.setFocus(true)
 					uni.showToast({
 						title: '请先输入图形验证码',
 						icon: 'none',
@@ -175,7 +175,7 @@
 					return
 				}
 
-				// const param : UTSJSONObject 
+				// const param : UTSJSONObject
 				// console.log('sendSmsCode',{
 				// 	"mobile": this.mobile,
 				// 	"scene": "login-by-sms",
@@ -201,7 +201,7 @@
 						// console.log('result', result);
 						this.showCodeInput()
 					})
-					.catch<void>((err : any | null) : void => {
+					.catch((err : any | null) : void => {
 						const error = err as UniCloudError
 						// console.error(error.message)
 						// console.error(error.code)
@@ -214,7 +214,7 @@
 									duration: 3000,
 									mask: false
 								});
-								this.$sendSmsCaptchaCP!.getImageCaptcha(true);
+								this.sendSmsCaptchaCP!.getImageCaptcha(true);
 								this.sendSmsCaptcha = "";
 								break;
 							case "uni-id-invalid-sms-template-id":
