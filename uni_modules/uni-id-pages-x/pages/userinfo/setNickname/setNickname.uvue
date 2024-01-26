@@ -106,8 +106,8 @@
 		font-size: 14px;
 		border-radius: 5px;
 		margin-right: 15px;
-		background-color: #0070ff;
-		color: #FFF;
+		background-color: #0070ff !important;
+		color: #FFF!important;
 	}
 
 	.submit.disabled {
