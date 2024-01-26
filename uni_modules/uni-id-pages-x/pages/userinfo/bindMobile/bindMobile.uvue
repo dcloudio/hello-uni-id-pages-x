@@ -14,7 +14,7 @@
 </template>
 
 <script>
-	import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
+	import { mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
 	export default {
 		data() {
 			return {
@@ -44,7 +44,7 @@
 			},
 			bindMobileBySms(param : UTSJSONObject) {
 				// 设置(添加)验证码并重新发起
-				function setCaptchaRetry() {
+				const setCaptchaRetry = ()=> {
 					uni.showToast({
 						title: '请输入验证码',
 						icon: 'none',
@@ -70,8 +70,7 @@
 						uni.hideLoading()
 					})
 					.then((e : UTSJSONObject) : void => {
-						// console.log('then');
-						console.log(e);
+						console.log(e,"-----------");
 						uni.showToast({
 							title: '绑定成功',
 							icon: 'none',
@@ -107,7 +106,6 @@
 					})
 			},
 			popupCaptchaCancel() {
-				// console.log('popupCaptchaCancel');
 				this.smsCodeEl!.reset();
 				this.captcha = ""
 			}
