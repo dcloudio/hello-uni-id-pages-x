@@ -139,8 +139,8 @@
 						// console.log('res', res);
 						let tempFiles = res.tempFiles as UTSJSONObject[];
 						let tempFile = tempFiles[0];
-            let tempFileName = tempFile['name'] as string
-						let tempFilePath = tempFile['path'] as string
+            let tempFileName = tempFile['name'] as string | null
+						let tempFilePath = tempFile['path'] as string | null
 						if (tempFileName == null) {
 							tempFileName = ""
 						}

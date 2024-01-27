@@ -17,7 +17,7 @@
         <text class="list-item-text">账号密码登录</text>
         <uni-id-pages-x-icons type="right-arrow" color="#999" />
       </view>
-      <!-- #ifdef uniVersion > 3.99 || uniVersion == 3.99 -->
+      <!-- #ifdef APP && (uniVersion > 3.99 || uniVersion == 3.99) -->
       <view class="list-item" @click="toLogin('univerify')" v-if="hasUniverify">
         <text class="list-item-text">一键登录</text>
         <uni-id-pages-x-icons type="right-arrow" color="#999" />
