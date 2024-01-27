@@ -3,7 +3,6 @@
 
 // 导入配置
 import config from '@/uni_modules/uni-id-pages-x/config.uts'
-
 import {state} from '@/uni_modules/uni-id-pages-x/store.uts';
 
 // uni-id的云对象
@@ -11,7 +10,9 @@ const uniIdCo = uniCloud.importObject('uni-id-co', {
   customUI: true
 })
 // 用户配置的登录方式、是否打开调试模式
-const loginTypes = config.getArray<string>('loginTypes');
+const configLoginTypes = config.getArray<string>('loginTypes');
+const loginTypes = configLoginTypes == null ? [] as string[] : configLoginTypes;
+
 const debug = config.getBoolean('debug') as boolean;
 
 // #ifdef APP && ( uniVersion > 3.99 || uniVersion == 3.99)
@@ -27,7 +28,7 @@ export default async function () {
     uniIdCo.getSupportedLoginType().then((res:UTSJSONObject)=>{
       // console.log('7777res',res)
       let supportedLoginType = res.getArray<string>('supportedLoginType')
-      console.log('supportedLoginType: ',supportedLoginType);
+      // console.log('supportedLoginType: ',supportedLoginType);
       if(supportedLoginType == null){
         supportedLoginType = []
       }
@@ -47,17 +48,31 @@ export default async function () {
         "weixinMobile": 'weixin'
       };
       // 遍历客户端配置的登录方式，与服务端比对。并在错误时抛出错误提示
-      const list = loginTypes?.filter((type:string):boolean =>type != 'smsCode')
-      ?.filter((type:string):boolean =>{
-        let currentType = data.getString(type);
-        if(currentType == null){
-          currentType = ""
+      // const list = loginTypes?.filter((type:string):boolean =>type != 'smsCode')
+      // ?.filter((type:string):boolean =>{
+      //   let currentType = data.getString(type);
+      //   if(currentType == null){
+      //     currentType = ""
+      //   }
+      //   return supportedLoginType?.includes(currentType) != true
+      // })
+      const list:Array<string> = [];
+      console.log('loginTypes: ',loginTypes);
+      for (let i = 0; i < loginTypes.length; i++) {
+        const type = loginTypes[i];
+        if (type != 'smsCode') {
+          let currentType = data.getString(type);
+          if (currentType === null) {
+            currentType = '';
+          }
+          if (!supportedLoginType.includes(currentType)) {
+            list.push(type);
+          }
         }
-        return supportedLoginType?.includes(currentType) != true
-      })
-      if (list?.length != 0) {
+      }
+      if (list.length != 0) {
         console.error(
-      		`错误：前端启用的登录方式:${list?.join('，')};没有在服务端完成配置。配置文件路径："/uni_modules/uni-config-center/uniCloud/cloudfunctions/common/uni-config-center/uni-id/config.json"`
+      		`错误：前端启用的登录方式:${list.join('，')};没有在服务端完成配置。配置文件路径："/uni_modules/uni-config-center/uniCloud/cloudfunctions/common/uni-config-center/uni-id/config.json"`
         )
       }
     })
@@ -65,7 +80,7 @@ export default async function () {
 
   // #ifdef APP
   // 如果uni-id-pages配置的登录功能有一键登录，有则执行预登录（异步）
-  if (loginTypes != null && loginTypes.includes('univerify')) {
+  if (loginTypes.includes('univerify')) {
     const myUniverify = new Univerify()
     const univerifyManager = uni.getUniverifyManager();
     univerifyManager.preLogin({
