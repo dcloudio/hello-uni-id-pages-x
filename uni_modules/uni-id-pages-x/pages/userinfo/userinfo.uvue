@@ -58,12 +58,13 @@
 </template>
 
 <script>
-  import {state, mutations} from '@/uni_modules/uni-id-pages-x/store.uts';
+  import {state} from '@/uni_modules/uni-id-pages-x/store.uts';
   import {logout} from '@/uni_modules/uni-id-pages-x/common/common.uts';
-
   export default {
     data() {
-      return {}
+      return {
+        showLoginManage: true
+      }
     },
     computed: {
       userInfo(): UTSJSONObject {
@@ -75,19 +76,14 @@
       realNameStatus (): number {
         const realNameAuth = this.userInfo.getJSON('realNameInfo')
         const authStatus = realNameAuth?.getNumber('authStatus')
-
         if (realNameAuth == null || authStatus == null) {
           return 0
         }
-
         return authStatus as number
       }
     },
-    props: {
-      showLoginManage: {
-        type: Boolean,
-        default: true
-      }
+    onLoad(options){
+      this.showLoginManage = options['showLoginManage'] == 'true'
     },
     methods: {
       setNickname() {
@@ -130,7 +126,6 @@
     }
   }
 </script>
-
 <style>
   .uni-content {
     width: 750rpx;

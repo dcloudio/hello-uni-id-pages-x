@@ -222,9 +222,10 @@
                     uni.removeStorage({
                         key: tempFrvInfoKey
                     })
-                } catch (e: UniCloudError) {
+                } catch (e: Error) {
+                    const error = e as UniCloudError
                     this.verifyFail = true
-                    this.verifyFailTitle = e.errMsg
+                    this.verifyFailTitle = error.errMsg
                     console.error(JSON.stringify(e))
                 }
                 uni.hideLoading()
