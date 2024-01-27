@@ -125,12 +125,8 @@
 					}
 				}
 			},
-			codeChange(i : number, e : InputEvent) {
-				// console.log(i, e);
-			},
 			onFocus(i : number) {
 				if (this.smsCodeList[i].length == 0) {
-					// console.log('i', i);
 					this.smsCodeList[i] = '\u200b'
 				}
 			},
