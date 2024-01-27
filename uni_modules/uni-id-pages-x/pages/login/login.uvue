@@ -54,11 +54,11 @@
 		},
 		onLoad(param) {
 			let type = param["type"]
-      if (type === null){
+      if ( type == null){
        let loginTypes = config.getArray<string>("loginTypes");
        type = loginTypes![0];
       }
-      console.log('type:',type)
+      // console.log('type:',type)
       this.loginType = type
 		},
 		methods: {

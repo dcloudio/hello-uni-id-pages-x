@@ -26,6 +26,7 @@
         </view>
       </view>
     </view>
+    <!-- #ifdef APP -->
     <view class="list">
       <!-- 如未开通实人认证服务，可以将实名认证入口注释 -->
       <view @click="realNameVerify" class="item">
@@ -37,6 +38,7 @@
         </view>
       </view>
     </view>
+    <!-- #endif -->
     <view class="list">
       <view @click="deactivate" class="item">
         <text class="title">注销账号</text>
