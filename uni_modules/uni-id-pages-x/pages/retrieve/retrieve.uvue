@@ -105,7 +105,7 @@
 					.finally(() : void => {
 						uni.hideLoading()
 					})
-					.then((_ : UTSJSONObject) : void => {
+					.then((e: UTSJSONObject) : void => {
 						// console.log('then');
 						// console.log(e);
 						this.testState = true
