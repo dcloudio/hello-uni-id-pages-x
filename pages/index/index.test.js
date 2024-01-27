@@ -1,38 +1,43 @@
 // uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
 
 describe('pages/index/index.uvue', () => {
-	let page,currentPage,listItems;
-	beforeAll(async () => {
-		page = await program.reLaunch('/pages/index/index')
-		// page = await program.currentPage()
-		await page.waitFor('view')
-		listItems = await page.$$('.list-item')
-	});
-	it('openName', async () => {
-		const openName = await page.$('.openName-text')
-		expect(await openName.text()).toBe('未登录')
-	});
-	it('text', async () => {
-		const itemTexts = await page.$$('.list-item-text')
-    console.log('itemTexts: ',itemTexts);
+  let page, currentPage, listItems, platform;
+  beforeAll(async () => {
+    platform = process.env.UNI_PLATFORM
+    page = await program.reLaunch('/pages/index/index')
+    // page = await program.currentPage()
+    await page.waitFor('view')
+    listItems = await page.$$('.list-item')
+    console.log('listItems: ', listItems);
+  });
+  it('openName', async () => {
+    const openName = await page.$('.openName-text')
+    expect(await openName.text()).toBe('未登录')
+  });
+  it('text', async () => {
+    const itemTexts = await page.$$('.list-item-text')
+    console.log(platform, 'itemTexts: ', itemTexts);
     console.log(await itemTexts[0].text())
-		expect(await itemTexts[0].text()).toBe('手机验证码登录')
-		expect(await itemTexts[1].text()).toBe('账号密码登录')
-    expect(await itemTexts[2].text()).toBe('一键登录')
-	});
-	it('手机验证码登录', async () => {
-		await listItems[0].tap()
-		currentPage = await program.currentPage()
-    console.log('currentPage: ',currentPage);
-		expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
-		expect(currentPage.query.type).toBe("smsCode")
-		await program.navigateBack()
-	});
-	it('账号密码登录', async () => {
-		await listItems[1].tap()
-		currentPage = await program.currentPage()
-		expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
-		expect(currentPage.query.type).toBe("username")
-	});
+    console.log(await itemTexts[1].text())
+    expect(await itemTexts[0].text()).toBe('手机验证码登录')
+    expect(await itemTexts[1].text()).toBe('账号密码登录')
+    if (platform != "h5") {
+      expect(await itemTexts[2].text()).toBe('一键登录')
+    }
+  });
+  it('手机验证码登录', async () => {
+    await listItems[0].tap()
+    currentPage = await program.currentPage()
+    console.log('currentPage: ', currentPage);
+    expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
+    expect(currentPage.query.type).toBe("smsCode")
+    await program.navigateBack()
+  });
+  it('账号密码登录', async () => {
+    await listItems[1].tap()
+    currentPage = await program.currentPage()
+    // console.log('currentPage: ', currentPage);
+    expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
+    expect(currentPage.query.type).toBe("username")
+  });
 });
-

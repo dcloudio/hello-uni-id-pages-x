@@ -44,36 +44,39 @@
 			async loginByPwd():Promise<any> {
 				if (this.username.length == 0) {
 					(this.$refs['username'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
-					return uni.showToast({
-						title: '请输入手机号/用户名/邮箱',
-						icon: 'none',
-						duration: 3000
-					});
+          uni.showToast({
+          	title: '请输入手机号/用户名/邮箱',
+          	icon: 'none',
+          	duration: 3000
+          });
+					return false
 				}
 				if (this.password.length == 0) {
 					(this.$refs['password'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
-					return uni.showToast({
-						title: '请输入密码',
-						icon: 'none',
-						duration: 3000
-					});
+          uni.showToast({
+          	title: '请输入密码',
+          	icon: 'none',
+          	duration: 3000
+          });
+					return false
 				}
 				if (this.needCaptcha && this.loginCaptcha.length != 4) {
 					(this.$refs['popup-captcha'] as UniPopupCaptchaComponentPublicInstance).open(() => {
 						this.loginByPwd()
 					});
-					return uni.showToast({
-						title: '请输入验证码',
-						icon: 'none',
-						duration: 3000
-					});
+          uni.showToast({
+          	title: '请输入验证码',
+          	icon: 'none',
+          	duration: 3000
+          });
+					return false
 				}
-			
+
 				const data : UTSJSONObject = {
 					"password": this.password,
 					"captcha": this.loginCaptcha
 				}
-			
+
 				let keyName = 'username'
 				if (/^1\d{10}$/.test(this.username)) {
 					keyName = "mobile"
@@ -92,12 +95,12 @@
 					})
 					return false;
 				}
-			
+
 				uni.showLoading({
 					title: '登录中',
 					mask: false
 				});
-				
+
 				let testRes = await new Promise((resolve)=>{
 					uniIdCo.login(data)
 						.finally(() : void => {
@@ -110,7 +113,7 @@
 							loginSuccess(e)
 							resolve(e['uid'])
 						})
-						.catch<void>((err : any | null) : void => {
+						.catch((err : any | null) => {
 							const error = err as UniCloudError
 							console.error(error)
 							console.error(error.code)
