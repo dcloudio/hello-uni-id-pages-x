@@ -32,7 +32,7 @@
 				confirmCallBack = callback;
 				(this.$refs['popup'] as UniPopupComponentPublicInstance).open();
 				this.$nextTick(() => {
-					(this.$refs['input'] as Element).focus()
+					(this.$refs['input'] as UniElement).focus()
 				})
 			},
 			cancel() {
