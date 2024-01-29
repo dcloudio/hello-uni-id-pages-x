@@ -5,8 +5,9 @@
 			<text class="sms-code-title">{{title}}</text>
 			<text class="sms-code-tip">短信验证码已发送至{{mobile}}</text>
 			<view class="code-input-list">
-				<template v-for="(item,i) in smsCodeList" :key="i">
-					<input @input="setSmsCode(i,$event as InputEvent)" :value="item" type="number" ref="code-input"
+				<template v-for="(_,i) in smsCodeList" :key="i">
+          <!-- TODO APP :value="item" -->
+					<input @input="setSmsCode(i,$event as InputEvent)" type="number" ref="code-input"
 						class="code-input" maxlength="7" @focus="onFocus(i)" />
 				</template>
 			</view>
@@ -23,7 +24,7 @@
 		emits: ["update:modelValue","reGetSmsCode","blur", "focus" ],
 		data() {
 			return {
-				smsCodeList: ["\u200b", "\u200b", "\u200b", "\u200b", "\u200b", "\u200b"],
+        smsCodeList: ["\u200b", "\u200b", "\u200b", "\u200b", "\u200b", "\u200b"],
 				isOpen: false
 			}
 		},
@@ -63,7 +64,7 @@
 			show() {
 				(this.$refs['popup'] as UniPopupComponentPublicInstance).open();
 				this.$nextTick(() => {
-					(this.$refs["code-input"] as Element[])[0].focus();
+					(this.$refs["code-input"] as UniElement[])[0].focus();
 				})
 				this.isOpen = true
 			},
@@ -75,28 +76,26 @@
 			clear() {
 				this.smsCodeList = ["\u200b", "\u200b", "\u200b", "\u200b", "\u200b", "\u200b"];
 				if (this.isOpen) {
-					(this.$refs["code-input"] as Element[])[0].focus();
+					(this.$refs["code-input"] as UniElement[])[0].focus();
 					// console.log('clear success');
 				} else {
 					// console.log('已经关了，不能清空');
 				}
 			},
 			setSmsCode(i : number, e : InputEvent) {
+				// console.log('setSmsCode--',e);
 				const { value } = e.detail
-				// console.log('~~',value,value.length);
-
+				console.log('~~',value,value.length);
 				// 已满6位数就直接调登录
 				let $value = value.replace(/\u200b/g, '')
 				if ($value.length == 6) {
 					// (this.$refs["code-input"] as Element[])[0].focus();
 					// console.log('~~~~~', $value, $value.split(''));
 					$value.split('').forEach((item : string, index : number) => {
-						// console.log('index', index, item);
 						this.smsCodeList[index] = "\u200b" + item
 					})
 					return
 				}
-
 				// 限制每个空格内的文字不超过2位
 				if (value.length > 2) {
 					this.$nextTick(() => {
@@ -105,7 +104,6 @@
 						this.smsCodeList[i] = newValue
 					})
 				}
-
 				// 被删除完就直接后退一格
 				if (value.length == 0) {
 					this.smsCodeList[i] = ""
@@ -113,19 +111,20 @@
 						this.smsCodeList[i] = '\u200b'
 					})
 					if (i != 0) {
-						(this.$refs["code-input"] as Element[])[i - 1].focus();
+						(this.$refs["code-input"] as UniElement[])[i - 1].focus();
 						this.smsCodeList[i - 1] = ""
 					}
 				} else if (value != "\u200b") {
 					this.smsCodeList[i] = value;
 					if (i != (this.smsCodeList.length - 1)) {
-						(this.$refs["code-input"] as Element[])[i + 1].focus();
+						(this.$refs["code-input"] as UniElement[])[i + 1].focus();
 					} else {
 						// console.log(i, (this.smsCodeList.length - 1));
 					}
 				}
 			},
 			onFocus(i : number) {
+        // console.log("onFocus",i);
 				if (this.smsCodeList[i].length == 0) {
 					this.smsCodeList[i] = '\u200b'
 				}
