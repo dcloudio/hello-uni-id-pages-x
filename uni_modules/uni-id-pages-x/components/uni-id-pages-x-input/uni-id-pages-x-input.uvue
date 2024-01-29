@@ -103,7 +103,7 @@
 				// this.$emit('update:focus', true);
 			},
 			setFocus(state : boolean) {
-				const inputEl = this.$refs['input'] as Element
+				const inputEl = this.$refs['input'] as UniElement
 				if (state) {
 					inputEl.focus();
 				} else {
