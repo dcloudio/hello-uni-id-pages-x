@@ -86,6 +86,10 @@
       this.showLoginManage = options['showLoginManage'] == 'true'
     },
     methods: {
+      // 自动化测试专用
+      getIsLogin(): boolean{
+        return state.isLogin
+      },
       setNickname() {
         uni.navigateTo({
           "url": "/uni_modules/uni-id-pages-x/pages/userinfo/setNickname/setNickname"
