@@ -95,7 +95,7 @@
 						}
 					});
 				}
-				this.smsCodeRef!.sendSmsCode();
+				this.smsCodeRef!.sendSmsCode(false);
 			},
 			resetPwdBySms(param : UTSJSONObject) {
 				uni.showLoading({ "title": "请求中" })

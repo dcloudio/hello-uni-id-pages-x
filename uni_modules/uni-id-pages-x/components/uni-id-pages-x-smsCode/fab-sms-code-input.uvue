@@ -6,7 +6,7 @@
 			<text class="sms-code-tip">短信验证码已发送至{{mobile}}</text>
 			<view class="code-input-list">
 				<template v-for="(_,i) in smsCodeList" :key="i">
-          <!-- TODO APP :value="item" -->
+          <!-- TODO APP :value="item" 第一次不触发@input -->
 					<input @input="setSmsCode(i,$event as InputEvent)" type="number" ref="code-input"
 						class="code-input" maxlength="7" @focus="onFocus(i)" />
 				</template>
@@ -71,7 +71,6 @@
 			hide() {
 				(this.$refs['popup'] as UniPopupComponentPublicInstance).close();
 				this.isOpen = false
-				// console.log('hide success');
 			},
 			clear() {
 				this.smsCodeList = ["\u200b", "\u200b", "\u200b", "\u200b", "\u200b", "\u200b"];
@@ -83,14 +82,12 @@
 				}
 			},
 			setSmsCode(i : number, e : InputEvent) {
-				// console.log('setSmsCode--',e);
 				const { value } = e.detail
-				console.log('~~',value,value.length);
+				// console.log('~~',value,value.length);
 				// 已满6位数就直接调登录
 				let $value = value.replace(/\u200b/g, '')
 				if ($value.length == 6) {
 					// (this.$refs["code-input"] as Element[])[0].focus();
-					// console.log('~~~~~', $value, $value.split(''));
 					$value.split('').forEach((item : string, index : number) => {
 						this.smsCodeList[index] = "\u200b" + item
 					})
@@ -100,7 +97,6 @@
 				if (value.length > 2) {
 					this.$nextTick(() => {
 						let newValue = value.slice(value.length - 1)
-						// console.log('newValue', newValue);
 						this.smsCodeList[i] = newValue
 					})
 				}
@@ -124,7 +120,6 @@
 				}
 			},
 			onFocus(i : number) {
-        // console.log("onFocus",i);
 				if (this.smsCodeList[i].length == 0) {
 					this.smsCodeList[i] = '\u200b'
 				}

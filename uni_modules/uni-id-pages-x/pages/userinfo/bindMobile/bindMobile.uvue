@@ -34,16 +34,12 @@
 				isTest:false
 			}
 		},
-		computed: {
-		},
-		watch: {
-		},
 		mounted() {
 			this.smsCodeEl = (this.$refs["smsCode"] as UniIdPagesXSmsCodeComponentPublicInstance)
 		},
 		methods: {
 			sendSmsCode() {
-				this.smsCodeEl!.sendSmsCode();
+				this.smsCodeEl!.sendSmsCode(false);
 			},
 			smsCodeInput(param : UTSJSONObject) {
 				// console.log('smsCodeInput param', param);
