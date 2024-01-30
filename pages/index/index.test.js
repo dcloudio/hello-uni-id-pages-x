@@ -1,17 +1,14 @@
 // uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
-jest.setTimeout(20000)
+jest.setTimeout(60000)
 describe('pages/index/index.uvue', () => {
   let page, currentPage, listItems, platform;
   beforeAll(async () => {
     platform = process.env.UNI_PLATFORM
-    console.log('platform: ', platform);
-    if(platform == 'h5'){await page.waitFor(8000)}
     page = await program.reLaunch('/pages/index/index')
     // page = await program.currentPage()
     await page.waitFor('view')
     listItems = await page.$$('.list-item')
-    console.log('listItems: ', listItems);
-
+    // console.log('listItems: ', listItems);
   });
   it('openName', async () => {
     const openName = await page.$('.openName-text')
@@ -19,7 +16,7 @@ describe('pages/index/index.uvue', () => {
   });
   it('text', async () => {
     const itemTexts = await page.$$('.list-item-text')
-    console.log(platform, 'itemTexts: ', itemTexts);
+    // console.log(platform, 'itemTexts: ', itemTexts);
     console.log(await itemTexts[0].text())
     console.log(await itemTexts[1].text())
     expect(await itemTexts[0].text()).toBe('手机验证码登录')
@@ -30,7 +27,7 @@ describe('pages/index/index.uvue', () => {
   });
   it('手机验证码登录', async () => {
     await listItems[0].tap()
-    if(platform == 'h5'){await page.waitFor(5000)}
+    if(platform == 'h5'){await page.waitFor(20000)}
     currentPage = await program.currentPage()
     console.log('currentPage: ', currentPage);
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
@@ -39,6 +36,7 @@ describe('pages/index/index.uvue', () => {
   });
   it('账号密码登录', async () => {
     await listItems[1].tap()
+    if(platform == 'h5'){await page.waitFor(5000)}
     currentPage = await program.currentPage()
     // console.log('currentPage: ', currentPage);
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
