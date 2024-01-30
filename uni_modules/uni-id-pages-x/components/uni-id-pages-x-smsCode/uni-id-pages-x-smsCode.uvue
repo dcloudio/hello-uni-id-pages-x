@@ -61,7 +61,7 @@
 			sendSmsCaptcha() {
 				this.emitInput()
 				if (this.autoSend && this.sendSmsCaptcha.length == 4 && this.mobile.length == 11) {
-					this.sendSmsCode()
+					this.sendSmsCode(true)
 				}
 			},
 			smsCode() {
@@ -71,7 +71,6 @@
 		mounted() {
 			this.fabSmsCodeInputEl = this.$refs["fab-sms-code-input"] as ComponentPublicInstance;
 			this.sendSmsCaptchaCP = this.$refs["sendSmsCaptcha"] as UniCaptchaComponentPublicInstance;
-
 			// 加载好，手机号码输入框就自动获取焦点
 			// TO 临时方案解决 this.$nextTick 无效，由setTimeout 300 代替
 			setTimeout(() => {
@@ -130,14 +129,13 @@
 				this.sendSmsCaptcha = ""
 				this.clearCodeInput()
 				this.hideCodeInput()
-				// console.log('reset');
 			},
-			sendSmsCode() {
-				console.log("state.pendingAgreements", state.pendingAgreements);
-				if (state.pendingAgreements) {
+			sendSmsCode(needAgreements:boolean) {
+				// console.log("state.pendingAgreements", state.pendingAgreements,needAgreements);
+				if (needAgreements && state.pendingAgreements) {
           // uni.hideKeyboard();
           this.sendSmsCaptchaCP!.setFocus(false);
-          // web端有问题
+          // TODO web端有问题
           // (this.$parent as ComponentPublicInstance).$callMethod("showPopupCaptcha", () => {
           // 	if (!state.pendingAgreements) {
           // 		this.sendSmsCode()
@@ -146,7 +144,7 @@
           // 临时方案
           uni.$emit('uni-id-pages-x-loginBySmsCode-showPopupCaptcha',()=>{
             if (!state.pendingAgreements) {
-            	this.sendSmsCode()
+            	this.sendSmsCode(false)
             }
           })
 					uni.showToast({
@@ -155,12 +153,10 @@
 					});
 					return
 				}
-				// console.log('sendSmsCode');
 				// 如果还在倒计时就显示出来输入框，阻止发送
 				if (this.reverseNumber != 0) {
 					return this.showCodeInput()
 				}
-
 				let reg_mobile = /^1\d{10}$/;
 				if (!reg_mobile.test(this.mobile)) {
 					(this.$refs['mobileInput'] as UniIdPagesXInputComponentPublicInstance).setFocus(true)
@@ -171,7 +167,6 @@
 					})
 					return
 				}
-
 				if (this.sendSmsCaptcha.length != 4) {
 					this.sendSmsCaptchaCP!.setFocus(true)
 					uni.showToast({
@@ -181,14 +176,12 @@
 					});
 					return
 				}
-
 				// const param : UTSJSONObject
 				// console.log('sendSmsCode',{
 				// 	"mobile": this.mobile,
 				// 	"scene": "login-by-sms",
 				// 	"captcha": this.sendSmsCaptcha
 				// });
-
 				uni.showLoading({ "title": "发送中" })
 				const uniIdCo = uniCloud.importObject("uni-id-co", { "customUI": true })
 				uniIdCo.sendSmsCode({
@@ -205,14 +198,12 @@
 							icon: 'none',
 							duration: 3000
 						});
-						// console.log('result', result);
 						this.showCodeInput()
 					})
 					.catch((err : any | null) : void => {
 						const error = err as UniCloudError
 						// console.error(error.message)
 						// console.error(error.code)
-
 						switch (error.code) {
 							case "uni-captcha-verify-fail":
 								uni.showToast({
