@@ -34,7 +34,7 @@
 		},
 		methods: {
 			sendSmsCode() {
-				this.smsCodeRef!.$callMethod('sendSmsCode');
+				this.smsCodeRef!.$callMethod('sendSmsCode',true);
 			},
 			smsCodeInput(param : UTSJSONObject) {
 				// console.log('smsCodeInput param', param);
