@@ -3,7 +3,7 @@ module.exports = {
     "compile": true,
     "h5": {
         "options": {
-            "headless": true
+            "headless": false
         },
         "executablePath": ""
     },
@@ -28,10 +28,10 @@ module.exports = {
             "executablePath": ""
         },
         "uni-app-x": {
-            "version": "D:\\xm\\download\\uni-app-x-dev\\HBuilderX.3.9.0.20230708.1221-dev\\HBuilderX\\plugins\\uniappx-launcher\\base\\version.txt",
+            "version": "D:\\HX\\alpha\\HBuilderX.3.97.2023110504-alpha\\HBuilderX\\plugins\\uniappx-launcher\\base\\version.txt",
             "android": {
                 "id": "emulator-5554",
-                "executablePath": "D:\\xm\\download\\uni-app-x-dev\\HBuilderX.3.9.0.20230708.1221-dev\\HBuilderX\\plugins\\uniappx-launcher\\base\\android_base.apk"
+                "executablePath": "D:\\HX\\alpha\\HBuilderX.3.97.2023110504-alpha\\HBuilderX\\plugins\\uniappx-launcher\\base\\android_base.apk"
             }
         }
     }

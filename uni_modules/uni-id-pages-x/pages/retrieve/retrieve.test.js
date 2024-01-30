@@ -44,7 +44,8 @@ describe('retrieve', () => {
 					expect(expecVerifytStr).toContain(testErrRes.errMsg);
 					break;
 				case 'uni-id-captcha-required':
-					expect(testErrRes.errMsg).toBe('请输入图形验证码');
+				const requiredStr = ["请输入图形验证码","Captcha required"]
+					expect(requiredStr).toContain(testErrRes.errMsg)
 					break;
 				default:
 					break;

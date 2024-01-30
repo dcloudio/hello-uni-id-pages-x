@@ -71,8 +71,8 @@ describe('loginByPwd', () => {
 		await page.setData({
 			loginType: "smsCode"
 		})
-		loginBySmsCodeEl = await page.$('uni-id-pages-x-loginBySmsCode')
-		smsCodeEl = await page.$('uni-id-pages-x-smsCode')
+    loginBySmsCodeEl = await page.$('uni-id-pages-x-loginBySmsCode')
+    smsCodeEl = await page.$('uni-id-pages-x-smsCode')
 		await smsCodeEl.setData({
 			mobile: "17755555555",
 			sendSmsCaptcha: "1234",
@@ -87,7 +87,7 @@ describe('loginByPwd', () => {
 	});
 
 	it('smsCode-callMethod', async () => {
-		await smsCodeEl.callMethod('sendSmsCode')
+		await smsCodeEl.callMethod('sendSmsCode',true)
 		await page.waitFor(500)
 		await smsCodeEl.setData({
 			smsCode: "123456"
