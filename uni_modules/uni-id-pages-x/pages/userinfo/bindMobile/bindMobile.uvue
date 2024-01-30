@@ -23,16 +23,12 @@
 				captcha: ""
 			}
 		},
-		computed: {
-		},
-		watch: {
-		},
 		mounted() {
 			this.smsCodeEl = (this.$refs["smsCode"] as UniIdPagesXSmsCodeComponentPublicInstance)
 		},
 		methods: {
 			sendSmsCode() {
-				this.smsCodeEl!.sendSmsCode();
+				this.smsCodeEl!.sendSmsCode(false);
 			},
 			smsCodeInput(param : UTSJSONObject) {
 				// console.log('smsCodeInput param', param);
@@ -70,7 +66,7 @@
 						uni.hideLoading()
 					})
 					.then((e : UTSJSONObject) : void => {
-						console.log(e,"-----------");
+						// console.log(e);
 						uni.showToast({
 							title: '绑定成功',
 							icon: 'none',
