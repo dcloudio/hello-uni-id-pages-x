@@ -65,7 +65,7 @@
 					.finally(() : void => {
 						uni.hideLoading()
 					})
-					.then((e : UTSJSONObject) : void => {
+					.then((_: UTSJSONObject) : void => {
 						// console.log(e);
 						uni.showToast({
 							title: '绑定成功',
