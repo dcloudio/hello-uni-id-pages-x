@@ -5,10 +5,8 @@ describe('pages/index/index.uvue', () => {
   beforeAll(async () => {
     platform = process.env.UNI_PLATFORM
     page = await program.reLaunch('/pages/index/index')
-    // page = await program.currentPage()
     await page.waitFor('view')
     listItems = await page.$$('.list-item')
-    // console.log('listItems: ', listItems);
   });
   it('openName', async () => {
     const openName = await page.$('.openName-text')
@@ -16,12 +14,12 @@ describe('pages/index/index.uvue', () => {
   });
   it('text', async () => {
     const itemTexts = await page.$$('.list-item-text')
-    // console.log(platform, 'itemTexts: ', itemTexts);
     console.log(await itemTexts[0].text())
     console.log(await itemTexts[1].text())
     expect(await itemTexts[0].text()).toBe('手机验证码登录')
     expect(await itemTexts[1].text()).toBe('账号密码登录')
     if (platform != "h5") {
+      console.log(await itemTexts[2].text())
       expect(await itemTexts[2].text()).toBe('一键登录')
     }
   });
@@ -38,7 +36,6 @@ describe('pages/index/index.uvue', () => {
     await listItems[1].tap()
     if(platform == 'h5'){await page.waitFor(5000)}
     currentPage = await program.currentPage()
-    // console.log('currentPage: ', currentPage);
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
     expect(currentPage.query.type).toBe("username")
   });
