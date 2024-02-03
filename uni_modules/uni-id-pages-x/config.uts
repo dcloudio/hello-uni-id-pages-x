@@ -14,7 +14,7 @@ export default {
   },
   "loginTypes":[
     "smsCode",
-    // #ifdef APP && ( uniVersion > 3.99 || uniVersion == 3.99)
+    // #ifdef APP && uniVersion >= 3.98
     "univerify",
     // #endif
     "username",
