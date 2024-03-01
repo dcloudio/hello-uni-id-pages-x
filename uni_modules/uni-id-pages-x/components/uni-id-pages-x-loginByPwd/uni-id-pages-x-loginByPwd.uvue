@@ -5,7 +5,7 @@
     <uni-id-pages-x-input class="my-input" title="密码" v-model="password" :password="true" ref="password"></uni-id-pages-x-input>
     <!-- 同意隐私政策协议 -->
     <uni-id-pages-x-agreements class="agreements-box" ref="agreements" scope="login"/>
-    <button class="uni-btn" :type="password.length > 0 && username.length >0 ? 'primary' : '' " @click="loginByPwd">登录</button>
+    <button class="uni-btn" :type="password.length > 0 && username.length >0 ? 'primary' : 'default' " @click="loginByPwd">登录</button>
   </view>
 
   <view class="link-group">
