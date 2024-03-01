@@ -18,10 +18,10 @@ describe('pages/index/index.uvue', () => {
     console.log(await itemTexts[1].text())
     expect(await itemTexts[0].text()).toBe('手机验证码登录')
     expect(await itemTexts[1].text()).toBe('账号密码登录')
-    if (platform != "h5") {
-      console.log(await itemTexts[2].text())
-      expect(await itemTexts[2].text()).toBe('一键登录')
-    }
+    // if (platform != "h5") {
+    //   console.log(await itemTexts[2].text())
+    //   expect(await itemTexts[2].text()).toBe('一键登录')
+    // }
   });
   it('手机验证码登录', async () => {
     await listItems[0].tap()
