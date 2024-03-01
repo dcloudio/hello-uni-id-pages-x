@@ -48,7 +48,7 @@
 		},
 		data() {
 			return {
-				loginType: "username" as string,
+				loginType: "username",
 				logo: "/static/logo.png"
 			}
 		},
