@@ -24,7 +24,7 @@
 				return this.currentNickname != this.nickname
 			},
 			currentNickname() : string {
-				return (state.userInfo.get("nickname") as string)
+        return state.userInfo.get("nickname") == null?'':(state.userInfo.get("nickname") as string)
 			}
 		},
 		onLoad() {
@@ -44,14 +44,14 @@
 					// console.log('没有变化');
 					return false
 				}
-			
+
 				uni.showLoading({
 					title: '加载中',
 					mask: false
 				});
 				const db = uniCloud.databaseForJQL()
 				const uid = uniCloud.getCurrentUserInfo().uid
-				
+
 				if (uid != null) {
 					let testRes = await new Promise((resolve)=>{
 						db.collection('uni-id-users')
