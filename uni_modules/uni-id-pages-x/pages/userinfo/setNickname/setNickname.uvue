@@ -24,7 +24,7 @@
 				return this.currentNickname != this.nickname
 			},
 			currentNickname() : string {
-				return (state.userInfo.get("nickname") as string)
+        return state.userInfo.get("nickname") == null?'':(state.userInfo.get("nickname") as string)
 			}
 		},
 		onLoad() {
