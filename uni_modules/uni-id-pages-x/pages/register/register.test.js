@@ -10,6 +10,7 @@ describe('register', () => {
 		// console.log("isTest",await page.data('isTest'))
 	});
 	it('register', async () => {
+    expect.assertions(2);
 		const agreeEl = await page.$('uni-id-pages-x-agreements')
 		expect(await agreeEl.data('needAgreements')).toBe(true)
 		// setAgree
