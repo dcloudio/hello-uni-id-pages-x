@@ -147,8 +147,6 @@
 						if (tempFilePath == null) {
 							tempFilePath = ""
 						}
-						// console.log('tempFileName',tempFileName);
-						// console.log('tempFilePath',tempFilePath);
 						let avatar_file = {
 							// #ifdef WEB
 							extname: tempFileName.split(".")[tempFileName.split(".").length - 1],
@@ -192,20 +190,17 @@
 						//   _id = "" as string
 						// }
 						let cloudPath = _id + '' + Date.now()
-						avatar_file.name = cloudPath
+            avatar_file['name'] = cloudPath
 						uni.showLoading({
 							title: "更新中",
 							mask: true
 						});
-						// console.log('filePath', filePath);
 						uniCloud.uploadFile({
 							filePath,
 							cloudPath,
 						})
 							.then(function (res) {
-                // console.log('res', res);
-								avatar_file.url = res.fileID
-								// console.log('avatar_file111', avatar_file);
+                avatar_file['url'] = res.fileID
 								mutations.updateUserInfo({ avatar_file } as UTSJSONObject)
 							})
 							.catch(function (err : any | null) {
