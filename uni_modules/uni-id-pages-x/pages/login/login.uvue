@@ -33,7 +33,7 @@
 <script>
 	import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
 	import config from '@/uni_modules/uni-id-pages-x/config.uts';
-  // #ifdef APP && uniVersion >= 3.98
+  // #ifdef APP-ANDROID && uniVersion >= 3.98
   import Univerify from '@/uni_modules/uni-id-pages-x/lib/Univerify.uts'
   // #endif
   export default {
