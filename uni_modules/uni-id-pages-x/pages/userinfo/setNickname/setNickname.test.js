@@ -5,6 +5,7 @@ describe('setNickname', () => {
 	beforeAll(async () => {
 		page = await program.redirectTo(PAGE_PATH)
 		await page.waitFor('view')
+    await page.setData({'isTest':true})
 	});
 	it('设置昵称', async () => {
 		expect.assertions(1);

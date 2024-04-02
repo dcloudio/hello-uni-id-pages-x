@@ -16,7 +16,8 @@
 	export default {
 		data() {
 			return {
-				nickname: ""
+				nickname: "",
+        isTest:false //自动化测试标记
 			};
 		},
 		computed: {
@@ -62,7 +63,7 @@
 							.then((e) => {
 								console.log('e: ',e);
 								mutations.updateUserInfo({ "nickname": this.nickname } as UTSJSONObject)
-								// uni.navigateBack()
+                if(!this.isTest){uni.navigateBack()}
 								resolve(e['updated'])
 							})
 							.catch((err : any | null) => {
