@@ -5,7 +5,7 @@
 			:class="{'showBorder':border}" :style="{width,height,lineHeight:height}">
 		<!-- #endif -->
 			<!-- #ifndef MP-WEIXIN -->
-			<view open-type="chooseAvatar" @click="uploadAvatarImg" class="box" :class="{'showBorder':border}"
+			<view @click="uploadAvatarImg" class="box" :class="{'showBorder':border}"
 				:style="{width,height}">
 			<!-- #endif -->
 
