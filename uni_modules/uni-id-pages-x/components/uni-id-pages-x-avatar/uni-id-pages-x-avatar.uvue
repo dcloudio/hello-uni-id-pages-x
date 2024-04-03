@@ -4,10 +4,10 @@
 		<button open-type="chooseAvatar" @chooseavatar="bindchooseavatar" @click="uploadAvatarImg" class="box"
 			:class="{'showBorder':border}" :style="{width,height,lineHeight:height}">
 		<!-- #endif -->
-			<!-- #ifndef MP-WEIXIN -->
-			<view @click="uploadAvatarImg" class="box" :class="{'showBorder':border}"
-				:style="{width,height}">
-			<!-- #endif -->
+		<!-- #ifndef MP-WEIXIN -->
+		<view @click="uploadAvatarImg" class="box" :class="{'showBorder':border}"
+			:style="{width,height}">
+		<!-- #endif -->
 
 			<!-- {{avatar_file!.getString("url")}} -->
       <cloud-image v-if="avatar_file != null" :src="avatar_file!.getString('url')" :width="width" :height="height"></cloud-image>
@@ -136,7 +136,7 @@
 					count: 1,
 					crop,
 					success: (res) => {
-						// console.log('res', res);
+						console.log('res', res);
 						let tempFiles = res.tempFiles as UTSJSONObject[];
 						let tempFile = tempFiles[0];
             let tempFileName = tempFile['name'] as string | null
@@ -185,7 +185,7 @@
 						})
 						// #endif
 						let _id = this.userInfo["_id"] as string
-            console.log("id",_id)
+            // console.log("id",_id)
 						// if(_id != null){
 						//   _id = "" as string
 						// }
