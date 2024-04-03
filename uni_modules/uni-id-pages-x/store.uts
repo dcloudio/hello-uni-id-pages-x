@@ -15,12 +15,17 @@ export const state = reactive({
   isLogin: false
 } as State)
 
+
 function initState() {
   try {
     let userInfo = uni.getStorageSync('uni-id-pages-x-userInfo')
+    console.log('init userInfo',userInfo);
+    // #ifdef APP-IOS
+    userInfo = new UTSJSONObject(userInfo)
+    // #endif
     if (userInfo instanceof UTSJSONObject) {
       state.userInfo = userInfo
-      console.log('init userInfo',userInfo);
+      // console.log('init userInfo',userInfo);
     }
   } catch (e) {
     console.error('init userInfo error', e);
