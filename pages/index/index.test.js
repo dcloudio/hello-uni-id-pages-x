@@ -3,7 +3,7 @@ jest.setTimeout(60000)
 describe('pages/index/index.uvue', () => {
   let page, currentPage, listItems, platform;
   beforeAll(async () => {
-    platform = process.env.UNI_PLATFORM
+    platform = process.env.UNI_UTS_PLATFORM
     page = await program.reLaunch('/pages/index/index')
     await page.waitFor('view')
     listItems = await page.$$('.list-item')
@@ -18,14 +18,18 @@ describe('pages/index/index.uvue', () => {
     console.log(await itemTexts[1].text())
     expect(await itemTexts[0].text()).toBe('手机验证码登录')
     expect(await itemTexts[1].text()).toBe('账号密码登录')
-    // if (platform != "h5") {
-    //   console.log(await itemTexts[2].text())
-    //   expect(await itemTexts[2].text()).toBe('一键登录')
-    // }
+    if (platform == "app-android") {
+      console.log(await itemTexts[2].text())
+      expect(await itemTexts[2].text()).toBe('一键登录')
+    }
   });
   it('手机验证码登录', async () => {
     await listItems[0].tap()
-    if(platform == 'h5'){await page.waitFor(20000)}
+    if(platform == 'web'){
+      await page.waitFor(5000)
+    }else{
+      await page.waitFor(2000)
+    }
     currentPage = await program.currentPage()
     console.log('currentPage: ', currentPage);
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
@@ -34,7 +38,11 @@ describe('pages/index/index.uvue', () => {
   });
   it('账号密码登录', async () => {
     await listItems[1].tap()
-    if(platform == 'h5'){await page.waitFor(5000)}
+    if(platform == 'web'){
+      await page.waitFor(5000)
+    }else{
+      await page.waitFor(2000)
+    }
     currentPage = await program.currentPage()
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
     expect(currentPage.query.type).toBe("username")
