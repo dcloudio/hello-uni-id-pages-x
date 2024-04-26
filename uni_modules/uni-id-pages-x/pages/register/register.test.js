@@ -11,13 +11,11 @@ describe('register', () => {
 	});
 	it('register', async () => {
     expect.assertions(2);
-		const agreeEl = await page.$('uni-id-pages-x-agreements')
+		// const agreeEl = await page.$('uni-id-pages-x-agreements')
+    const agreeEl = await page.$('agreements-box')
+
     console.log("agreeEl",agreeEl)
     console.log("data----needAgreements",await agreeEl.data('needAgreements'))
-
-    await program.screenshot({
-      path: "static/screenshot/register.png"
-    })
 
 		expect(await agreeEl.data('needAgreements')).toBe(true)
 		// setAgree
