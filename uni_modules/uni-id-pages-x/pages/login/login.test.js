@@ -7,8 +7,10 @@ describe('loginByPwd', () => {
 		page = await program.reLaunch(PAGE_PATH)
 		await page.waitFor('view')
 		loginByPwdEl = await page.$('uni-id-pages-x-loginByPwd')
+    console.log("loginByPwdEl",loginByPwdEl)
 		await loginByPwdEl.setData({isTest: true})
-		// console.log("isTest",await loginByPwdEl.data('isTest'))
+    await page.waitFor(1000)
+		console.log("isTest",await loginByPwdEl.data('isTest'))
 	});
 	it('账号密码登录', async () => {
 		expect(await page.data('loginType')).toBe('username')
@@ -24,7 +26,7 @@ describe('loginByPwd', () => {
 	});
 	it('跳转到忘记密码页面', async () => {
 		await loginByPwdEl.callMethod('toRetrievePwd')
-		await page.waitFor(500)
+		await page.waitFor(1000)
 		expect((await program.currentPage()).path).toBe(
 			'uni_modules/uni-id-pages-x/pages/retrieve/retrieve')
 		expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')

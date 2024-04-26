@@ -8,6 +8,8 @@ describe('retrieve', () => {
 		await page.waitFor('view')
 		await page.setData({isTest:true})
 		smsCodeEl = await page.$('uni-id-pages-x-smsCode')
+    console.log("smsCodeEl",smsCodeEl)
+    await page.waitFor(1000)
 	});
 	it('重置密码-setData', async () => {
 		// mobile = "17766666666"

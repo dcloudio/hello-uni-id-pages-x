@@ -4,6 +4,7 @@ describe('pages/index/index.uvue', () => {
   let page, currentPage, listItems, platform;
   beforeAll(async () => {
     platform = process.env.UNI_UTS_PLATFORM
+    console.log("platform",platform)
     page = await program.reLaunch('/pages/index/index')
     await page.waitFor('view')
     listItems = await page.$$('.list-item')
@@ -26,7 +27,7 @@ describe('pages/index/index.uvue', () => {
   it('手机验证码登录', async () => {
     await listItems[0].tap()
     if(platform == 'web'){
-      await page.waitFor(10000)
+      await page.waitFor(20000)
     }else{
       await page.waitFor(2000)
     }

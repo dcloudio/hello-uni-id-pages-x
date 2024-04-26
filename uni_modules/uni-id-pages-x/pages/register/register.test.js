@@ -7,14 +7,22 @@ describe('register', () => {
 		page = await program.navigateTo(PAGE_PATH)
 		await page.waitFor('view')
 		await page.setData({isTest: true})
-		// console.log("isTest",await page.data('isTest'))
+		console.log("isTest",await page.data('isTest'))
 	});
 	it('register', async () => {
     expect.assertions(2);
 		const agreeEl = await page.$('uni-id-pages-x-agreements')
+    console.log("agreeEl",agreeEl)
+    console.log("data----needAgreements",await agreeEl.data('needAgreements'))
+
+    await program.screenshot({
+      path: "static/screenshot/register.png"
+    })
+
 		expect(await agreeEl.data('needAgreements')).toBe(true)
 		// setAgree
 		await agreeEl.callMethod('confirm')
+    await page.waitFor(1000)
 		await page.setData({
 			username: "dcloud88",
 			nickname: "",
