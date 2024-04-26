@@ -25,7 +25,7 @@
 			</view>
 			<!-- 隐私政策协议授权申请框 -->
 
-			<uni-id-pages-x-agreements class="agreements-box" ref="agreements" />
+			<uni-id-pages-x-agreements ref="agreements" />
 
 			<button @click="registerBefore" type="primary">注册并登录</button>
 		</view>
@@ -163,7 +163,7 @@
 				}
 				const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: true });
 				uni.showLoading({ "title": "请求中" })
-				
+
 				let testRes = await new Promise((resolve)=>{
 					uniIdCo.registerUser(data)
 						.finally(() => uni.hideLoading())
