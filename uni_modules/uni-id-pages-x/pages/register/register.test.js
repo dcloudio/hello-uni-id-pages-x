@@ -11,8 +11,11 @@ describe('register', () => {
 	});
 	it('register', async () => {
     expect.assertions(2);
-		const agreeEl = await page.$('uni-id-pages-x-agreements')
+		// const agreeEl = await page.$('uni-id-pages-x-agreements')
+    const agreeEl = await page.$('.agreementsTest')
     console.log("agreeEl",agreeEl)
+    const agreeEla = await page.$('#agreementsTesta')
+    console.log("agreeEla",agreeEla)
     console.log("data----needAgreements",await agreeEl.data('needAgreements'))
     await page.waitFor(1000)
 		expect(await agreeEl.data('needAgreements')).toBe(true)

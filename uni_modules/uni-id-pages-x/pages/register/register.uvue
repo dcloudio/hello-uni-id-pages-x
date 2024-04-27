@@ -25,7 +25,7 @@
 			</view>
 			<!-- 隐私政策协议授权申请框 -->
 
-			<uni-id-pages-x-agreements ref="agreements" />
+			<uni-id-pages-x-agreements class="agreementsTest" id="agreementsTesta" ref="agreements" />
 
 			<button @click="registerBefore" type="primary">注册并登录</button>
 		</view>
