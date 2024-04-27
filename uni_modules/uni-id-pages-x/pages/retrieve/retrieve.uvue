@@ -2,7 +2,7 @@
 	<view class="page">
 		<view class="form">
 			<!-- 获取验证码组件（输入手机号码+发送短信验证码所需的图形验证码，获得短信验证码） -->
-			<uni-id-pages-x-smsCode scene="reset-pwd-by-sms" ref="smsCode" @input="smsCodeInput"
+			<uni-id-pages-x-smsCode class="smsCodeTest" scene="reset-pwd-by-sms" ref="smsCode" @input="smsCodeInput"
 				:autoSend="false"></uni-id-pages-x-smsCode>
 			<uni-id-pages-x-input class="my-input" :border="false" v-model="password" placeholder="请输入新密码" ref="password"
 				:password="true"></uni-id-pages-x-input>

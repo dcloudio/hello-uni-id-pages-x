@@ -1,5 +1,5 @@
 <template>
-  <view class="form">
+  <view class="form" id="loginByPwdTestCom">
     <text class="pwd-login-title">账号密码登录</text>
     <uni-id-pages-x-input class="my-input" title="账号" placeholder="请输入手机号/用户名/邮箱" v-model="username" ref="username"></uni-id-pages-x-input>
     <uni-id-pages-x-input class="my-input" title="密码" v-model="password" :password="true" ref="password"></uni-id-pages-x-input>
@@ -109,8 +109,8 @@
 						})
 						.then(e => {
 							console.log('uniIdCo.login res',e);
-							// if(!this.isTest){loginSuccess(e)}
-							loginSuccess(e)
+							if(!this.isTest){loginSuccess(e)}
+							// loginSuccess(e)
 							resolve(e['uid'])
 						})
 						.catch((err : any | null) => {
