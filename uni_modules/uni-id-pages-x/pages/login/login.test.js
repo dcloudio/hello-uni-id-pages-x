@@ -6,7 +6,7 @@ describe('loginByPwd', () => {
 	beforeAll(async () => {
 		page = await program.reLaunch(PAGE_PATH)
 		await page.waitFor('view')
-		loginByPwdEl = await page.$('uni-id-pages-x-loginByPwd')
+		loginByPwdEl = await page.$('.loginByPwdTest')
     console.log("loginByPwdEl",loginByPwdEl)
 		await loginByPwdEl.setData({isTest: true})
     await page.waitFor(1000)
@@ -32,7 +32,7 @@ describe('loginByPwd', () => {
 		expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
 	});
 	it('登录账号', async () => {
-		agreeEl = await page.$('uni-id-pages-x-agreements')
+		agreeEl = await page.$('.agreementsTest')
 		expect(await agreeEl.data('needAgreements')).toBe(true)
 		// setAgree
 		await agreeEl.callMethod('confirm')
@@ -73,8 +73,8 @@ describe('loginByPwd', () => {
 		await page.setData({
 			loginType: "smsCode"
 		})
-    loginBySmsCodeEl = await page.$('uni-id-pages-x-loginBySmsCode')
-    smsCodeEl = await page.$('uni-id-pages-x-smsCode')
+    loginBySmsCodeEl = await page.$('.loginBySmsCodeTest')
+    smsCodeEl = await page.$('.smsCodeTest')
 		await smsCodeEl.setData({
 			mobile: "17755555555",
 			sendSmsCaptcha: "1234",
@@ -82,7 +82,7 @@ describe('loginByPwd', () => {
 	});
 
 	it('smsCode-agree', async () => {
-		agreeEl = await page.$('uni-id-pages-x-agreements')
+		agreeEl = await page.$('.agreementsTest')
 		expect(await agreeEl.data('needAgreements')).toBe(true)
 		await agreeEl.callMethod('confirm')
 		await page.waitFor(100)

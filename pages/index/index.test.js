@@ -27,7 +27,7 @@ describe('pages/index/index.uvue', () => {
   it('手机验证码登录', async () => {
     await listItems[0].tap()
     if(platform == 'web'){
-      await page.waitFor(20000)
+      await page.waitFor(10000)
     }else{
       await page.waitFor(2000)
     }

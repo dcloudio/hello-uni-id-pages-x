@@ -8,7 +8,7 @@ describe('bindMobile', () => {
 		await page.waitFor('view')
 		await page.setData({isTest:true})
 		captcha = "1234"
-		smsCodeEl = await page.$('uni-id-pages-x-smsCode')
+		smsCodeEl = await page.$('.smsCodeTest')
 	});
 	it('setData', async () => {
 		await smsCodeEl.setData({

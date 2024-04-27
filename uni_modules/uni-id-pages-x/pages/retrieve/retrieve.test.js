@@ -7,7 +7,7 @@ describe('retrieve', () => {
 		page = await program.navigateTo(PAGE_PATH)
 		await page.waitFor('view')
 		await page.setData({isTest:true})
-		smsCodeEl = await page.$('uni-id-pages-x-smsCode')
+		smsCodeEl = await page.$('.smsCodeTest')
     console.log("smsCodeEl",smsCodeEl)
     await page.waitFor(1000)
 	});

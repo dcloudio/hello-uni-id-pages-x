@@ -14,14 +14,14 @@
       <button v-else type="primary" open-type="getmobileNumber" @getmobilenumber="login"
         class="uni-btn">微信授权手机号登录</button>
       <!-- 同意隐私政策协议 -->
-      <uni-id-pages-x-agreements class="agreements-box" scope="login" />
+      <uni-id-pages-x-agreements class="agreementsTest" scope="login" />
     </view>
 
 		<!-- 密码登录 -->
-		<uni-id-pages-x-loginByPwd v-if="loginType == 'username'" />
+		<uni-id-pages-x-loginByPwd class="loginByPwdTest" v-if="loginType == 'username'" />
 
 		<!-- 手机号验证码登录 -->
-		<uni-id-pages-x-loginBySmsCode v-else-if="loginType == 'smsCode'" />
+		<uni-id-pages-x-loginBySmsCode class="loginBySmsCodeTest" v-else-if="loginType == 'smsCode'" />
 
 		<!-- 固定定位的快捷登录按钮 -->
 		<uni-id-pages-x-fab-login :currentLoginType="loginType"
