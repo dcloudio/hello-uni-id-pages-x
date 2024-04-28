@@ -111,6 +111,8 @@ module.exports = {
     switch (clientPlatform) {
       case 'app':
       case 'app-plus':
+      case 'app-android':
+      case 'app-ios':
         clientPlatform = 'app'
         break
       case 'web':
