@@ -6,13 +6,16 @@ describe('loginByPwd', () => {
   beforeAll(async () => {
     page = await program.reLaunch(PAGE_PATH)
     await page.waitFor('view')
-    console.log("UNI_PLATFORM: ",process.env.UNI_PLATFORM);
-    console.log(await page.data('loginType') == 'username')
+    await page.waitFor(2000)
+    console.log("UNI_PLATFORM: ",process.env.UNI_PLATFORM,await page.data());
     const startTime = Date.now()
     await page.waitFor(async()=>{
-      return await page.data('loginType') == 'username' ||Date.now()-startTime >6000
+      if(Date.now()-startTime >6000){
+        console.log('-----------timeout----------')
+        return true
+      }
+      return await page.data('loginType') == 'username'
     })
-    console.log('timeout',Date.now()-startTime >6000)
     loginByPwdEla = await page.$('.loginByPwdTest')
     console.log("loginByPwdEla", loginByPwdEla)
     loginByPwdEl = await page.$('#loginByPwdTestCom')
