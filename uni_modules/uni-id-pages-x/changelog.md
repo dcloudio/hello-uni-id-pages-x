@@ -1,3 +1,5 @@
+## 1.1.1（2024-04-28）
+- 兼容uni-app-x对客户端uniPlatform的调整（uni-app-x内uniPlatform区分app-android、app-ios）
 ## 1.1.0（2024-04-07）
 - 新增 支持iOS端（HBuilderX 4.11+）
 ## 1.0.9（2024-03-20）
