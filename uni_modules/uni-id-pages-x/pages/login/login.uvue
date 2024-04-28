@@ -18,7 +18,7 @@
     </view>
 
 		<!-- 密码登录 -->
-		<uni-id-pages-x-loginByPwd class="loginByPwdTest" v-if="loginType == 'username'" />
+		<uni-id-pages-x-loginByPwd v-if="loginType == 'username'"  class="loginByPwdTest"/>
 
 		<!-- 手机号验证码登录 -->
 		<uni-id-pages-x-loginBySmsCode class="loginBySmsCodeTest" v-else-if="loginType == 'smsCode'" />

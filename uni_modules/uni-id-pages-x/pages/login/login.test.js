@@ -8,7 +8,9 @@ describe('loginByPwd', () => {
     await page.waitFor('view')
     console.log("UNI_PLATFORM: ",process.env.UNI_PLATFORM);
     console.log(await page.data('loginType') == 'username')
-    await page.waitFor(1000)
+    await page.waitFor(async()=>{
+      return await page.data('loginType') == 'username'
+    })
     loginByPwdEla = await page.$('.loginByPwdTest')
     console.log("loginByPwdEla", loginByPwdEla)
     loginByPwdEl = await page.$('#loginByPwdTestCom')
