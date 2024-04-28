@@ -6,7 +6,6 @@ describe('loginByPwd', () => {
   beforeAll(async () => {
     page = await program.reLaunch(PAGE_PATH)
     await page.waitFor('view')
-    await page.waitFor(2000)
     console.log("UNI_PLATFORM: ",process.env.UNI_PLATFORM,await page.data());
     const startTime = Date.now()
     await page.waitFor(async()=>{
@@ -16,12 +15,11 @@ describe('loginByPwd', () => {
       }
       return await page.data('loginType') == 'username'
     })
-    loginByPwdEla = await page.$('.loginByPwdTest')
-    console.log("loginByPwdEla", loginByPwdEla)
-    loginByPwdEl = await page.$('#loginByPwdTestCom')
+    // ios web 没支持通过标签名取组件，用 class。
+    loginByPwdEl = await page.$('.loginByPwdTest')
     console.log("loginByPwdEl", loginByPwdEl)
     await loginByPwdEl.setData({isTest: true })
-    console.log("isTest", await loginByPwdEl.data('isTest'))
+    // console.log("isTest", await loginByPwdEl.data('isTest'))
   });
   it('账号密码登录', async () => {
     expect(await page.data('loginType')).toBe('username')
@@ -43,7 +41,10 @@ describe('loginByPwd', () => {
     expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
   });
   it('登录账号', async () => {
-    agreeEl = await page.$('.agreementsTest')
+    // uni-id-pages-x-loginByPwd --》uni-id-pages-x-agreements--》.agreementsPwdTest 组件中的组件加class用page.$获取数据
+    agreeEl = await page.$('.agreementsPwdTest')
+    console.log('agreeEl',agreeEl)
+    console.log('------------',await agreeEl.data())
     expect(await agreeEl.data('needAgreements')).toBe(true)
     // setAgree
     await agreeEl.callMethod('confirm')
@@ -85,8 +86,9 @@ describe('loginByPwd', () => {
       loginType: "smsCode"
     })
     loginBySmsCodeEl = await page.$('.loginBySmsCodeTest')
-    console.log('loginBySmsCodeEl',loginBySmsCodeEl)
-    smsCodeEl = await page.$('.smsCodeTest')
+    smsCodeEl = await page.$('.smsCodeSmsTest')
+    console.log('smsCodeEl',smsCodeEl,await smsCodeEl.data())
+    // smsCodeEl = await loginBySmsCodeEl.$('.smsCodeTest')
     await smsCodeEl.setData({
       mobile: "17755555555",
       sendSmsCaptcha: "1234",
@@ -94,7 +96,8 @@ describe('loginByPwd', () => {
   });
 
   it('smsCode-agree', async () => {
-    agreeEl = await page.$('.agreementsTest')
+    agreeEl = await page.$('.agreementsSmsTest')
+    console.log('agreeEl---2',agreeEl)
     expect(await agreeEl.data('needAgreements')).toBe(true)
     await agreeEl.callMethod('confirm')
     await page.waitFor(100)

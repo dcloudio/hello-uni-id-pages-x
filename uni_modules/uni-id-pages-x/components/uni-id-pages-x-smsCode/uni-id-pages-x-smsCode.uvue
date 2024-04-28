@@ -1,21 +1,23 @@
 <template>
-	<view class="mobile-box">
-		<view @click="chooseArea" class="area">
-			<text>+86</text>
-			<uni-id-pages-x-icons :size="10" color="#666" @click="chooseArea" type="down" />
-		</view>
-		<view class="input-box">
-			<uni-id-pages-x-input type="number" :border="false" v-model="mobile" :maxlength="11" placeholder="请输入11位手机号"
-				ref="mobileInput"></uni-id-pages-x-input>
-		</view>
-	</view>
-	<!-- 获取发送短信的验证码的图形验证码组件 -->
-	<view class="send-sms-captcha-box">
-		<uni-captcha ref="sendSmsCaptcha" scene="send-sms-code" v-model="sendSmsCaptcha" />
-	</view>
-	<!-- 悬浮的短信验证码输入框 -->
-	<fab-sms-code-input v-model="smsCode" :mobile="mobile" :reverseNumber="reverseNumber" ref="fab-sms-code-input"
-		@reGetSmsCode="reGetSmsCode" title="验证并登录" />
+	<view>
+    <view class="mobile-box">
+    	<view @click="chooseArea" class="area">
+    		<text>+86</text>
+    		<uni-id-pages-x-icons :size="10" color="#666" @click="chooseArea" type="down" />
+    	</view>
+    	<view class="input-box">
+    		<uni-id-pages-x-input type="number" :border="false" v-model="mobile" :maxlength="11" placeholder="请输入11位手机号"
+    			ref="mobileInput"></uni-id-pages-x-input>
+    	</view>
+    </view>
+    <!-- 获取发送短信的验证码的图形验证码组件 -->
+    <view class="send-sms-captcha-box">
+    	<uni-captcha ref="sendSmsCaptcha" scene="send-sms-code" v-model="sendSmsCaptcha" />
+    </view>
+    <!-- 悬浮的短信验证码输入框 -->
+    <fab-sms-code-input v-model="smsCode" :mobile="mobile" :reverseNumber="reverseNumber" ref="fab-sms-code-input"
+    	@reGetSmsCode="reGetSmsCode" title="验证并登录" />
+  </view>
 </template>
 
 <script>
