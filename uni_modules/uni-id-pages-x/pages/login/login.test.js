@@ -52,6 +52,7 @@ describe('loginByPwd', () => {
     agreeEl = await page.$('.agreementsPwdTest')
     console.log('agreeEl',agreeEl)
     console.log('------------',await agreeEl.data())
+    console.log('------------',await page.data())
     expect(await agreeEl.data('needAgreements')).toBe(true)
     // setAgree
     await agreeEl.callMethod('confirm')
@@ -85,7 +86,7 @@ describe('loginByPwd', () => {
   });
   it('smsCode-setData', async () => {
     page = await program.redirectTo(PAGE_PATH)
-    await page.waitFor(1000)
+    await page.waitFor(2000)
     // const fabLogin = await page.$('uni-id-pages-x-fab-login')
     // await fabLogin.tap()
     // console.log('fabLogin: ',await page.data('loginType'));
@@ -120,7 +121,12 @@ describe('loginByPwd', () => {
 
   it('手机验证码', async () => {
     // 等待登录结果
+    const startTime = Date.now()
     await page.waitFor(async () => {
+      if(Date.now()-startTime >10000){
+        console.log('-----------timeout----------')
+        return true
+      }
       return await loginBySmsCodeEl.data('testState') === true
     })
     loginSuccess = await loginBySmsCodeEl.data('testSuccess')
