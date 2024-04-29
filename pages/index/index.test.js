@@ -45,6 +45,7 @@ describe('pages/index/index.uvue', () => {
       await page.waitFor(2000)
     }
     currentPage = await program.currentPage()
+    console.log('currentPage: ', currentPage);
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
     expect(currentPage.query.type).toBe("username")
   });

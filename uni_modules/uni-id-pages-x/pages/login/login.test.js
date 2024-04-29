@@ -6,7 +6,10 @@ describe('loginByPwd', () => {
   beforeAll(async () => {
     page = await program.reLaunch(PAGE_PATH)
     await page.waitFor('view')
+    // await page.waitFor(3000)
     console.log("UNI_PLATFORM: ",process.env.UNI_PLATFORM,await page.data());
+    await page.setData({isTest: true })
+    console.log("data: ",await page.data());
     const startTime = Date.now()
     await page.waitFor(async()=>{
       if(Date.now()-startTime >6000){
