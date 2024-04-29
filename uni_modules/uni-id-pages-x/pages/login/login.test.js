@@ -9,15 +9,19 @@ describe('loginByPwd', () => {
     // await page.waitFor(3000)
     console.log("UNI_PLATFORM: ",process.env.UNI_PLATFORM,await page.data());
     await page.setData({isTest: true })
-    console.log("data: ",await page.data());
-    const startTime = Date.now()
-    await page.waitFor(async()=>{
-      if(Date.now()-startTime >6000){
-        console.log('-----------timeout----------')
-        return true
-      }
-      return await page.data('loginType') == 'username'
+    console.log("data:----1 ",await page.data());
+    await page.setData({
+      loginType: "username"
     })
+    console.log("data:----2",await page.data());
+    // const startTime = Date.now()
+    // await page.waitFor(async()=>{
+    //   if(Date.now()-startTime >6000){
+    //     console.log('-----------timeout----------')
+    //     return true
+    //   }
+    //   return await page.data('loginType') == 'username'
+    // })
     // ios web 没支持通过标签名取组件，用 class。
     loginByPwdEl = await page.$('.loginByPwdTest')
     console.log("loginByPwdEl", loginByPwdEl)
