@@ -49,19 +49,16 @@
 		data() {
 			return {
 				loginType: "username",
-				logo: "/static/logo.png",
-        isTest:false
+				logo: "/static/logo.png"
 			}
 		},
 		onLoad(param) {
-      if(!this.isTest){
-        let type = param["type"]
-        if (type === null){
-         let loginTypes = config.getArray<string>("loginTypes");
-         type = loginTypes![0];
-        }
-        this.loginType = type
+      let type = param["type"]
+      if (type === null){
+       let loginTypes = config.getArray<string>("loginTypes");
+       type = loginTypes![0];
       }
+      this.loginType = type
 		},
 		methods: {
       login(){},

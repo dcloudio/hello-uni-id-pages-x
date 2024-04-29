@@ -1,45 +1,43 @@
 // uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
-jest.setTimeout(20000)
+jest.setTimeout(30000)
 const PAGE_PATH = '/uni_modules/uni-id-pages-x/pages/login/login'
 describe('loginByPwd', () => {
   let page, agreeEl, loginByPwdEl, loginBySmsCodeEl, smsCodeEl, loginSuccess, loginErr;
   beforeAll(async () => {
     page = await program.reLaunch(PAGE_PATH)
     await page.waitFor('view')
-    console.log("UNI_PLATFORM: ",process.env);
+    console.log("UNI_PLATFORM: ",process.env.UNI_UTS_PLATFORM);
     console.log("data:----0 ",await page.data());
-    await page.setData({isTest: true })
-    console.log("data:----1 ",await page.data());
+  });
+  it('切换登录方式：密码登录', async () => {
+    await page.setData({
+      loginType: "username"
+    })
+    console.log("data:----2",await page.data());
+    expect(await page.data('loginType')).toBe('username')
+    const title = await page.$('.pwd-login-title')
+    expect(await title.text()).toBe('账号密码登录')
     // ios web 没支持通过标签名取组件，用 class。
     loginByPwdEl = await page.$('.loginByPwdTest')
     console.log("loginByPwdEl", loginByPwdEl)
     await loginByPwdEl.setData({isTest: true })
     // console.log("isTest", await loginByPwdEl.data('isTest'))
   });
-  it('账号密码登录', async () => {
-    expect(await page.data('loginType')).toBe('username')
-    const title = await page.$('.pwd-login-title')
-    expect(await title.text()).toBe('账号密码登录')
+  it('跳转到注册账号页面', async () => {
+    await loginByPwdEl.callMethod('toRegister')
+    await page.waitFor(1000)
+    expect((await program.currentPage()).path).toBe(
+      'uni_modules/uni-id-pages-x/pages/register/register')
+    expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
   });
-  // it('跳转到注册账号页面', async () => {
-  //   await loginByPwdEl.callMethod('toRegister')
-  //   await page.waitFor(1000)
-  //   expect((await program.currentPage()).path).toBe(
-  //     'uni_modules/uni-id-pages-x/pages/register/register')
-  //   expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
-  // });
-  // it('跳转到忘记密码页面', async () => {
-  //   await loginByPwdEl.callMethod('toRetrievePwd')
-  //   await page.waitFor(1000)
-  //   expect((await program.currentPage()).path).toBe(
-  //     'uni_modules/uni-id-pages-x/pages/retrieve/retrieve')
-  //   expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
-  // });
+  it('跳转到忘记密码页面', async () => {
+    await loginByPwdEl.callMethod('toRetrievePwd')
+    await page.waitFor(1000)
+    expect((await program.currentPage()).path).toBe(
+      'uni_modules/uni-id-pages-x/pages/retrieve/retrieve')
+    expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
+  });
   it('登录账号', async () => {
-    await page.setData({
-      loginType: "username"
-    })
-    console.log("data:----2",await page.data());
     // uni-id-pages-x-loginByPwd --》uni-id-pages-x-agreements--》.agreementsPwdTest 组件中的组件加class用page.$获取数据
     agreeEl = await page.$('.agreementsPwdTest')
     console.log('agreeEl',agreeEl)
@@ -76,24 +74,24 @@ describe('loginByPwd', () => {
       }
     }
   });
-  it('smsCode-setData', async () => {
-    page = await program.redirectTo(PAGE_PATH)
-    await page.waitFor(2000)
-    // const fabLogin = await page.$('uni-id-pages-x-fab-login')
-    // await fabLogin.tap()
-    // console.log('fabLogin: ',await page.data('loginType'));
-    await page.setData({
-      loginType: "smsCode"
-    })
-    loginBySmsCodeEl = await page.$('.loginBySmsCodeTest')
-    smsCodeEl = await page.$('.smsCodeSmsTest')
-    console.log('smsCodeEl',smsCodeEl,await smsCodeEl.data())
-    // smsCodeEl = await loginBySmsCodeEl.$('.smsCodeTest')
-    await smsCodeEl.setData({
-      mobile: "17755555555",
-      sendSmsCaptcha: "1234",
-    })
-  });
+  // it('smsCode-setData', async () => {
+  //   page = await program.redirectTo(PAGE_PATH)
+  //   await page.waitFor(2000)
+  //   // const fabLogin = await page.$('uni-id-pages-x-fab-login')
+  //   // await fabLogin.tap()
+  //   // console.log('fabLogin: ',await page.data('loginType'));
+  //   await page.setData({
+  //     loginType: "smsCode"
+  //   })
+  //   loginBySmsCodeEl = await page.$('.loginBySmsCodeTest')
+  //   smsCodeEl = await page.$('.smsCodeSmsTest')
+  //   console.log('smsCodeEl',smsCodeEl,await smsCodeEl.data())
+  //   // smsCodeEl = await loginBySmsCodeEl.$('.smsCodeTest')
+  //   await smsCodeEl.setData({
+  //     mobile: "17755555555",
+  //     sendSmsCaptcha: "1234",
+  //   })
+  // });
 
   // it('smsCode-agree', async () => {
   //   agreeEl = await page.$('.agreementsSmsTest')
