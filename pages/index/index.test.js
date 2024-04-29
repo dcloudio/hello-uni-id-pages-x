@@ -26,24 +26,18 @@ describe('pages/index/index.uvue', () => {
   });
   it('手机验证码登录', async () => {
     await listItems[0].tap()
-    if(platform == 'web'){
-      await page.waitFor(10000)
-    }else{
-      await page.waitFor(2000)
-    }
+    await page.waitFor('view')
     currentPage = await program.currentPage()
     console.log('currentPage: ', currentPage);
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
     expect(currentPage.query.type).toBe("smsCode")
     await program.navigateBack()
+    await page.waitFor(5000)
   });
   it('账号密码登录', async () => {
     await listItems[1].tap()
-    if(platform == 'web'){
-      await page.waitFor(10000)
-    }else{
-      await page.waitFor(2000)
-    }
+    // await page.callMethod('toLogin','username')
+    await page.waitFor('view')
     currentPage = await program.currentPage()
     console.log('currentPage: ', currentPage);
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")

@@ -6,8 +6,8 @@ describe('register', () => {
 	beforeAll(async () => {
 		page = await program.navigateTo(PAGE_PATH)
 		await page.waitFor('view')
-		await page.setData({isTest: true})
-		console.log("isTest",await page.data('isTest'))
+		// await page.setData({isTest: true})
+		// console.log("isTest",await page.data('isTest'))
 	});
 	it('register', async () => {
     expect.assertions(2);
@@ -30,6 +30,7 @@ describe('register', () => {
 		const registerRes =  await page.callMethod('register')
 		console.log('registerRes: ',registerRes);
 		if(typeof registerRes == 'string'){
+      console.log('注册成功 ',registerRes);
 			expect(registerRes).toHaveLength(24)
 			return
 		}else{

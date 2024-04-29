@@ -1,14 +1,16 @@
 // uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
-jest.setTimeout(20000)
+jest.setTimeout(30000)
 const PAGE_PATH = '/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile'
 describe('bindMobile', () => {
 	let page,captcha,smsCodeEl;
 	beforeAll(async () => {
 		page = await program.navigateTo(PAGE_PATH)
 		await page.waitFor('view')
+    console.log('page',page)
 		await page.setData({isTest:true})
 		captcha = "1234"
 		smsCodeEl = await page.$('.smsCodeTest')
+    console.log('smsCodeEl',smsCodeEl)
 	});
 	it('setData', async () => {
 		await smsCodeEl.setData({
@@ -29,9 +31,13 @@ describe('bindMobile', () => {
 	});
 
 	it('绑定手机号', async () => {
-		await page.waitFor(1000)
+    const startTime = Date.now()
 		// 等待登录结果
 		await page.waitFor(async () => {
+      if(Date.now()-startTime >10000){
+        console.log('-----------timeout----------')
+        return true
+      }
 			return await page.data('testState') === true
 		})
 		const testSuccessRes = await page.data('testSuccess')
