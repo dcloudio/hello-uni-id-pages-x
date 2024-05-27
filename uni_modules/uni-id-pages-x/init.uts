@@ -15,7 +15,7 @@ const loginTypes = configLoginTypes == null ? [] as string[] : configLoginTypes;
 
 const debug = config.getBoolean('debug') as boolean;
 
-// #ifdef APP-ANDROID && uniVersion >= 3.98
+// #ifdef uniVersion >= 3.98
 import Univerify from '@/uni_modules/uni-id-pages-x/lib/Univerify.uts'
 // #endif
 
@@ -78,7 +78,7 @@ export default async function () {
     })
   }
 
-  // #ifdef APP-ANDROID && uniVersion >= 3.98
+  // #ifdef uniVersion >= 3.98
   // 如果uni-id-pages配置的登录功能有一键登录，有则执行预登录（异步）
   if (loginTypes.includes('univerify')) {
     const myUniverify = new Univerify()
