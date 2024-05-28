@@ -17,7 +17,7 @@ const loginTypes = config.getArray<string>('loginTypes');
 //   buttonsList.push(buttons)
 // })
 
-// #ifdef uniVersion >= 3.98
+// #ifdef APP && uniVersion >= 3.98
 
 const univerifyManager = uni.getUniverifyManager();
 export default class Univerify {
