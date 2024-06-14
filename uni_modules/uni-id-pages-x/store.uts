@@ -24,7 +24,7 @@ function initState() {
     userInfo = new UTSJSONObject(userInfo)
     // #endif
     if (userInfo instanceof UTSJSONObject) {
-      state.userInfo = userInfo
+      state.userInfo = userInfo as UTSJSONObject
       // console.log('init userInfo',userInfo);
     }
   } catch (e) {
@@ -45,40 +45,47 @@ export const mutations = {
       // console.log('afterUpdateUserInfo', state.userInfo);
       uni.setStorageSync('uni-id-pages-x-userInfo', state.userInfo)
     }
-
+    const db = uniCloud.databaseForJQL()
+    const usersCollection = db.collection('uni-id-users')
+    const user_id = uniCloud.getCurrentUserInfo().uid
+    console.log('user_id', user_id);
+    if(user_id == null){
+      return
+    }
     if (param == null) {
-      const db = uniCloud.databaseForJQL()
-      const user_id = uniCloud.getCurrentUserInfo().uid
-      console.log('user_id', user_id);
-      if (user_id != null) {
-        db.collection('uni-id-users')
-          .doc(user_id)
-          .field('_id,username,nickname,avatar_file,mobile')
-          .get()
-          .then(res => {
-            const uniIdCo = uniCloud.importObject('uni-id-co', {
-              customUI: true
+      usersCollection
+        .doc(user_id)
+        .field('_id,username,nickname,avatar_file,mobile')
+        .get()
+        .then(res => {
+          const uniIdCo = uniCloud.importObject('uni-id-co', {
+            customUI: true
+          })
+
+          uniIdCo
+              .getRealNameInfo()
+              .then((realNameInfo) => {
+            state.userInfo = Object.assign(res.data[0], {
+              realNameInfo
             })
 
-            uniIdCo
-                .getRealNameInfo()
-                .then((realNameInfo) => {
-              state.userInfo = Object.assign(res.data[0], {
-                realNameInfo
-              })
+            afterUpdateUserInfo()
+          })
+        })
+        .catch((err: any | null) => {
+          const error = err as UniCloudError
+          console.error(error.errMsg, '错误')
+        })
 
-              afterUpdateUserInfo()
-            })
-          })
-          .catch((err: any | null) => {
-            const error = err as UniCloudError
-            console.error(error.errMsg, '错误')
-          })
-      }
     } else {
       param.toMap().forEach((value, key) => {
         state.userInfo.set(key, value)
       })
+
+      usersCollection
+        .doc(user_id)
+        .update(param)
+
       afterUpdateUserInfo()
     }
   }
