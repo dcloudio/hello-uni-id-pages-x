@@ -1,3 +1,6 @@
+## 1.1.2（2024-06-17）
+- 新增 支持iOS端一键登录（HBuilderX 4.18+）
+- 修复用户头像未更新的Bug
 ## 1.1.1（2024-04-28）
 - 兼容uni-app-x对客户端uniPlatform的调整（uni-app-x内uniPlatform区分app-android、app-ios）
 ## 1.1.0（2024-04-07）
