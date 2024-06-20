@@ -7,22 +7,17 @@ describe('loginByPwd', () => {
     platform = process.env.UNI_UTS_PLATFORM
     page = await program.reLaunch(PAGE_PATH)
     await page.waitFor('view')
-    console.log("UNI_PLATFORM: ",platform);//web
-    console.log("data:----0 ",await page.data());
   });
   it('切换登录方式：密码登录', async () => {
     await page.setData({
       loginType: "username"
     })
-    console.log("data:----1",await page.data());
     expect(await page.data('loginType')).toBe('username')
     const title = await page.$('.pwd-login-title')
     expect(await title.text()).toBe('账号密码登录')
     // ios web 没支持通过标签名取组件，用 class。
     loginByPwdEl = await page.$('.loginByPwdTest')
-    console.log("loginByPwdEl", loginByPwdEl)
     await loginByPwdEl.setData({isTest: true })
-    // console.log("isTest", await loginByPwdEl.data('isTest'))
   });
   it('跳转到注册账号页面', async () => {
     await loginByPwdEl.callMethod('toRegister')
@@ -48,7 +43,6 @@ describe('loginByPwd', () => {
   it('登录账号', async () => {
     // uni-id-pages-x-loginByPwd --》uni-id-pages-x-agreements--》.agreementsPwdTest 组件中的组件加class用page.$获取数据
     agreeEl = await page.$('.agreementsPwdTest')
-    console.log('agreeEl',agreeEl)
     console.log('agreeEl------------',await agreeEl.data('needAgreements'))
     expect(await agreeEl.data('needAgreements')).toBe(true)
     // setAgree
@@ -61,7 +55,6 @@ describe('loginByPwd', () => {
     const loginByPwdRes = await loginByPwdEl.callMethod('loginByPwd')
     console.log('loginByPwdRes: ', loginByPwdRes);
     if (typeof loginByPwdRes == 'string') {
-      console.log('登录成功');
       expect(loginByPwdRes).toHaveLength(24)
     } else {
       switch (loginByPwdRes.errCode) {
@@ -76,7 +69,7 @@ describe('loginByPwd', () => {
           expect(loginByPwdRes.errMsg).toBe('请输入图形验证码')
           break;
         default:
-          console.log('err--')
+          console.log('未知错误')
           break;
       }
     }
@@ -101,7 +94,6 @@ describe('loginByPwd', () => {
 
   it('smsCode-agree', async () => {
     agreeEl = await page.$('.agreementsSmsTest')
-    console.log('agreeEl---2',agreeEl)
     expect(await agreeEl.data('needAgreements')).toBe(true)
     await agreeEl.callMethod('confirm')
     await page.waitFor(100)
@@ -148,7 +140,7 @@ describe('loginByPwd', () => {
           })
           break;
         default:
-          console.log('err--')
+          console.log('未知错误')
           break;
       }
     }

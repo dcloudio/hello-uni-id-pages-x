@@ -4,7 +4,7 @@ describe('pages/index/index.uvue', () => {
   let page, currentPage, listItems, platform;
   beforeAll(async () => {
     platform = process.env.UNI_UTS_PLATFORM
-    console.log("platform",platform)
+    console.log('platform',platform)
     page = await program.reLaunch('/pages/index/index')
     await page.waitFor('view')
     listItems = await page.$$('.list-item')
@@ -15,11 +15,9 @@ describe('pages/index/index.uvue', () => {
   });
   it('text', async () => {
     const itemTexts = await page.$$('.list-item-text')
-    console.log(await itemTexts[0].text())
-    console.log(await itemTexts[1].text())
     expect(await itemTexts[0].text()).toBe('手机验证码登录')
     expect(await itemTexts[1].text()).toBe('账号密码登录')
-    if (platform == "app-android") {
+    if (platform != "web") {
       console.log(await itemTexts[2].text())
       expect(await itemTexts[2].text()).toBe('一键登录')
     }

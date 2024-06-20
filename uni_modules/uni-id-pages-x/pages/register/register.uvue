@@ -42,8 +42,7 @@
 				nickname: "",
 				password: "",
 				password2: "",
-				captcha: "",
-				isTest:false
+				captcha: ""
 			}
 		},
 		methods: {
@@ -173,7 +172,6 @@
 								title: '注册成功',
 								icon: 'none'
 							});
-							// if(!this.isTest){loginSuccess(e)}
 							loginSuccess(e)
 							resolve(e['uid'])
 						})

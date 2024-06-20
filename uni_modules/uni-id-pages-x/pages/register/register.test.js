@@ -6,15 +6,11 @@ describe('register', () => {
 	beforeAll(async () => {
 		page = await program.navigateTo(PAGE_PATH)
 		await page.waitFor('view')
-		// await page.setData({isTest: true})
-		// console.log("isTest",await page.data('isTest'))
 	});
 	it('register', async () => {
     expect.assertions(2);
 		// const agreeEl = await page.$('uni-id-pages-x-agreements')
     const agreeEl = await page.$('.agreementsTest')
-    console.log("agreeEl",agreeEl)
-    console.log("data----needAgreements",await agreeEl.data('needAgreements'))
     await page.waitFor(1000)
 		expect(await agreeEl.data('needAgreements')).toBe(true)
 		// setAgree
@@ -30,17 +26,24 @@ describe('register', () => {
 		const registerRes =  await page.callMethod('register')
 		console.log('registerRes: ',registerRes);
 		if(typeof registerRes == 'string'){
-      console.log('注册成功 ',registerRes);
 			expect(registerRes).toHaveLength(24)
 			return
 		}else{
 			switch (registerRes.errCode){
 				case 'uni-id-account-exists':
-					const expectStr = ["此账号已注册","Account exists"]
-					expect(expectStr).toContain(registerRes.errMsg);
+					const accountStr = ["此账号已注册","Account exists"]
+					expect(accountStr).toContain(registerRes.errMsg);
 					break;
+        case 'uni-captcha-verify-fail':
+        	const captchaStr = ["验证码错误","Account exists"]
+        	expect(captchaStr).toContain(registerRes.errMsg);
+        	break;
+        case 'SYS_ERR':
+        	const SYSStr = ["系统错误","request system error"]
+        	expect(SYSStr).toContain(registerRes.errMsg);
+        	break;
 				default:
-					console.log('err--')
+					console.log('未知错误')
 					break;
 			}
 		}
