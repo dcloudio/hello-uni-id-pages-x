@@ -8,7 +8,6 @@ describe('retrieve', () => {
 		await page.waitFor('view')
 		await page.setData({isTest:true})
 		smsCodeEl = await page.$('.smsCodeTest')
-    console.log("smsCodeEl",smsCodeEl)
     await page.waitFor(1000)
 	});
 	it('重置密码-setData', async () => {
@@ -27,6 +26,7 @@ describe('retrieve', () => {
 	});
 	it('重置密码', async () => {
 		await page.waitFor(500)
+    expect.assertions(1);
 		await page.callMethod('doNext')
 		//等待登录结果
 		await page.waitFor(async () => {
@@ -40,18 +40,18 @@ describe('retrieve', () => {
 		}else{
 			const testErrRes = await page.data('testErr')
 			console.log('testErrRes: ',testErrRes);
-			switch (testErrRes.errCode){
-				case 'uni-id-mobile-verify-code-error':
-					const expecVerifytStr = ["手机验证码错误或已过期","Verify code error or expired"]
-					expect(expecVerifytStr).toContain(testErrRes.errMsg);
-					break;
-				case 'uni-id-captcha-required':
-				const requiredStr = ["请输入图形验证码","Captcha required"]
-					expect(requiredStr).toContain(testErrRes.errMsg)
-					break;
-				default:
-					break;
-			}
+			// switch (testErrRes.errCode){
+			// 	case 'uni-id-mobile-verify-code-error':
+			// 		const expecVerifytStr = ["手机验证码错误或已过期","Verify code error or expired"]
+			// 		expect(expecVerifytStr).toContain(testErrRes.errMsg);
+			// 		break;
+			// 	case 'uni-id-captcha-required':
+			// 	const requiredStr = ["请输入图形验证码","Captcha required"]
+			// 		expect(requiredStr).toContain(testErrRes.errMsg)
+			// 		break;
+			// 	default:
+			// 		break;
+			// }
 		}
 	});
 

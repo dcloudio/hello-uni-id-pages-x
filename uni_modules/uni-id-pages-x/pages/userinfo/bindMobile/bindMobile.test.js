@@ -6,11 +6,10 @@ describe('bindMobile', () => {
 	beforeAll(async () => {
 		page = await program.navigateTo(PAGE_PATH)
 		await page.waitFor('view')
-    console.log('page',page)
 		await page.setData({isTest:true})
 		captcha = "1234"
 		smsCodeEl = await page.$('.smsCodeTest')
-    console.log('smsCodeEl',smsCodeEl)
+    // console.log('smsCodeEl',smsCodeEl)
 	});
 	it('setData', async () => {
 		await smsCodeEl.setData({
@@ -31,6 +30,7 @@ describe('bindMobile', () => {
 	});
 
 	it('绑定手机号', async () => {
+    expect.assertions(1);
     const startTime = Date.now()
 		// 等待登录结果
 		await page.waitFor(async () => {
@@ -49,22 +49,22 @@ describe('bindMobile', () => {
 		}else{
 			const testErrRes = await page.data('testErr')
 			console.log('testErrRes: ',testErrRes);
-			switch (testErrRes.errCode){
-				case 'uni-id-bind-conflict':
-					const expectBindStr = ["此账号已被绑定","This account has been bound"]
-					expect(expectBindStr).toContain(testErrRes.errMsg);
-					break;
-				case 'uni-id-mobile-verify-code-error':
-					const expectCodeStr = ["手机验证码错误或已过期","Verify code error or expired"]
-					expect(expectCodeStr).toContain(testErrRes.errMsg);
-					break;
-				case 'uni-id-captcha-required':
-        const requiredStr = ["请输入图形验证码","Captcha required"]
-					expect(requiredStr).toContain(testErrRes.errMsg)
-					break;
-				default:
-					break;
-			}
+			// switch (testErrRes.errCode){
+			// 	case 'uni-id-bind-conflict':
+			// 		const expectBindStr = ["此账号已被绑定","This account has been bound"]
+			// 		expect(expectBindStr).toContain(testErrRes.errMsg);
+			// 		break;
+			// 	case 'uni-id-mobile-verify-code-error':
+			// 		const expectCodeStr = ["手机验证码错误或已过期","Verify code error or expired"]
+			// 		expect(expectCodeStr).toContain(testErrRes.errMsg);
+			// 		break;
+			// 	case 'uni-id-captcha-required':
+   //      const requiredStr = ["请输入图形验证码","Captcha required"]
+			// 		expect(requiredStr).toContain(testErrRes.errMsg)
+			// 		break;
+			// 	default:
+			// 		break;
+			// }
 		}
 	});
 });

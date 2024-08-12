@@ -4,7 +4,6 @@ describe('pages/index/index.uvue', () => {
   let page, currentPage, listItems, platform;
   beforeAll(async () => {
     platform = process.env.UNI_UTS_PLATFORM
-    console.log('platform',platform)
     page = await program.reLaunch('/pages/index/index')
     await page.waitFor('view')
     listItems = await page.$$('.list-item')
@@ -26,7 +25,7 @@ describe('pages/index/index.uvue', () => {
     await listItems[0].tap()
     await page.waitFor('view')
     currentPage = await program.currentPage()
-    console.log('currentPage: ', currentPage);
+    // console.log('currentPage: ', currentPage);
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
     expect(currentPage.query.type).toBe("smsCode")
     await program.navigateBack()
@@ -37,7 +36,6 @@ describe('pages/index/index.uvue', () => {
     // await page.callMethod('toLogin','username')
     await page.waitFor('view')
     currentPage = await program.currentPage()
-    console.log('currentPage: ', currentPage);
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
     expect(currentPage.query.type).toBe("username")
   });
