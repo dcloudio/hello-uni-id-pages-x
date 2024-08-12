@@ -56,10 +56,11 @@
 				}
 			},
 			showPopupCaptcha(callback : () => void) {
-				(this.$refs["agreements"] as UniIdPagesXAgreementsComponentPublicInstance).showPopupAgreements(callback)
+        console.log(this.$refs["agreements"]);
+        console.log(this.$refs);
+        (this.$refs["agreements"] as UniIdPagesXAgreementsComponentPublicInstance).$callMethod('showPopupAgreements',callback)
 			},
 			login(param : UTSJSONObject) {
-				console.log('param: ',param);
 				uni.showLoading({ "title": "登录中" })
 				uniIdCo.loginBySms(param)
 					.finally(() : void => {

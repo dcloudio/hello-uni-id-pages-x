@@ -81,7 +81,7 @@
 		},
 		methods: {
 			setMobileInputFocus(val:boolean){
-			  (this.$refs['mobileInput'] as UniIdPagesXInputComponentPublicInstance).setFocus(val);
+        (this.$refs['mobileInput'] as UniIdPagesXInputComponentPublicInstance)?.$callMethod('setFocus', val);
 			},
 			showCodeInput() {
 				if (this.reverseNumber == 0) {
@@ -133,7 +133,7 @@
 				this.hideCodeInput()
 			},
 			sendSmsCode(needAgreements:boolean) {
-				// console.log("state.pendingAgreements", state.pendingAgreements,needAgreements);
+				console.log("state.pendingAgreements", state.pendingAgreements,needAgreements);
 				if (needAgreements && state.pendingAgreements) {
           // uni.hideKeyboard();
           this.sendSmsCaptchaCP!.setFocus(false);

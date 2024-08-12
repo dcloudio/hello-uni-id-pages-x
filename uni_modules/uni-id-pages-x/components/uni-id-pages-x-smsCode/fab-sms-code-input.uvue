@@ -62,7 +62,7 @@
 		},
 		methods: {
 			show() {
-				(this.$refs['popup'] as UniPopupComponentPublicInstance).open();
+        (this.$refs['popup'] as UniPopupComponentPublicInstance)?.$callMethod('open');
 				this.$nextTick(() => {
 					(this.$refs["code-input"] as UniElement[])[0].focus();
 				})
