@@ -61,7 +61,11 @@
 			sendSmsCaptcha() {
 				this.emitInput()
 				if (this.autoSend && this.sendSmsCaptcha.length == 4 && this.mobile.length == 11) {
-					this.sendSmsCode(true)
+          if(this.scene == "bind-mobile-by-sms"){
+            this.sendSmsCode(false)
+          }else{
+            this.sendSmsCode(true)
+          }
 				}
 			},
 			smsCode() {
