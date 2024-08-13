@@ -36,17 +36,15 @@ describe('retrieve', () => {
       }
     	return await page.data('testState') === true
     })
-
     const testSuccessRes = await page.data('testSuccess')
     if(testSuccessRes<100){
-      return testSuccess
+      return testSuccessRes
     }else{
       const testErrRes = await page.data('testErr')
       return testErrRes
     }
   }
 	it('重置密码', async () => {
-
     expect.assertions(1);
     const res = await getRes()
     console.log('res: ',res);
