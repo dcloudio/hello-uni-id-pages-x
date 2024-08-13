@@ -59,9 +59,7 @@
 				}
 			},
 			showPopupCaptcha(callback : () => void) {
-        console.log(this.$refs["agreements"]);
-        console.log(this.$refs);
-        (this.$refs["agreements"] as UniIdPagesXAgreementsComponentPublicInstance).$callMethod('showPopupAgreements',callback)
+        (this.$refs["agreements"] as UniIdPagesXAgreementsComponentPublicInstance).showPopupAgreements(callback)
 			},
 			login(param : UTSJSONObject) {
 				uni.showLoading({ "title": "登录中" })
