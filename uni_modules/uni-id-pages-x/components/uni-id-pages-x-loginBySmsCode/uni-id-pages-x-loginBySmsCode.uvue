@@ -32,6 +32,9 @@
         this.showPopupCaptcha(callback)
       })
 		},
+    unmounted() {
+      uni.$off('uni-id-pages-x-loginBySmsCode-showPopupCaptcha')
+    },
 		methods: {
 			sendSmsCode() {
 				this.smsCodeRef!.$callMethod('sendSmsCode',true);
