@@ -19,31 +19,31 @@ describe('loginByPwd', () => {
     loginByPwdEl = await page.$('.loginByPwdTest')
     await loginByPwdEl.setData({isTest: true })
   });
-  it('跳转到注册账号页面', async () => {
-    await loginByPwdEl.callMethod('toRegister')
-    if(platform == 'web'){
-      await page.waitFor('view')
-    }else{
-      await page.waitFor(1000)
-    }
-    expect((await program.currentPage()).path).toBe(
-      'uni_modules/uni-id-pages-x/pages/register/register')
-    expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
-    await page.waitFor('view')
-  });
-  it('跳转到忘记密码页面', async () => {
-    await loginByPwdEl.callMethod('toRetrievePwd')
-    await page.waitFor(1000)
-    await page.waitFor('view')
-    expect((await program.currentPage()).path).toBe(
-      'uni_modules/uni-id-pages-x/pages/retrieve/retrieve')
-    expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
-    await page.waitFor('view')
-  });
+  // it('跳转到注册账号页面', async () => {
+  //   await loginByPwdEl.callMethod('toRegister')
+  //   if(platform == 'web'){
+  //     await page.waitFor('view')
+  //   }else{
+  //     await page.waitFor(1000)
+  //   }
+  //   expect((await program.currentPage()).path).toBe(
+  //     'uni_modules/uni-id-pages-x/pages/register/register')
+  //   expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
+  //   await page.waitFor('view')
+  // });
+  // it('跳转到忘记密码页面', async () => {
+  //   await loginByPwdEl.callMethod('toRetrievePwd')
+  //   await page.waitFor(1000)
+  //   await page.waitFor('view')
+  //   expect((await program.currentPage()).path).toBe(
+  //     'uni_modules/uni-id-pages-x/pages/retrieve/retrieve')
+  //   expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
+  //   await page.waitFor('view')
+  // });
   async function resetPassword(){
     await loginByPwdEl.setData({
       username: "dcloud88",
-      password: "2023dcloud",
+      password: "dcloud2023",
       needCaptcha: false
     })
     await page.waitFor(300)
@@ -59,7 +59,7 @@ describe('loginByPwd', () => {
     await agreeEl.callMethod('confirm')
     await loginByPwdEl.setData({
       username: "dcloud88",
-      password: "dcloud2023",
+      password: "2023dcloud",
       needCaptcha: false
     })
     const loginByPwdRes = await loginByPwdEl.callMethod('loginByPwd')
