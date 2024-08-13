@@ -9,13 +9,13 @@ describe('retrieve', () => {
 		await page.setData({isTest:true})
 		smsCodeEl = await page.$('.smsCodeTest')
     await page.waitFor(1000)
+    // mobile = "17766666666"
+    // sendSmsCaptcha = "1234"
+    // smsCode = "123456"
 	});
 	it('重置密码-setData', async () => {
-		// mobile = "17766666666"
-		// sendSmsCaptcha = "1234"
-		// smsCode = "123456"
 		await smsCodeEl.setData({
-			mobile:"17766666666",
+			mobile:"17755555555",
 			sendSmsCaptcha:"1234"
 		})
 		await page.setData({
@@ -24,33 +24,48 @@ describe('retrieve', () => {
 		})
 		await smsCodeEl.setData({smsCode:"123456"})
 	});
+  async function getRes(){
+    const startTime = Date.now()
+    await page.waitFor(500)
+    await page.callMethod('doNext')
+    //等待登录结果
+    await page.waitFor(async () => {
+      if(Date.now()-startTime >10000){
+        console.log('-----------timeout----------')
+        return true
+      }
+    	return await page.data('testState') === true
+    })
+
+    const testSuccessRes = await page.data('testSuccess')
+    if(testSuccessRes<100){
+      return testSuccess
+    }else{
+      const testErrRes = await page.data('testErr')
+      return testErrRes
+    }
+  }
 	it('重置密码', async () => {
-		await page.waitFor(500)
+
     expect.assertions(1);
-		await page.callMethod('doNext')
-		//等待登录结果
-		await page.waitFor(async () => {
-			return await page.data('testState') === true
-		})
-		const testSuccessRes = await page.data('testSuccess')
-		if(testSuccessRes < 100){
+    const res = await getRes()
+    console.log('res: ',res);
+		if(res < 100){
 			console.log('重置成功');
-			expect(testSuccessRes).toBe(0)
+			expect(res).toBe(0)
 			return
 		}else{
-			const testErrRes = await page.data('testErr')
-			console.log('testErrRes: ',testErrRes);
-			switch (testErrRes.errCode){
+			switch (res.errCode){
 				case 'uni-id-mobile-verify-code-error':
 					const expecVerifytStr = ["手机验证码错误或已过期","Verify code error or expired"]
-					expect(expecVerifytStr).toContain(testErrRes.errMsg);
+					expect(expecVerifytStr).toContain(res.errMsg);
 					break;
 				case 'uni-id-captcha-required':
           const requiredStr = ["请输入图形验证码","Captcha required"]
-					expect(requiredStr).toContain(testErrRes.errMsg)
-          await page.setData({
-            captcha
-          })
+					expect(requiredStr).toContain(res.errMsg)
+          await page.setData({captcha:captcha})
+          const res1 = await getRes()
+          console.log('res1: ',res1);
 					break;
 				default:
 					break;

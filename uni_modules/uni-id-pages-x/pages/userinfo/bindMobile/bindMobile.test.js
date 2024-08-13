@@ -11,6 +11,12 @@ describe('bindMobile', () => {
 		smsCodeEl = await page.$('.smsCodeTest')
     // console.log('smsCodeEl',smsCodeEl)
 	});
+  async function setCaptcha(){
+    const needCaptcha = await page.data('needCaptcha')
+    if(needCaptcha){
+    	await page.setData({captcha:captcha})
+    }
+  }
   async function setSmsCode(mobile){
     await smsCodeEl.setData({
     	mobile:mobile,
@@ -20,11 +26,9 @@ describe('bindMobile', () => {
     await smsCodeEl.setData({
     	smsCode:"123456"
     })
-    const needCaptcha = await page.data('needCaptcha')
-    if(needCaptcha){
-    	await page.setData({captcha:captcha})
-    }
+    await setCaptcha()
   }
+
   async function getRes(){
     const startTime = Date.now()
     // 等待登录结果
@@ -69,9 +73,8 @@ describe('bindMobile', () => {
 				case 'uni-id-captcha-required':
           const requiredStr = ["请输入图形验证码","Captcha required"]
 					expect(requiredStr).toContain(res.errMsg)
-          await page.setData({
-            captcha:captcha
-          })
+          await setCaptcha()
+          await setSmsCode("17700000003")
 					break;
 				default:
           console.log('未知错误')

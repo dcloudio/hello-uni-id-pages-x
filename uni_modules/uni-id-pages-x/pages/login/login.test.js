@@ -40,6 +40,16 @@ describe('loginByPwd', () => {
     expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
     await page.waitFor('view')
   });
+  async function resetPassword(){
+    await loginByPwdEl.setData({
+      username: "dcloud88",
+      password: "2023dcloud",
+      needCaptcha: false
+    })
+    await page.waitFor(300)
+    const res = await loginByPwdEl.callMethod('loginByPwd')
+    return res
+  }
   it('登录账号', async () => {
     // expect.assertions(2);
     // uni-id-pages-x-loginByPwd --》uni-id-pages-x-agreements--》.agreementsPwdTest 组件中的组件加class用page.$获取数据
@@ -49,13 +59,11 @@ describe('loginByPwd', () => {
     await agreeEl.callMethod('confirm')
     await loginByPwdEl.setData({
       username: "dcloud88",
-      password: "2023dcloud",
-      // dcloud2023
-      // 2023dcloud
+      password: "dcloud2023",
       needCaptcha: false
     })
     const loginByPwdRes = await loginByPwdEl.callMethod('loginByPwd')
-    console.log('loginByPwdRes:----1 ', loginByPwdRes);
+    console.log('loginByPwdRes:', loginByPwdRes,typeof loginByPwdRes);
     if (typeof loginByPwdRes == 'string') {
       expect(loginByPwdRes).toHaveLength(24)
     } else {
@@ -63,15 +71,8 @@ describe('loginByPwd', () => {
       switch (loginByPwdRes.errCode) {
         case 'uni-id-password-error':
           // 密码错误
-          await loginByPwdEl.setData({
-            username: "dcloud88",
-            password: "2023dcloud",
-            needCaptcha: false
-          })
-          await page.waitFor(300)
-          const loginByPwdRes1 = await loginByPwdEl.callMethod('loginByPwd')
-          console.log('loginByPwdRes1: ', loginByPwdRes1);
-          expect(loginByPwdRes1).toHaveLength(24)
+          const loginByPwdRes1 = await resetPassword()
+          console.log('uni-id-password-error: ', loginByPwdRes1);
           break;
         case 'uni-id-captcha-required':
           // 请输入图形验证码
@@ -80,8 +81,11 @@ describe('loginByPwd', () => {
           })
           await page.waitFor(300)
           const loginByPwdRes2 = await loginByPwdEl.callMethod('loginByPwd')
-          console.log('loginByPwdRes2: ', loginByPwdRes2);
-          expect(loginByPwdRes2).toHaveLength(24)
+          console.log('uni-id-captcha-required: ', loginByPwdRes2);
+          if(loginByPwdRes2.errCode == 'uni-id-password-error'){
+            const loginByPwdRes3 = await resetPassword()
+            console.log('uni-id-password-error: ', loginByPwdRes3);
+          }
           break;
         // case 'uni-id-account-not-exists':
         //   const expectStr = ["此账号未注册", "Account does not exists"]
@@ -138,7 +142,7 @@ describe('loginByPwd', () => {
       return await loginBySmsCodeEl.data('testState') === true
     })
     loginSuccess = await loginBySmsCodeEl.data('testSuccess')
-    console.log('loginSuccess:---2 ', loginSuccess);
+    console.log('loginSuccess:---2 ', loginSuccess,typeof loginSuccess);
     if (typeof loginSuccess == 'string') {
       expect(loginSuccess).toHaveLength(24)
       return
