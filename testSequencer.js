@@ -1,5 +1,5 @@
 const Sequencer = require("@jest/test-sequencer").default;
-const sortTestFilenames = ["index.test.js","register.test.js","login.test.js","bindMobile.test.js","setNickname.test.js","retrieve.test.js","userinfo.test.js"];
+const sortTestFilenames = ["index.test.js","register.test.js","login.test.js","setNickname.test.js","bindMobile.test.js","retrieve.test.js","userinfo.test.js"];
 class CustomSequencer extends Sequencer {
   sort(tests) {
     // 测试例排序

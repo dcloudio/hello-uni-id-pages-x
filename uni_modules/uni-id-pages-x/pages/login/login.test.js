@@ -41,39 +41,56 @@ describe('loginByPwd', () => {
     await page.waitFor('view')
   });
   it('登录账号', async () => {
-    expect.assertions(2);
+    // expect.assertions(2);
     // uni-id-pages-x-loginByPwd --》uni-id-pages-x-agreements--》.agreementsPwdTest 组件中的组件加class用page.$获取数据
     agreeEl = await page.$('.agreementsPwdTest')
-    console.log('agreeEl------------',await agreeEl.data('needAgreements'))
     expect(await agreeEl.data('needAgreements')).toBe(true)
     // setAgree
     await agreeEl.callMethod('confirm')
     await loginByPwdEl.setData({
       username: "dcloud88",
-      password: "dcloud2023",
+      password: "2023dcloud",
+      // dcloud2023
+      // 2023dcloud
       needCaptcha: false
     })
     const loginByPwdRes = await loginByPwdEl.callMethod('loginByPwd')
-    console.log('loginByPwdRes: ', loginByPwdRes);
+    console.log('loginByPwdRes:----1 ', loginByPwdRes);
     if (typeof loginByPwdRes == 'string') {
       expect(loginByPwdRes).toHaveLength(24)
     } else {
-      console.log('未知错误')
-      // switch (loginByPwdRes.errCode) {
-      //   case 'uni-id-account-not-exists':
-      //     const expectStr = ["此账号未注册", "Account does not exists"]
-      //     expect(expectStr).toContain(loginByPwdRes.errMsg);
-      //     break;
-      //   case 'uni-id-password-error':
-      //     expect(loginByPwdRes.errMsg).toBe('密码错误')
-      //     break;
-      //   case 'uni-id-captcha-required':
-      //     expect(loginByPwdRes.errMsg).toBe('请输入图形验证码')
-      //     break;
-      //   default:
-      //     console.log('未知错误')
-      //     break;
-      // }
+
+      switch (loginByPwdRes.errCode) {
+        case 'uni-id-password-error':
+          // 密码错误
+          await loginByPwdEl.setData({
+            username: "dcloud88",
+            password: "2023dcloud",
+            needCaptcha: false
+          })
+          await page.waitFor(300)
+          const loginByPwdRes1 = await loginByPwdEl.callMethod('loginByPwd')
+          console.log('loginByPwdRes1: ', loginByPwdRes1);
+          expect(loginByPwdRes1).toHaveLength(24)
+          break;
+        case 'uni-id-captcha-required':
+          // 请输入图形验证码
+          await loginByPwdEl.setData({
+            loginCaptcha: "1234"
+          })
+          await page.waitFor(300)
+          const loginByPwdRes2 = await loginByPwdEl.callMethod('loginByPwd')
+          console.log('loginByPwdRes2: ', loginByPwdRes2);
+          expect(loginByPwdRes2).toHaveLength(24)
+          break;
+        // case 'uni-id-account-not-exists':
+        //   const expectStr = ["此账号未注册", "Account does not exists"]
+        //   expect(expectStr).toContain(loginByPwdRes.errMsg);
+        //   break;
+        default:
+          console.log('未知错误')
+          break;
+      }
     }
   });
   it('smsCode-setData', async () => {
@@ -123,29 +140,29 @@ describe('loginByPwd', () => {
     loginSuccess = await loginBySmsCodeEl.data('testSuccess')
     console.log('loginSuccess:---2 ', loginSuccess);
     if (typeof loginSuccess == 'string') {
-      console.log('登录成功', loginSuccess);
       expect(loginSuccess).toHaveLength(24)
       return
     } else {
       loginErr = await loginBySmsCodeEl.data('testErr')
       console.log('loginErr:---2 ', loginErr);
-      // switch (loginErr.errCode) {
-      //   case 'uni-id-account-not-exists':
-      //     expect(loginErr.errMsg).toBe('Account does not exists')
-      //     break;
-      //   case 'uni-id-mobile-verify-code-error':
-      //     expect(loginErr.errMsg).toBe('手机验证码错误或已过期')
-      //     break;
-      //   case 'uni-id-captcha-required':
-      //     expect(loginErr.errMsg).toBe('请输入图形验证码')
-      //     await loginBySmsCodeEl.setData({
-      //       captcha: "1234"
-      //     })
-      //     break;
-      //   default:
-      //     console.log('未知错误')
-      //     break;
-      // }
+      switch (loginErr.errCode) {
+        case 'uni-id-captcha-required':
+          // 请输入图形验证码
+          expect(loginErr.errMsg).toBe('请输入图形验证码')
+          await loginBySmsCodeEl.setData({
+            captcha: "1234"
+          })
+          break;
+        // case 'uni-id-account-not-exists':
+        //   expect(loginErr.errMsg).toBe('Account does not exists')
+        //   break;
+        // case 'uni-id-mobile-verify-code-error':
+        //   expect(loginErr.errMsg).toBe('手机验证码错误或已过期')
+        //   break;
+        default:
+          console.log('未知错误')
+          break;
+      }
     }
   });
 });

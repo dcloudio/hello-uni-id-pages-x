@@ -40,18 +40,21 @@ describe('retrieve', () => {
 		}else{
 			const testErrRes = await page.data('testErr')
 			console.log('testErrRes: ',testErrRes);
-			// switch (testErrRes.errCode){
-			// 	case 'uni-id-mobile-verify-code-error':
-			// 		const expecVerifytStr = ["手机验证码错误或已过期","Verify code error or expired"]
-			// 		expect(expecVerifytStr).toContain(testErrRes.errMsg);
-			// 		break;
-			// 	case 'uni-id-captcha-required':
-			// 	const requiredStr = ["请输入图形验证码","Captcha required"]
-			// 		expect(requiredStr).toContain(testErrRes.errMsg)
-			// 		break;
-			// 	default:
-			// 		break;
-			// }
+			switch (testErrRes.errCode){
+				case 'uni-id-mobile-verify-code-error':
+					const expecVerifytStr = ["手机验证码错误或已过期","Verify code error or expired"]
+					expect(expecVerifytStr).toContain(testErrRes.errMsg);
+					break;
+				case 'uni-id-captcha-required':
+          const requiredStr = ["请输入图形验证码","Captcha required"]
+					expect(requiredStr).toContain(testErrRes.errMsg)
+          await page.setData({
+            captcha
+          })
+					break;
+				default:
+					break;
+			}
 		}
 	});
 
