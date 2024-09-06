@@ -59,7 +59,7 @@ describe('loginByPwd', () => {
     await agreeEl.callMethod('confirm')
     await loginByPwdEl.setData({
       username: "dcloud88",
-      password: "2023dcloud",
+      password: "dcloud2023",
       needCaptcha: false
     })
     const loginByPwdRes = await loginByPwdEl.callMethod('loginByPwd')
