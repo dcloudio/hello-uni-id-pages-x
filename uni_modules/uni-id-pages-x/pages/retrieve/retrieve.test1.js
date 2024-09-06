@@ -19,8 +19,8 @@ describe('retrieve', () => {
 			sendSmsCaptcha:"1234"
 		})
 		await page.setData({
-			password:"2023dcloud",
-			password2:"2023dcloud"
+			password:"dcloud2023new",
+			password2:"dcloud2023new"
 		})
 		await smsCodeEl.setData({smsCode:"123456"})
 	});
