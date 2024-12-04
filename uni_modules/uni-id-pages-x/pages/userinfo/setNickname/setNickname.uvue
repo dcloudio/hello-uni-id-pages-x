@@ -1,13 +1,18 @@
 <template>
 	<view class="page">
 		<uni-navbar-lite title="设置昵称" class="uni-navbar-lite">
-			<template v-slot:right>
-				<text class="submit" :class="{disabled:!hasChange || nickname == ''}" @click="setNickname">完成</text>
+      <!-- #ifndef MP-WEIXIN -->
+      <template v-slot:right>
+        <text class="submit" :class="{disabled:!hasChange || nickname == ''}" @click="setNickname">完成</text>
 			</template>
+      <!-- #endif -->
 		</uni-navbar-lite>
 
 		<uni-id-pages-x-input class="my-input" v-model="nickname" @confirm="setNickname" placeholder="请输入昵称" :focus="true"
 			:maxlength="25"></uni-id-pages-x-input>
+    <!-- #ifdef MP-WEIXIN -->
+    <button class="submit-mp" :disabled="!hasChange || nickname == ''" type="primary" @click="setNickname">完成</button>
+    <!-- #endif -->
 	</view>
 </template>
 
@@ -24,7 +29,8 @@
 				return this.currentNickname != this.nickname
 			},
 			currentNickname() : string {
-        return state.userInfo.get("nickname") == null?'':(state.userInfo.get("nickname") as string)
+        const nickname = state.userInfo["nickname"]
+        return nickname == null ? '' : nickname as string
 			}
 		},
 		onLoad() {
@@ -83,7 +89,7 @@
 	}
 
 	.my-input {
-		background-color: #FFF;
+		background-color: #FFF!important;
 	}
 
 	.uni-navbar-lite .right-content {
@@ -106,4 +112,13 @@
 		background-color: #EFEFEF;
 		color: #AAA;
 	}
+  /* #ifdef MP-WEIXIN */
+  .submit-mp {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 0;
+  }
+  /* #endif */
 </style>

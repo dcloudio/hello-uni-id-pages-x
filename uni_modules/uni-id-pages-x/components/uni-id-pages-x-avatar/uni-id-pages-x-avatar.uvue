@@ -1,7 +1,7 @@
 <template>
 	<view class="avatar-box-root">
 		<!-- #ifdef MP-WEIXIN -->
-		<button open-type="chooseAvatar" @chooseavatar="bindchooseavatar" @click="uploadAvatarImg" class="box"
+		<button open-type="chooseAvatar" @chooseavatar="bindchooseavatar" @click="uploadAvatarImg" class="box chooseAvatar"
 			:class="{'showBorder':border}" :style="{width,height,lineHeight:height}">
 		<!-- #endif -->
 		<!-- #ifndef MP-WEIXIN -->
@@ -9,8 +9,7 @@
 			:style="{width,height}">
 		<!-- #endif -->
 
-			<!-- {{avatar_file!.getString("url")}} -->
-      <cloud-image v-if="avatar_file != null" :src="avatar_file!.getString('url')" :width="width" :height="height"></cloud-image>
+      <cloud-image v-if="avatar_file != null" :src="avatar_file!['url']" :width="width" :height="height"></cloud-image>
 			<image v-else-if="readOnly" class="default-avatarUrl" src="@/uni_modules/uni-id-pages-x/static/default-avatar.png" mode="widthFix"></image>
       <view v-else class="upload-img-icon">
 				<uni-id-pages-x-icons :size="35" color="#eee" type="jiahao"></uni-id-pages-x-icons>
@@ -73,7 +72,7 @@
 				return state.userInfo
 			},
 			avatar_file() : UTSJSONObject | null {
-				return this.userInfo.getJSON("avatar_file")
+				return this.userInfo["avatar_file"] as UTSJSONObject | null
 			}
 		},
 		methods: {
@@ -81,36 +80,37 @@
 				// 使用 clientDB 提交数据
 				// mutations.updateUserInfo({avatar_file})
 			},
-			bindchooseavatar() {
-				// res
-				// let avatarUrl = res.detail.avatarUrl
-				// let avatar_file = {
-				// 	extname: avatarUrl.split('.')[avatarUrl.split('.').length - 1],
-				// 	name:'',
-				// 	url:''
-				// }
-				// //上传到服务器
-				// let cloudPath = this.userInfo._id + '' + Date.now()
-				// avatar_file.name = cloudPath
-				// try{
-				// 	uni.showLoading({
-				// 		title: "更新中",
-				// 		mask: true
-				// 	});
-				// 	let {
-				// 		fileID
-				// 	} = await uniCloud.uploadFile({
-				// 		filePath:avatarUrl,
-				// 		cloudPath,
-				// 		fileType: "image"
-				// 	});
-				// 	avatar_file.url = fileID
-				// 	uni.hideLoading()
-				// }catch(e){
-				// 	console.error(e);
-				// }
-				// console.log('avatar_file',avatar_file);
-				// this.setAvatarFile(avatar_file)
+			async bindchooseavatar(res:any) {
+        // #ifdef MP-WEIXIN
+        let avatarUrl = res.detail.avatarUrl
+        let avatar_file = {
+        	extname: avatarUrl.split('.')[avatarUrl.split('.').length - 1],
+        	name:'',
+        	url:''
+        }
+        //上传到服务器
+        let cloudPath = this.userInfo._id + '' + Date.now()
+        avatar_file.name = cloudPath
+        try{
+        	uni.showLoading({
+        		title: "更新中",
+        		mask: true
+        	});
+        	let {
+        		fileID
+        	} = await uniCloud.uploadFile({
+        		filePath:avatarUrl,
+        		cloudPath,
+        		fileType: "image"
+        	});
+        	avatar_file.url = fileID
+        	uni.hideLoading()
+        }catch(e){
+        	console.error(e);
+        }
+        console.log('avatar_file',avatar_file);
+        mutations.updateUserInfo({ avatar_file } as UTSJSONObject)
+        // #endif
 			},
 			uploadAvatarImg() {
         if(this.readOnly){
@@ -216,10 +216,10 @@
 					},
 					fail:(err)=>{
 						console.error('chooseImage fail: ', err)
-						uni.showModal({
-							content: '失败，' + err.errMsg,
-							showCancel: false
-						});
+						// uni.showModal({
+						// 	content: '失败，' + err.errMsg,
+						// 	showCancel: false
+						// });
 					}
 				})
 				// #endif
@@ -242,20 +242,19 @@
 		padding: 0;
 	}
 
-	.chooseAvatar {
-		/* #ifndef UNI-APP-X */
-		display: inline-block;
-		box-sizing: border-box;
-		/* #endif */
-		border-radius: 100px;
-		text-align: center;
-		padding: 1px;
-	}
+  /* #ifdef MP */
+  .chooseAvatar {
+  	border-radius: 0;
+  }
+  .chooseAvatar:after{
+    display: none;
+  }
+  /* #endif */
 
 	.upload-img-icon {
 		border: 1px dotted #c8c8c8;
-		width: 55px;
-		height: 55px;
+		width: 100%;
+		height: 100%;
 		justify-content: center;
 		align-items: center;
 	}

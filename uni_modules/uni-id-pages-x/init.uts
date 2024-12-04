@@ -152,8 +152,7 @@ export default async function () {
 
   // needLogin相关代码-start（此代码仅为版本兼容提示使用，如已知晓可删除）
   const needLogin = config.getArray<string>('needLogin')
-  const uniCompileVersionCode = uni.getSystemInfoSync().uniCompileVersionCode
-  if(needLogin != null && (uniCompileVersionCode >= 3.99 ) ){
+  if(needLogin != null){
     const tipText = "uni-id-pages x v1.0.4+ 不再支持配置项config.needLogin，请升级HBuilderX 版本为3.99+，使用更强大 uni-id-router替代。详情查看：https://uniapp.dcloud.net.cn/uniCloud/uni-id/summary.html#uni-id-router"
     console.error(tipText)
     uni.showModal({
