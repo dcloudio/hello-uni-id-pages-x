@@ -31,7 +31,7 @@ export const loginSuccess = (_ : UTSJSONObject) => {
           // console.log('uniIdRouter redirectTo success');
         }
       })
-    } else if (currentPage.route == "uni_modules/uni-id-pages-x/pages/login/login") {
+    } else if (currentPage.route.includes("uni_modules/uni-id-pages-x/pages/login/login") ){
       uni.navigateBack()
     }
   };
