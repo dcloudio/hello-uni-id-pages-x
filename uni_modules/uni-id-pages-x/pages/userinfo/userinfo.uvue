@@ -9,12 +9,9 @@
         <text class="title">昵称</text>
         <view @click="setNickname" class="content">
           <text class="unset" v-if="!isLogin">未登录</text>
-          <text class="value"
-                v-else-if="userInfo['nickname'] != null && userInfo['nickname'] != ''">{{userInfo['nickname']}}
-          </text>
+          <text class="value" v-else-if="userInfo['nickname'] != null && userInfo['nickname'] != ''">{{userInfo['nickname']}}</text>
           <text class="unset" v-else>未设置</text>
-          <uni-id-pages-x-icons v-if="isLogin" :size="16" type="right-arrow"
-                                class="link-icon"></uni-id-pages-x-icons>
+          <uni-id-pages-x-icons v-if="isLogin" :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icons>
         </view>
       </view>
       <view class="item">
