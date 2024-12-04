@@ -143,6 +143,9 @@
     transform: scale(0.6);
     margin-left: -6px;
     margin-right: -18px;
+    /* #ifdef WEB */
+    margin-right: -30px;
+    /* #endif */
     padding-right: 10px;
     .checkbox {
       margin-left: 5px;
@@ -198,6 +201,7 @@
 		border-radius: 10px;
 		width: 600rpx;
     padding: 15px;
+    padding-bottom: 0;
 	}
 	.popup-header {
 		display: flex;
