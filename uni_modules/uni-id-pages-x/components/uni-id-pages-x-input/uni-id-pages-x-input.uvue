@@ -4,7 +4,7 @@
 		<text v-if="hasTitleAndContent" class="title">{{title}}</text>
 		<input class="input" ref="input" :placeholder="_placeholder" :class="{'move-down':hasTitleAndContent}"
 			:value="modelValue" @input="updateValue" :type="type" :maxlength="maxlength"
-			:password="password && !visiblePwd" :focus="focus" @blur="onBlur" @focus="onFocus" @confirm="confirm"
+			:password="password && !visiblePwd" :focus="focusInput" @blur="onBlur" @focus="onFocus" @confirm="confirm"
 			:confirm-type="confirmType" />
 		<view class="my-input-icon-box" v-if="modelValue">
 			<uni-id-pages-x-icons v-if="password" :color="visiblePwd?'#0070ff':'#ddd'"
@@ -23,9 +23,15 @@
 		emits: ["blur", "focus", "confirm", "update:modelValue"],
 		data() {
 			return {
-				visiblePwd: false
+				visiblePwd: false,
+        focusInput: false
 			}
 		},
+    mounted(){
+      if(this.focus){
+        this.setFocus(true)
+      }
+    },
 		computed: {
 			_placeholder() : string {
 				if (this.placeholder.length > 0) {
@@ -78,7 +84,10 @@
 				default: "done"
 			},
       /**
-       * @param touch click
+       * 显示密码的方式
+       * @type {String}
+       * @default click
+       * @example click | touch
        */
       visiblePwdOption:{
         type: String,
@@ -103,31 +112,29 @@
 				// this.$emit('update:focus', true);
 			},
 			setFocus(state : boolean) {
-				const inputEl = this.$refs['input'] as UniElement
-				if (state) {
-					inputEl.focus();
-				} else {
-					inputEl.blur();
-				}
+        // console.error('setFocus',state)
+				this.focusInput = state
 			},
 			confirm(event : InputConfirmEvent) {
 				this.$emit('confirm', event)
 			},
       setVisiblePwd(eventName:string){
+        console.error('eventName',eventName)
         if(eventName == "click" && this.visiblePwdOption == 'click'){
           this.visiblePwd = !this.visiblePwd
-        }else if(eventName == "touch"){
-          // switch (eventName){
-          //   case "touchstart":
-          //     this.visiblePwd = true
-          //     break;
-          //   case "touchend":
-          //     this.visiblePwd = false
-          //     break;
-          //   case "touchcancel":
-          //     this.visiblePwd = false
-          //     break;
-          // }
+        }else if(eventName.includes("touch") && this.visiblePwdOption == 'touch'){
+          console.error('eventName',eventName)
+          switch (eventName){
+            case "touchstart":
+              this.visiblePwd = true
+              break;
+            case "touchend":
+              this.visiblePwd = false
+              break;
+            case "touchcancel":
+              this.visiblePwd = false
+              break;
+          }
         }
       }
 		}
@@ -137,7 +144,6 @@
 <style lang="scss" scoped>
 	.input-box {
 		position: relative;
-		margin: 0;
 		background-color: #F8F8F8;
 		height: 50px !important;
 		border-radius: 5rpx;
@@ -179,6 +185,7 @@
 		right: 10px;
 		bottom:14px;
 		flex-direction: row;
+    z-index: 2;
 	}
 
 	.password-icon {

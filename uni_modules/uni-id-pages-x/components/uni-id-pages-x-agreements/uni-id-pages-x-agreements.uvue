@@ -1,11 +1,10 @@
 <template>
 	<view class="agreements-root" v-if="agreements.length != 0">
 		<template v-if="needAgreements">
-			<checkbox-group @change="setAgree">
-				<checkbox class="checkbox" style="transform: scale(0.7);margin-right: -6px;padding-right: 3px;margin-left: 1px;"
-					:checked="!pendingAgreements" value="agreement">
-					<text class="checkbox-text">同意</text>
-				</checkbox>
+			<checkbox-group @change="setAgree" class="checkbox-group">
+        <checkbox class="checkbox" :checked="!pendingAgreements" value="agreement">
+          <text class="text">同意</text>
+        </checkbox>
 			</checkbox-group>
 			<view class="content">
 				<view class="agreements-item" v-for="(agreement,index) in agreements" :key="index">
@@ -140,21 +139,41 @@
 		margin-left: -9px;
 	}
 
-	.checkbox-text {
-		transform: scale(1.3);
-		margin-left: 3px;
-		color: #8a8f8b;
-		font-size: 12px;
-	}
+  .checkbox-group {
+    transform: scale(0.6);
+    margin-left: -6px;
+    margin-right: -18px;
+    padding-right: 10px;
+    .checkbox {
+      margin-left: 5px;
+      padding-right: 15px;
+      .text {
+        margin-left: 8px;
+        margin-right: 10px;
+        transform: scale(1.8);
+      	color: #8a8f8b;
+      	font-size: 12px;
+        line-height: 24px;
+      }
+    }
+
+    /* #ifdef MP-WEIXIN */
+    // 解决微信小程序中外层有transform: scale内层再设置transform: scale无效的问题
+    .checkbox {
+      padding-right: 40px;
+      .text {
+        position: absolute;
+        margin-right: 0;
+        top: 0;
+      }
+    }
+    /* #endif */
+  }
 
 	.agreements-item {
 		flex-direction: row;
 	}
 
-	.text {
-		line-height: 26px;
-		font-size: 12px;
-	}
 	.popup-text{
 		line-height: 30px;
 		font-size:14px;
