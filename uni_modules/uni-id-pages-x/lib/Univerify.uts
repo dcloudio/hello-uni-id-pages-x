@@ -34,7 +34,7 @@ export default class Univerify {
           console.log("pre login success");
           this.login(fullScreen);
         },
-        fail(err : PreLoginFail) {
+        fail(err) {
           console.error("pre login fail => " + JSON.stringify(err));
           // 当前页面不是登录页面时，一键登录不可用，且还存在一键登录以外的登录方式，就跳转至此登录方式
           const pages = getCurrentPages()
@@ -67,7 +67,7 @@ export default class Univerify {
             }
           }
         }
-      } as PreLoginOptions);
+      });
     }
   }
   login(fullScreen : boolean) {
@@ -82,8 +82,8 @@ export default class Univerify {
         //   "iconWidth": "45px", // 图标宽度（高度等比例缩放） 默认值：45px
         //   "list":buttonsList
         // }
-      } as UniverifyStyle,
-      success(res : LoginSuccess) {
+      },
+      success(res) {
         console.log("login success => " + JSON.stringify(res));
         // 云函数取号
         const uniIdCo = uniCloud.importObject("uni-id-co")
@@ -100,14 +100,14 @@ export default class Univerify {
           univerifyManager.close();
         });
       },
-      fail(err : LoginFail) {
+      fail(err) {
         console.error("login fail => " + err);
         // uni.showToast({
         //   title: "登录失败",
         //   icon: "error"
         // });
       }
-    } as LoginOptions);
+    });
   }
 }
 // #endif
