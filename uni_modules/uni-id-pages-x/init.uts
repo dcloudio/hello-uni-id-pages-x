@@ -87,10 +87,10 @@ export default async function () {
       success() {
         console.log("pre login success");
       },
-      fail(err : PreLoginFail) {
+      fail(err) {
         console.error("pre login fail => " + JSON.stringify(err));
       }
-    } as PreLoginOptions);
+    });
 
 
     const handleInterceptor = (geturl:string)=>{
