@@ -57,7 +57,7 @@ export default async function () {
       //   return supportedLoginType?.includes(currentType) != true
       // })
       const list:Array<string> = [];
-      console.log('loginTypes: ',loginTypes);
+      // console.log('loginTypes: ',loginTypes);
       for (let i = 0; i < loginTypes.length; i++) {
         const type = loginTypes[i];
         if (type != 'smsCode') {
@@ -85,7 +85,7 @@ export default async function () {
     const univerifyManager = uni.getUniverifyManager();
     univerifyManager.preLogin({
       success() {
-        console.log("pre login success");
+        // console.log("pre login success");
       },
       fail(err) {
         console.error("pre login fail => " + JSON.stringify(err));
@@ -151,8 +151,7 @@ export default async function () {
 
 
   // needLogin相关代码-start（此代码仅为版本兼容提示使用，如已知晓可删除）
-  const needLogin = config.getArray<string>('needLogin')
-  if(needLogin != null){
+  if(config['needLogin'] != null){
     const tipText = "uni-id-pages x v1.0.4+ 不再支持配置项config.needLogin，请升级HBuilderX 版本为3.99+，使用更强大 uni-id-router替代。详情查看：https://uniapp.dcloud.net.cn/uniCloud/uni-id/summary.html#uni-id-router"
     console.error(tipText)
     uni.showModal({
@@ -160,41 +159,6 @@ export default async function () {
       showCancel: false,
       confirmText:"知道了"
     });
-  }else{
-    const checkNeedLogin = (url:string):boolean=>{
-      if(state.isLogin){
-        return false
-      }
-      if (needLogin != null) {
-        return needLogin.every((item:string):boolean => {
-          return item == url || new RegExp(item).test(url)
-        })
-      }else{
-        return false
-      }
-    }
-    uni.addInterceptor('navigateTo',{
-      invoke:(e:NavigateToOptions)=>{
-        if (checkNeedLogin(e.url)) {
-          uni.showToast({
-            title: '请先登录',
-            icon: 'none'
-          })
-          e.url = "/uni_modules/uni-id-pages-x/pages/login/login?uniIdRedirectUrl=" + encodeURIComponent(e.url)
-        }
-      }
-    })
-    uni.addInterceptor('redirectTo',{
-      invoke:(e:RedirectToOptions)=>{
-        if (checkNeedLogin(e.url)) {
-          uni.showToast({
-            title: '请先登录',
-            icon: 'none'
-          })
-          e.url = "/uni_modules/uni-id-pages-x/pages/login/login?uniIdRedirectUrl=" + encodeURIComponent(e.url)
-        }
-      }
-    })
   }
   // needLogin相关代码-end
 
