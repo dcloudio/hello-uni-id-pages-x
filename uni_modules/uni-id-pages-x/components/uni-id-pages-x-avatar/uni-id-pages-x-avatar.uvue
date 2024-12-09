@@ -137,7 +137,7 @@
 					crop,
 					success: (res) => {
 						console.log('res', res);
-						let tempFiles = res.tempFiles as UTSJSONObject[];
+						const tempFiles = res.tempFiles as ChooseImageTempFile[]
 						let tempFile = tempFiles[0];
             let tempFileName = tempFile['name'] as string | null
 						let tempFilePath = tempFile['path'] as string | null

@@ -146,7 +146,7 @@
                     },
                     fail: (e: IFacialRecognitionVerifyError) => {
                         let title = "验证失败"
-                        let content: string
+                        let content: string;
 
                         console.log(
                             `[frv-debug] certifyId auth error: certifyId -> ${this.certifyId}, error -> ${JSON.stringify(e)}`
