@@ -20,11 +20,11 @@ export const loginSuccess = (_ : UTSJSONObject) => {
       // #endif
       // console.log('uniIdRedirectUrl', uniIdRedirectUrl);
       uni.redirectTo({
-        url: uniIdRedirectUrl,
+        url: uniIdRedirectUrl as string,
         fail() {
           console.error("uniIdRouter redirectTo fail");
           uni.switchTab({
-            "url": uniIdRedirectUrl
+            "url": uniIdRedirectUrl as string
           })
         },
         success() {
@@ -33,6 +33,18 @@ export const loginSuccess = (_ : UTSJSONObject) => {
       })
     } else if (currentPage.route.includes("uni_modules/uni-id-pages-x/pages/login/login") ){
       uni.navigateBack()
+    } else {
+      // 需要返回的页面数
+      const needBackCount = pages.reduce((count, page) => {
+        if (page.route.includes("uni_modules/uni-id-pages-x/pages")) {
+          return count + 1
+        }
+        return count
+      }, 0)
+      // console.log('needBackCount', needBackCount);
+      uni.navigateBack({
+        delta: needBackCount
+      })
     }
   };
   const toastDuration = 1500
