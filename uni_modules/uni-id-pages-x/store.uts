@@ -23,7 +23,7 @@ function initState() {
     // #ifdef APP-IOS
     userInfo = new UTSJSONObject(userInfo)
     // #endif
-    if (userInfo != null) {
+    if (userInfo instanceof UTSJSONObject) {
       state.userInfo = userInfo as UTSJSONObject
       // console.log('init userInfo',userInfo);
     }
