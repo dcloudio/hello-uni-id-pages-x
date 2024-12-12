@@ -1,3 +1,6 @@
+## 1.1.5（2024-12-12）
+- 【重要】兼容微信小程序（HBuilderX 4.41+）
+- 去掉UniverifyManager类型，uni-app x 会自动推导类型。（从HBuilderX 4.41+，UniverifyManager的方法的参数类型进行了调整。[详见](https://doc.dcloud.net.cn/uni-app-x/api/get-univerify-manager.html#typechange)）
 ## 1.1.4（2024-11-05）
 - uni-id-co 修复 没有配置敏感信息解密密钥时导致登录报错的问题
 - 修复部分场景下loginBySmsCode组件实例不释放的Bug
