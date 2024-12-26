@@ -6,7 +6,7 @@
       <!-- 获取验证码组件（输入手机号码+发送短信验证码所需的图形验证码，获得短信验证码） -->
       <uni-id-pages-x-smsCode class="smsCodeSmsTest" ref="smsCode" @input="smsCodeInput" ></uni-id-pages-x-smsCode>
       <!-- 同意隐私政策协议 -->
-      <uni-id-pages-x-agreements class="agreementsSmsTest" ref="agreements" scope="login"/>
+      <uni-id-pages-x-agreements class="agreements-box" id="agreementsSmsTest" ref="agreements" scope="login"/>
       <button class="uni-btn" type="primary" @click="sendSmsCode">获取手机验证码</button>
     </view>
 
@@ -76,8 +76,8 @@
 							title: '登录成功',
 							icon: 'none'
 						});
-						// if(!this.testState){loginSuccess(e)}
-						loginSuccess(e)
+						if(!this.testState){loginSuccess(e)}
+						// loginSuccess(e)
 						this.smsCodeRef!.$callMethod('clearCodeInput')
 					})
 					.catch((err : any | null) : void => {

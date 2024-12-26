@@ -53,7 +53,7 @@ describe('loginByPwd', () => {
   it('登录账号', async () => {
     // expect.assertions(2);
     // uni-id-pages-x-loginByPwd --》uni-id-pages-x-agreements--》.agreementsPwdTest 组件中的组件加class用page.$获取数据
-    agreeEl = await page.$('.agreementsPwdTest')
+    agreeEl = await page.$('#agreementsPwdTest')
     expect(await agreeEl.data('needAgreements')).toBe(true)
     // setAgree
     await agreeEl.callMethod('confirm')
@@ -63,11 +63,10 @@ describe('loginByPwd', () => {
       needCaptcha: false
     })
     const loginByPwdRes = await loginByPwdEl.callMethod('loginByPwd')
-    console.log('loginByPwdRes:', loginByPwdRes,typeof loginByPwdRes);
+    console.log('账号密码登录结果:', loginByPwdRes,typeof loginByPwdRes);
     if (typeof loginByPwdRes == 'string') {
       expect(loginByPwdRes).toHaveLength(24)
     } else {
-
       switch (loginByPwdRes.errCode) {
         case 'uni-id-password-error':
           // 密码错误
@@ -116,7 +115,7 @@ describe('loginByPwd', () => {
   });
 
   it('smsCode-agree', async () => {
-    agreeEl = await page.$('.agreementsSmsTest')
+    agreeEl = await page.$('#agreementsSmsTest')
     expect(await agreeEl.data('needAgreements')).toBe(true)
     await agreeEl.callMethod('confirm')
     await page.waitFor(100)
@@ -142,13 +141,12 @@ describe('loginByPwd', () => {
       return await loginBySmsCodeEl.data('testState') === true
     })
     loginSuccess = await loginBySmsCodeEl.data('testSuccess')
-    console.log('loginSuccess:---2 ', loginSuccess,typeof loginSuccess);
+    console.log('手机验证码登录结果： ', loginSuccess,typeof loginSuccess);
     if (typeof loginSuccess == 'string') {
       expect(loginSuccess).toHaveLength(24)
-      return
     } else {
       loginErr = await loginBySmsCodeEl.data('testErr')
-      console.log('loginErr:---2 ', loginErr);
+      console.log('手机验证码登录--失败： ', loginErr);
       switch (loginErr.errCode) {
         case 'uni-id-captcha-required':
           // 请输入图形验证码
@@ -157,12 +155,12 @@ describe('loginByPwd', () => {
             captcha: "1234"
           })
           break;
-        // case 'uni-id-account-not-exists':
-        //   expect(loginErr.errMsg).toBe('Account does not exists')
-        //   break;
-        // case 'uni-id-mobile-verify-code-error':
-        //   expect(loginErr.errMsg).toBe('手机验证码错误或已过期')
-        //   break;
+        case 'uni-id-account-not-exists':
+          expect(loginErr.errMsg).toBe('Account does not exists')
+          break;
+        case 'uni-id-mobile-verify-code-error':
+          expect(loginErr.errMsg).toBe('手机验证码错误或已过期')
+          break;
         default:
           console.log('未知错误')
           break;

@@ -5,7 +5,7 @@
       <uni-id-pages-x-input class="my-input" title="账号" placeholder="请输入手机号/用户名/邮箱" v-model="username" ref="username"></uni-id-pages-x-input>
       <uni-id-pages-x-input class="my-input" title="密码" v-model="password" :password="true" ref="password"></uni-id-pages-x-input>
       <!-- 同意隐私政策协议 -->
-      <uni-id-pages-x-agreements class="agreementsPwdTest" ref="agreements" scope="login"/>
+      <uni-id-pages-x-agreements  class="agreements-box" id="agreementsPwdTest" ref="agreements" scope="login"/>
       <button class="uni-btn" :type="password.length > 0 && username.length >0 ? 'primary' : 'default' " @click="loginByPwd">登录</button>
     </view>
 

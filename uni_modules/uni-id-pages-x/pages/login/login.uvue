@@ -14,14 +14,14 @@
       <button v-else type="primary" open-type="getmobileNumber" @getmobilenumber="login"
         class="uni-btn">微信授权手机号登录</button>
       <!-- 同意隐私政策协议 -->
-      <uni-id-pages-x-agreements scope="login" />
+      <uni-id-pages-x-agreements class="agreements-box" scope="login" />
     </view>
 
 		<!-- 密码登录 -->
-		<uni-id-pages-x-loginByPwd v-if="loginType == 'username'"  class="loginByPwdTest"/>
+		<uni-id-pages-x-loginByPwd v-if="loginType == 'username'" class="loginByPwdTest" />
 
 		<!-- 手机号验证码登录 -->
-		<uni-id-pages-x-loginBySmsCode class="loginBySmsCodeTest" v-else-if="loginType == 'smsCode'" />
+		<uni-id-pages-x-loginBySmsCode v-else-if="loginType == 'smsCode'" class="loginBySmsCodeTest" />
 
 		<!-- 固定定位的快捷登录按钮 -->
 		<uni-id-pages-x-fab-login :currentLoginType="loginType"
@@ -48,12 +48,13 @@
 		},
 		data() {
 			return {
-				loginType: "username",
+				loginType: "username" as string | null,
 				logo: "/static/logo.png"
 			}
 		},
 		onLoad(param) {
-      let type = param["type"]
+			let type = param["type"]
+      // if ( type == null){
       // #ifdef APP-ANDROID
       if (type === null){
       // #endif
@@ -63,6 +64,7 @@
        let loginTypes = config.getArray<string>("loginTypes");
        type = loginTypes![0];
       }
+      // console.log('type:',type)
       this.loginType = type
 		},
 		methods: {
