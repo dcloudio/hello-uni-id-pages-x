@@ -48,23 +48,22 @@
 		},
 		data() {
 			return {
-				loginType: "username" as string | null,
+				loginType: "username",
 				logo: "/static/logo.png"
 			}
 		},
 		onLoad(param) {
 			let type = param["type"]
-      // if ( type == null){
-      // #ifdef APP-ANDROID
-      if (type === null){
-      // #endif
-      // #ifndef APP-ANDROID
-      if (type === undefined){
-      // #endif
+      if ( type == null){
+      // // #ifdef APP-ANDROID
+      // if (type === null){
+      // // #endif
+      // // #ifndef APP-ANDROID
+      // if (type === undefined){
+      // // #endif
        let loginTypes = config.getArray<string>("loginTypes");
        type = loginTypes![0];
       }
-      // console.log('type:',type)
       this.loginType = type
 		},
 		methods: {
