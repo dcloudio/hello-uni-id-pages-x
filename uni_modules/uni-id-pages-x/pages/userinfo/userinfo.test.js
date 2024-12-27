@@ -23,7 +23,6 @@ describe('userinfo', () => {
 	it('退出登录', async () => {
 		await page.waitFor(1000)
 		const titleList = await page.$$('.title')
-    console.log('titleList.length',titleList.length)
 		expect(titleList.length).toBe(6)
 		expect(await titleList[5].text()).toBe('退出登录')
 		await page.callMethod('logout')

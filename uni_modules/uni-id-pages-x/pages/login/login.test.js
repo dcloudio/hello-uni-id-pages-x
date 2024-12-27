@@ -1,11 +1,11 @@
-// uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
 jest.setTimeout(30000)
-const PAGE_PATH = '/uni_modules/uni-id-pages-x/pages/login/login'
+const PAGE_PATH_NAME = '/uni_modules/uni-id-pages-x/pages/login/login?type=username'
+const PAGE_PATH_SMS = '/uni_modules/uni-id-pages-x/pages/login/login?type=smsCode'
 describe('loginByPwd', () => {
   let page, agreeEl, loginByPwdEl, loginBySmsCodeEl, smsCodeEl, loginSuccess, loginErr;
   beforeAll(async () => {
     platform = process.env.UNI_UTS_PLATFORM
-    page = await program.reLaunch(PAGE_PATH)
+    page = await program.reLaunch(PAGE_PATH_NAME)
     await page.waitFor('view')
   });
   it('切换登录方式：密码登录', async () => {
@@ -97,7 +97,7 @@ describe('loginByPwd', () => {
     }
   });
   it('smsCode-setData', async () => {
-    page = await program.redirectTo(PAGE_PATH)
+    page = await program.redirectTo(PAGE_PATH_SMS)
     await page.waitFor(2000)
     // const fabLogin = await page.$('uni-id-pages-x-fab-login')
     // await fabLogin.tap()
