@@ -79,11 +79,11 @@ export const mutations = {
       param.toMap().forEach((value, key) => {
         state.userInfo[key] = value
       })
-
-      usersCollection
-        .doc(user_id)
-        .update(param)
-
+      if(!param.mobile){
+        usersCollection
+          .doc(user_id)
+          .update(param)
+      }
       afterUpdateUserInfo()
     }
   }
