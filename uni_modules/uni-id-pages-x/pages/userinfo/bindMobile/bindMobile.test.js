@@ -3,6 +3,12 @@ const PAGE_PATH = '/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMob
 describe('bindMobile', () => {
 	let page,captcha,smsCodeEl;
 	beforeAll(async () => {
+    // 避免页面加载过慢，超过自动化测试框架等待时间超时退出
+    await new Promise(((resolve)=>{
+      setTimeout(()=>{
+        resolve()
+      },8000)
+    }))
 		page = await program.navigateTo(PAGE_PATH)
 		await page.waitFor('view')
 		await page.setData({isTest:true})
@@ -19,16 +25,15 @@ describe('bindMobile', () => {
     const phoneNumber = prefix + areaCode + randomNumber;
     return phoneNumber;
   }
-
+  // 设置验证码
   async function setCaptcha(){
     const needCaptcha = await page.data('needCaptcha')
     if(needCaptcha){
     	await page.setData({captcha:captcha})
     }
   }
+  // 设置短信验证码
   async function setSmsCode(mobile){
-    // console.log("data----",await page.data())
-    // console.log("smsCodeEl---data",await smsCodeEl.data())
     await smsCodeEl.setData({
     	mobile:mobile,
     	sendSmsCaptcha:captcha
@@ -38,27 +43,23 @@ describe('bindMobile', () => {
     	smsCode:"123456"
     })
     await setCaptcha()
-    await page.waitFor(2000)
   }
 
   async function getRes(){
     const startTime = Date.now()
-    console.log('startTime',startTime)
-    console.log('testState-----------',await page.data('testState'))
     // 等待登录结果
     await page.waitFor(async () => {
-      // if(Date.now()-startTime >5000){
-      //   console.log('-----------timeout----------')
-      //   return true
-      // }
-    	return await page.data('testState') === true
+      if(Date.now()-startTime >5000){
+        console.log('-----------timeout----------')
+        return true
+      }
+    	return await page.data('testState') === true && await page.data('testSuccess') === 0
     })
-    console.log('afterTime',Date.now())
-    console.log('-----------testState',await page.data('testState'))
+    console.log("testState",await page.data('testState'))
+    console.log("testSuccess",await page.data('testSuccess'))
     const testSuccessRes = await page.data('testSuccess')
-    console.log('testSuccessRes: ',testSuccessRes);
     if(testSuccessRes<100){
-      return testSuccess
+      return testSuccessRes
     }else{
       const testErrRes = await page.data('testErr')
       return testErrRes
@@ -68,7 +69,6 @@ describe('bindMobile', () => {
 	it('绑定手机号', async () => {
     const phone1 = generateRandomPhoneNumber()
     console.log('phone1: ',phone1);
-    // {mobile: "15566666666", code: "123456", sendSmsCaptcha: "1234"}
     await setSmsCode(phone1)
     const res = await getRes()
     console.log('res: ',res);
