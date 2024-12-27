@@ -70,6 +70,7 @@
 								console.log('e: ',e);
 								mutations.updateUserInfo({ "nickname": this.nickname } as UTSJSONObject)
                 if(!this.isTest){uni.navigateBack()}
+                // uni.navigateBack()
 								resolve(e['updated'])
 							})
 							.catch((err : any | null) => {

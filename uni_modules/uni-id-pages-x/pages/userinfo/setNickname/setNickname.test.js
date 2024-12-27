@@ -1,25 +1,27 @@
-// uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
 const PAGE_PATH = '/uni_modules/uni-id-pages-x/pages/userinfo/setNickname/setNickname'
 describe('setNickname', () => {
-	let page,nickname;
+	let page;
 	beforeAll(async () => {
-		page = await program.redirectTo(PAGE_PATH)
+		page = await program.navigateTo(PAGE_PATH)
 		await page.waitFor('view')
     await page.setData({'isTest':true})
 	});
-	it('设置昵称', async () => {
-		expect.assertions(1);
-		nickname = await page.data('nickname')
-		console.log('nickname: ',nickname,nickname == null);
-		if(!nickname || nickname == "dcloud99"){
-			nickname = "dcloud00";
-		}else{
-			nickname = "dcloud99";
-		}
-		await page.setData({nickname})
-		await page.waitFor(300)
-		const res = await page.callMethod('setNickname')
-		console.log('res: ',nickname,res);
-		expect(res).toBe(1)
-	});
+  // 随机昵称
+  function generateRandomString(prefix) {
+    var randomNumber = Math.floor(Math.random() * 100);
+    var formattedNumber = randomNumber.toString().padStart(2, '0');
+    return prefix + formattedNumber;
+  }
+  it('设置昵称', async () => {
+    console.log('原来的nickname: ', await page.data('nickname'));
+    const nicknameNew = generateRandomString('dcloud');
+    console.log("nicknameNew", nicknameNew);
+    await page.setData({
+      "nickname": nicknameNew
+    })
+    await page.waitFor(2000)
+    const res = await page.callMethod('setNickname')
+    console.log('结果res: ', res);
+    expect(res).toBe(1)
+  });
 });
