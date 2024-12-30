@@ -43,6 +43,12 @@
   let confirmCallBack = ():void=>{} //console.log('未传入回调函数，value：')
   export default {
     name: "uni-id-pages-x-agreements",
+    // #ifdef MP-WEIXIN
+    options: {
+      // 默认为true时，在微信小程序端获取不到组件上的class，自动化测试时设为false
+      virtualHost: false
+    },
+    // #endif
     computed: {
     	agreements():Agreement[]{
         const agreements = config.getJSON('agreements')

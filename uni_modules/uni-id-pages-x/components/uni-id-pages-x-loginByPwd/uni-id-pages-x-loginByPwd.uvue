@@ -25,6 +25,12 @@
 	import { loginSuccess } from '@/uni_modules/uni-id-pages-x/common/common.uts';
 	export default {
 		name: "uni-id-pages-x-loginByPwd",
+    // #ifdef MP-WEIXIN
+    options: {
+      // 默认为true时，在微信小程序端获取不到组件上的class，自动化测试时设为false
+      virtualHost: false
+    },
+    // #endif
 		data() {
 			return {
 				username: "",

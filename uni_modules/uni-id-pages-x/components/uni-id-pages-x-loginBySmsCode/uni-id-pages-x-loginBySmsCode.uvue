@@ -16,6 +16,7 @@
 </template>
 
 <script>
+  // 自动化测试
 	type TypeTestErr = {
 		errCode : string,
 		errMsg : string
@@ -25,10 +26,18 @@
 	const uniIdCo = uniCloud.importObject("uni-id-co", { "customUI": true })
 	export default {
 		name: "uni-id-pages-x-loginBySmsCode",
+    // name: "uni-id-pages-x-login-by-sms-code",
+    // #ifdef MP-WEIXIN
+    options: {
+      // 默认为true时，在微信小程序端获取不到组件上的class，自动化测试时设为false
+      virtualHost: false
+    },
+    // #endif
 		data() {
 			return {
 				captcha: "",
 				smsCodeRef: null as null | UniIdPagesXSmsCodeComponentPublicInstance,
+        // 自动化测试
 				testErr: {
 					errCode: '',
 					errMsg: ''
@@ -76,8 +85,8 @@
 							title: '登录成功',
 							icon: 'none'
 						});
-						if(!this.testState){loginSuccess(e)}
-						// loginSuccess(e)
+						// if(!this.testState){loginSuccess(e)}
+						loginSuccess(e)
 						this.smsCodeRef!.$callMethod('clearCodeInput')
 					})
 					.catch((err : any | null) : void => {
