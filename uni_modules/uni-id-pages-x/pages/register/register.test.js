@@ -1,14 +1,15 @@
 // uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
-jest.setTimeout(20000)
+jest.setTimeout(10000)
 const PAGE_PATH = '/uni_modules/uni-id-pages-x/pages/register/register'
 describe('register', () => {
 	let page;
 	beforeAll(async () => {
-		page = await program.navigateTo(PAGE_PATH)
+		page = await program.reLaunch(PAGE_PATH)
 		await page.waitFor('view')
 	});
 	it('register', async () => {
     expect.assertions(2);
+    // console.log("agreements-root",await page.$('.agreements-root'))
 		// const agreeEl = await page.$('uni-id-pages-x-agreements')
     const agreeEl = await page.$('.agreementsTest')
     await page.waitFor(1000)

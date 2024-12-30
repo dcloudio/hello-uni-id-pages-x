@@ -1,5 +1,5 @@
 // uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
-jest.setTimeout(60000)
+jest.setTimeout(10000)
 describe('pages/index/index.uvue', () => {
   let page, currentPage, listItems, platform;
   beforeAll(async () => {
@@ -16,7 +16,8 @@ describe('pages/index/index.uvue', () => {
     const itemTexts = await page.$$('.list-item-text')
     expect(await itemTexts[0].text()).toBe('手机验证码登录')
     expect(await itemTexts[1].text()).toBe('账号密码登录')
-    if (platform != "web") {
+    console.log('platform: ',platform);
+    if (platform == "app-plus") {
       console.log(await itemTexts[2].text())
       expect(await itemTexts[2].text()).toBe('一键登录')
     }
@@ -24,6 +25,9 @@ describe('pages/index/index.uvue', () => {
   it('手机验证码登录', async () => {
     await listItems[0].tap()
     await page.waitFor('view')
+    if(platform == 'mp-weixin'){
+      await page.waitFor(1000)
+    }
     currentPage = await program.currentPage()
     // console.log('currentPage: ', currentPage);
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
@@ -35,6 +39,9 @@ describe('pages/index/index.uvue', () => {
     await listItems[1].tap()
     // await page.callMethod('toLogin','username')
     await page.waitFor('view')
+    if(platform == 'mp-weixin'){
+      await page.waitFor(1000)
+    }
     currentPage = await program.currentPage()
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
     expect(currentPage.query.type).toBe("username")

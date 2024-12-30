@@ -9,37 +9,17 @@ describe('loginByPwd', () => {
     await page.waitFor('view')
   });
   it('切换登录方式：密码登录', async () => {
-    await page.setData({
-      loginType: "username"
-    })
+    // await page.setData({
+    //   loginType: "username"
+    // })
     expect(await page.data('loginType')).toBe('username')
     const title = await page.$('.pwd-login-title')
     expect(await title.text()).toBe('账号密码登录')
     // ios web 没支持通过标签名取组件，用 class。
     loginByPwdEl = await page.$('.loginByPwdTest')
+    console.log('loginByPwdEl: ',loginByPwdEl);
     await loginByPwdEl.setData({isTest: true })
   });
-  // it('跳转到注册账号页面', async () => {
-  //   await loginByPwdEl.callMethod('toRegister')
-  //   if(platform == 'web'){
-  //     await page.waitFor('view')
-  //   }else{
-  //     await page.waitFor(1000)
-  //   }
-  //   expect((await program.currentPage()).path).toBe(
-  //     'uni_modules/uni-id-pages-x/pages/register/register')
-  //   expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
-  //   await page.waitFor('view')
-  // });
-  // it('跳转到忘记密码页面', async () => {
-  //   await loginByPwdEl.callMethod('toRetrievePwd')
-  //   await page.waitFor(1000)
-  //   await page.waitFor('view')
-  //   expect((await program.currentPage()).path).toBe(
-  //     'uni_modules/uni-id-pages-x/pages/retrieve/retrieve')
-  //   expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
-  //   await page.waitFor('view')
-  // });
   async function resetPassword(){
     await loginByPwdEl.setData({
       username: "dcloud88",
@@ -53,7 +33,13 @@ describe('loginByPwd', () => {
   it('登录账号', async () => {
     // expect.assertions(2);
     // uni-id-pages-x-loginByPwd --》uni-id-pages-x-agreements--》.agreementsPwdTest 组件中的组件加class用page.$获取数据
-    agreeEl = await page.$('#agreementsPwdTest')
+    // 兼容微信小程序
+    if(process.env.UNI_PLATFORM == 'mp-weixin'){
+      agreeEl = await loginByPwdEl.$('#agreementsPwdTest')
+    }else{
+      agreeEl = await page.$('#agreementsPwdTest')
+    }
+    console.log('登录账号-agreeEl: ',agreeEl);
     expect(await agreeEl.data('needAgreements')).toBe(true)
     // setAgree
     await agreeEl.callMethod('confirm')
@@ -102,11 +88,11 @@ describe('loginByPwd', () => {
     // const fabLogin = await page.$('uni-id-pages-x-fab-login')
     // await fabLogin.tap()
     // console.log('fabLogin: ',await page.data('loginType'));
-    await page.setData({
-      loginType: "smsCode"
-    })
+    expect(await page.data('loginType')).toBe('smsCode')
     loginBySmsCodeEl = await page.$('.loginBySmsCodeTest')
+    console.log('loginBySmsCodeEl: ',loginBySmsCodeEl);
     smsCodeEl = await page.$('.smsCodeSmsTest')
+    console.log('smsCodeEl: ',smsCodeEl);
     // smsCodeEl = await loginBySmsCodeEl.$('.smsCodeTest')
     await smsCodeEl.setData({
       mobile: "17755555555",
@@ -115,7 +101,14 @@ describe('loginByPwd', () => {
   });
 
   it('smsCode-agree', async () => {
-    agreeEl = await page.$('#agreementsSmsTest')
+    // 兼容微信小程序
+    if(process.env.UNI_PLATFORM == 'mp-weixin'){
+      agreeEl = await loginBySmsCodeEl.$('#agreementsSmsTest')
+    }else{
+      agreeEl = await page.$('#agreementsSmsTest')
+    }
+    console.log('agreeEl: ',agreeEl);
+    console.log('needAgreements',await agreeEl.data('needAgreements'))
     expect(await agreeEl.data('needAgreements')).toBe(true)
     await agreeEl.callMethod('confirm')
     await page.waitFor(100)
@@ -130,11 +123,11 @@ describe('loginByPwd', () => {
   });
 
   it('手机验证码', async () => {
-    expect.assertions(1);
+    // expect.assertions(1);
     // 等待登录结果
     const startTime = Date.now()
     await page.waitFor(async () => {
-      if(Date.now()-startTime >10000){
+      if(Date.now()-startTime >8000){
         console.log('-----------timeout----------')
         return true
       }

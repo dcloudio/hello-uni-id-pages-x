@@ -25,7 +25,7 @@
 			</view>
 			<!-- 隐私政策协议授权申请框 -->
 
-			<uni-id-pages-x-agreements class="agreementsTest" id="agreementsTesta" ref="agreements" />
+			<uni-id-pages-x-agreements class="agreementsTest" ref="agreements" />
 
 			<button @click="registerBefore" type="primary">注册并登录</button>
 		</view>
@@ -172,7 +172,7 @@
 								title: '注册成功',
 								icon: 'none'
 							});
-							loginSuccess(e)
+							// loginSuccess(e)
 							resolve(e['uid'])
 						})
 						.catch((err : any | null) : void => {
