@@ -15,7 +15,7 @@ module.exports = {
         "launch": true,
         "teardown": "disconnect",
         "remote": false,
-        "executablePath": ""
+        "executablePath": "D:/software/minprogram/weixin/cli.bat"
     },
     "app-plus": {
         "android": {
@@ -28,10 +28,10 @@ module.exports = {
             "executablePath": ""
         },
         "uni-app-x": {
-            "version": "D:\\HX\\alpha\\HBuilderX.3.97.2023110504-alpha\\HBuilderX\\plugins\\uniappx-launcher\\base\\version.txt",
+            "version": "D:\\HX\\insideTest\\alpha\\HBuilderX.4.0.2024012502-alpha\\HBuilderX\\plugins\\uniappx-launcher\\base\\version.txt",
             "android": {
-                "id": "emulator-5554",
-                "executablePath": "D:\\HX\\alpha\\HBuilderX.3.97.2023110504-alpha\\HBuilderX\\plugins\\uniappx-launcher\\base\\android_base.apk"
+                "id": "fd07f76f",
+                "executablePath": "D:\\HX\\insideTest\\alpha\\HBuilderX.4.0.2024012502-alpha\\HBuilderX\\plugins\\uniappx-launcher\\base\\android_base.apk"
             }
         }
     }
