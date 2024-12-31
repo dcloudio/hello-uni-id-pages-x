@@ -28,6 +28,7 @@ describe('bindMobile', () => {
   // 设置验证码
   async function setCaptcha(){
     const needCaptcha = await page.data('needCaptcha')
+    console.log('needCaptcha',needCaptcha)
     if(needCaptcha){
     	await page.setData({captcha:captcha})
     }
@@ -47,16 +48,15 @@ describe('bindMobile', () => {
 
   async function getRes(){
     const startTime = Date.now()
+    console.log("data：",await page.data())
     // 等待登录结果
     await page.waitFor(async () => {
       if(Date.now()-startTime >8000){
         console.log('-----------timeout----------')
         return true
       }
-    	return await page.data('testState') === true && await page.data('testSuccess') === 0
+    	return await page.data('testState') === true
     })
-    console.log("testState",await page.data('testState'))
-    console.log("testSuccess",await page.data('testSuccess'))
     const testSuccessRes = await page.data('testSuccess')
     if(testSuccessRes<100){
       return testSuccessRes
