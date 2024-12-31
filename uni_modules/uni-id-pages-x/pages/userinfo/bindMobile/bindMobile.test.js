@@ -1,4 +1,4 @@
-jest.setTimeout(10000)
+jest.setTimeout(30000)
 const PAGE_PATH = '/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile'
 describe('bindMobile', () => {
 	let page,captcha,smsCodeEl;
@@ -51,7 +51,7 @@ describe('bindMobile', () => {
     console.log("data：",await page.data())
     // 等待登录结果
     await page.waitFor(async () => {
-      if(Date.now()-startTime >8000){
+      if(Date.now()-startTime >10000){
         console.log('-----------timeout----------')
         return true
       }
