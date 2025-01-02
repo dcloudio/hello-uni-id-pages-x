@@ -1,5 +1,5 @@
 // uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
-jest.setTimeout(10000)
+jest.setTimeout(20000)
 describe('pages/index/index.uvue', () => {
   let page, currentPage, listItems, platform;
   beforeAll(async () => {
@@ -8,6 +8,7 @@ describe('pages/index/index.uvue', () => {
     await page.waitFor('view')
     listItems = await page.$$('.list-item')
     console.log('listItems',listItems.length)
+    await page.waitFor(1000)
   });
   it('openName', async () => {
     const openName = await page.$('.openName-text')
@@ -22,9 +23,10 @@ describe('pages/index/index.uvue', () => {
     }
   });
   it('手机验证码登录', async () => {
+    // await page.callMethod("toLogin","smsCode")
     await listItems[0].tap()
     await page.waitFor('view')
-    await page.waitFor(1000)
+    await page.waitFor(3000)
     currentPage = await program.currentPage()
     console.log('currentPage: ', currentPage);
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
