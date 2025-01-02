@@ -7,6 +7,7 @@ describe('pages/index/index.uvue', () => {
     page = await program.reLaunch('/pages/index/index')
     await page.waitFor('view')
     listItems = await page.$$('.list-item')
+    console.log('listItems',listItems.length)
   });
   it('openName', async () => {
     const openName = await page.$('.openName-text')
@@ -16,20 +17,16 @@ describe('pages/index/index.uvue', () => {
     const itemTexts = await page.$$('.list-item-text')
     expect(await itemTexts[0].text()).toBe('手机验证码登录')
     expect(await itemTexts[1].text()).toBe('账号密码登录')
-    console.log('platform: ',platform);
     if (platform == "app-plus") {
-      console.log(await itemTexts[2].text())
       expect(await itemTexts[2].text()).toBe('一键登录')
     }
   });
   it('手机验证码登录', async () => {
     await listItems[0].tap()
     await page.waitFor('view')
-    if(platform == 'mp-weixin'){
-      await page.waitFor(1000)
-    }
+    await page.waitFor(1000)
     currentPage = await program.currentPage()
-    // console.log('currentPage: ', currentPage);
+    console.log('currentPage: ', currentPage);
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
     expect(currentPage.query.type).toBe("smsCode")
     await program.navigateBack()
@@ -39,10 +36,9 @@ describe('pages/index/index.uvue', () => {
     await listItems[1].tap()
     // await page.callMethod('toLogin','username')
     await page.waitFor('view')
-    if(platform == 'mp-weixin'){
-      await page.waitFor(1000)
-    }
+    await page.waitFor(1000)
     currentPage = await program.currentPage()
+    console.log('currentPage: ', currentPage);
     expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
     expect(currentPage.query.type).toBe("username")
   });
