@@ -66,8 +66,9 @@
 							.update({
 								"nickname": this.nickname
 							})
-							.then((e : UTSJSONObject) : void => {
-								console.log('e: ',e);
+							.then((e) => {
+								console.log('e:--nickname--update ',e);
+                console.log('updated------------',e['updated'])
 								mutations.updateUserInfo({ "nickname": this.nickname } as UTSJSONObject)
                 if(!this.isTest){uni.navigateBack()}
                 // uni.navigateBack()
