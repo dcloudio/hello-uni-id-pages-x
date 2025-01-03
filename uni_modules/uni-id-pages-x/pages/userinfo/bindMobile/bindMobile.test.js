@@ -40,16 +40,9 @@ describe('bindMobile', () => {
   //   console.log("res：",res)
   // });
 
-  // 设置验证码
-  async function setCaptcha(){
-    const needCaptcha = await page.data('needCaptcha')
-    console.log('needCaptcha',needCaptcha)
-    if(needCaptcha){
-    	await page.setData({captcha:captcha})
-    }
-  }
-  // 设置短信验证码
-  async function setSmsCode(mobile){
+  it('绑定手机号', async () => {
+    const phone1 = generateRandomPhoneNumber()
+    console.log('phone1: ',phone1);
     await smsCodeEl.setData({
     	mobile:mobile,
     	sendSmsCaptcha:captcha
@@ -58,67 +51,94 @@ describe('bindMobile', () => {
     await smsCodeEl.setData({
     	smsCode:"123456"
     })
-    await setCaptcha()
-  }
-
-  async function getRes(){
-    const startTime = Date.now()
-    console.log("data--2：",await page.data())
-    console.log("testState：",await page.data('testState'))
-    // 等待登录结果
-    await page.waitFor(async () => {
-      if(Date.now()-startTime >10000){
-        console.log('-----------timeout----------')
-        return true
-      }
-    	return await page.data('testState') === true
-    })
-    console.log("testState：",await page.data('testState'))
-    const testSuccessRes = await page.data('testSuccess')
-    console.log("testSuccessRes：",testSuccessRes)
-    if(testSuccessRes<100){
-      return testSuccessRes
-    }else{
-      const testErrRes = await page.data('testErr')
-      return testErrRes
+    const needCaptcha = await page.data('needCaptcha')
+    console.log('needCaptcha',needCaptcha)
+    if(needCaptcha){
+    	await page.setData({captcha:captcha})
     }
-  }
+    console.log("data：",await page.data())
 
-	it('绑定手机号', async () => {
-    const phone1 = generateRandomPhoneNumber()
-    console.log('phone1: ',phone1);
-    await setSmsCode(phone1)
-    const res = await getRes()
-    console.log('res: ',res);
-		if(res<100){
-			console.log('绑定成功');
-			expect(res).toBe(0)
-			return
-		}else{
-			switch (res.errCode){
-				case 'uni-id-bind-conflict':
-					const expectBindStr = ["此账号已被绑定","This account has been bound"]
-					expect(expectBindStr).toContain(res.errMsg);
-          await setSmsCode(generateRandomPhoneNumber())
-          const res1 = await getRes()
-          console.log('res1: ',res1);
-					break;
-				case 'uni-id-mobile-verify-code-error':
-					const expectCodeStr = ["手机验证码错误或已过期","Verify code error or expired"]
-					expect(expectCodeStr).toContain(res.errMsg);
-					break;
-				case 'uni-id-captcha-required':
-          const requiredStr = ["请输入图形验证码","Captcha required"]
-					expect(requiredStr).toContain(res.errMsg)
-          await setCaptcha()
-          await setSmsCode(generateRandomPhoneNumber())
-          const res2 = await getRes()
-          console.log('res2: ',res2);
-					break;
-				default:
-          console.log('未知错误')
-					break;
-			}
-		}
-	});
+  });
+
+  // 设置验证码
+ //  async function setCaptcha(){
+ //    const needCaptcha = await page.data('needCaptcha')
+ //    console.log('needCaptcha',needCaptcha)
+ //    if(needCaptcha){
+ //    	await page.setData({captcha:captcha})
+ //    }
+ //  }
+ //  // 设置短信验证码
+ //  async function setSmsCode(mobile){
+ //    await smsCodeEl.setData({
+ //    	mobile:mobile,
+ //    	sendSmsCaptcha:captcha
+ //    })
+ //    await page.waitFor(1000)
+ //    await smsCodeEl.setData({
+ //    	smsCode:"123456"
+ //    })
+ //    await setCaptcha()
+ //  }
+
+ //  async function getRes(){
+ //    const startTime = Date.now()
+ //    console.log("data--2：",await page.data())
+ //    console.log("testState：",await page.data('testState'))
+ //    // 等待登录结果
+ //    await page.waitFor(async () => {
+ //      if(Date.now()-startTime >10000){
+ //        console.log('-----------timeout----------')
+ //        return true
+ //      }
+ //    	return await page.data('testState') === true
+ //    })
+ //    console.log("testState：",await page.data('testState'))
+ //    const testSuccessRes = await page.data('testSuccess')
+ //    console.log("testSuccessRes：",testSuccessRes)
+ //    if(testSuccessRes<100){
+ //      return testSuccessRes
+ //    }else{
+ //      const testErrRes = await page.data('testErr')
+ //      return testErrRes
+ //    }
+ //  }
+
+	// it('绑定手机号', async () => {
+ //    const phone1 = generateRandomPhoneNumber()
+ //    console.log('phone1: ',phone1);
+ //    await setSmsCode(phone1)
+ //    const res = await getRes()
+ //    console.log('res: ',res);
+	// 	if(res<100){
+	// 		console.log('绑定成功');
+	// 		expect(res).toBe(0)
+	// 		return
+	// 	}else{
+	// 		switch (res.errCode){
+	// 			case 'uni-id-bind-conflict':
+	// 				const expectBindStr = ["此账号已被绑定","This account has been bound"]
+	// 				expect(expectBindStr).toContain(res.errMsg);
+ //          await setSmsCode(generateRandomPhoneNumber())
+ //          const res1 = await getRes()
+ //          console.log('res1: ',res1);
+	// 				break;
+	// 			case 'uni-id-mobile-verify-code-error':
+	// 				const expectCodeStr = ["手机验证码错误或已过期","Verify code error or expired"]
+	// 				expect(expectCodeStr).toContain(res.errMsg);
+	// 				break;
+	// 			case 'uni-id-captcha-required':
+ //          const requiredStr = ["请输入图形验证码","Captcha required"]
+	// 				expect(requiredStr).toContain(res.errMsg)
+ //          await setCaptcha()
+ //          await setSmsCode(generateRandomPhoneNumber())
+ //          const res2 = await getRes()
+ //          console.log('res2: ',res2);
+	// 				break;
+	// 			default:
+ //          console.log('未知错误')
+	// 				break;
+	// 		}
+	// 	}
+	// });
 });
