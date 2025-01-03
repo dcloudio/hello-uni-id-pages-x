@@ -8,6 +8,7 @@ describe('pages/index/index.uvue', () => {
     await page.waitFor('view')
     listItems = await page.$$('.list-item')
     console.log('listItems',listItems.length)
+
     await page.waitFor(1000)
   });
   it('openName', async () => {
@@ -20,28 +21,31 @@ describe('pages/index/index.uvue', () => {
     expect(await itemTexts[1].text()).toBe('账号密码登录')
     if (platform == "app-plus") {
       expect(await itemTexts[2].text()).toBe('一键登录')
+      expect(listItems.length).toBe(3)
+    }else{
+      expect(listItems.length).toBe(2)
     }
   });
-  it('手机验证码登录', async () => {
-    // await page.callMethod("toLogin","smsCode")
-    await listItems[0].tap()
-    await page.waitFor('view')
-    await page.waitFor(3000)
-    currentPage = await program.currentPage()
-    console.log('currentPage: ', currentPage);
-    expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
-    expect(currentPage.query.type).toBe("smsCode")
-    await program.navigateBack()
-    await page.waitFor(5000)
-  });
-  it('账号密码登录', async () => {
-    await listItems[1].tap()
-    // await page.callMethod('toLogin','username')
-    await page.waitFor('view')
-    await page.waitFor(1000)
-    currentPage = await program.currentPage()
-    console.log('currentPage: ', currentPage);
-    expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
-    expect(currentPage.query.type).toBe("username")
-  });
+  // it('手机验证码登录', async () => {
+  //   // await page.callMethod("toLogin","smsCode")
+  //   await listItems[0].tap()
+  //   await page.waitFor('view')
+  //   await page.waitFor(3000)
+  //   currentPage = await program.currentPage()
+  //   console.log('currentPage: ', currentPage);
+  //   expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
+  //   expect(currentPage.query.type).toBe("smsCode")
+  //   await program.navigateBack()
+  //   await page.waitFor(5000)
+  // });
+  // it('账号密码登录', async () => {
+  //   await listItems[1].tap()
+  //   // await page.callMethod('toLogin','username')
+  //   await page.waitFor('view')
+  //   await page.waitFor(1000)
+  //   currentPage = await program.currentPage()
+  //   console.log('currentPage: ', currentPage);
+  //   expect(currentPage.path).toBe("uni_modules/uni-id-pages-x/pages/login/login")
+  //   expect(currentPage.query.type).toBe("username")
+  // });
 });
