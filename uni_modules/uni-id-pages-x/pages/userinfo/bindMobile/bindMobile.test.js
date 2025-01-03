@@ -15,6 +15,7 @@ describe('bindMobile', () => {
 		captcha = "1234"
 		smsCodeEl = await page.$('#smsCodeTest')
     console.log('smsCodeEl',smsCodeEl)
+    console.log("data--1：",await page.data())
 	});
   // 随机生成手机号
   function generateRandomPhoneNumber() {
@@ -62,6 +63,7 @@ describe('bindMobile', () => {
 
   async function getRes(){
     const startTime = Date.now()
+    console.log("data--2：",await page.data())
     console.log("testState：",await page.data('testState'))
     // 等待登录结果
     await page.waitFor(async () => {
@@ -73,6 +75,7 @@ describe('bindMobile', () => {
     })
     console.log("testState：",await page.data('testState'))
     const testSuccessRes = await page.data('testSuccess')
+    console.log("testSuccessRes：",testSuccessRes)
     if(testSuccessRes<100){
       return testSuccessRes
     }else{
@@ -109,6 +112,8 @@ describe('bindMobile', () => {
 					expect(requiredStr).toContain(res.errMsg)
           await setCaptcha()
           await setSmsCode(generateRandomPhoneNumber())
+          const res2 = await getRes()
+          console.log('res2: ',res2);
 					break;
 				default:
           console.log('未知错误')
