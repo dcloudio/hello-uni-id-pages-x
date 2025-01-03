@@ -25,6 +25,20 @@ describe('bindMobile', () => {
     const phoneNumber = prefix + areaCode + randomNumber;
     return phoneNumber;
   }
+
+
+  // it('绑定手机号', async () => {
+  //   const phone1 = generateRandomPhoneNumber()
+  //   console.log('phone1: ',phone1);
+
+  //   const res = await page.callMethod('bindMobileBySms',{
+  //     code: "123456",
+  //     mobile: phone1,
+  //     sendSmsCaptcha: "1234"
+  //   })
+  //   console.log("res：",res)
+  // });
+
   // 设置验证码
   async function setCaptcha(){
     const needCaptcha = await page.data('needCaptcha')
@@ -48,7 +62,7 @@ describe('bindMobile', () => {
 
   async function getRes(){
     const startTime = Date.now()
-    console.log("data：",await page.data())
+    console.log("testState：",await page.data('testState'))
     // 等待登录结果
     await page.waitFor(async () => {
       if(Date.now()-startTime >10000){
@@ -57,6 +71,7 @@ describe('bindMobile', () => {
       }
     	return await page.data('testState') === true
     })
+    console.log("testState：",await page.data('testState'))
     const testSuccessRes = await page.data('testSuccess')
     if(testSuccessRes<100){
       return testSuccessRes
