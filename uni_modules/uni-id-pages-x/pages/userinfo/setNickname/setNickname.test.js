@@ -19,6 +19,7 @@ describe('setNickname', () => {
     await page.setData({
       "nickname": nicknameNew
     })
+    console.log("-----------nickname", await page.data('nickname'));
     await page.waitFor(2000)
     const res = await page.callMethod('setNickname')
     console.log('结果res: ', res);
