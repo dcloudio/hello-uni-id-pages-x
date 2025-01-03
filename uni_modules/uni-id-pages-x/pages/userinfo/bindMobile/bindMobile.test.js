@@ -44,7 +44,7 @@ describe('bindMobile', () => {
     const phone1 = generateRandomPhoneNumber()
     console.log('phone1: ',phone1);
     await smsCodeEl.setData({
-    	mobile:mobile,
+    	mobile:phone1,
     	sendSmsCaptcha:captcha
     })
     await page.waitFor(1000)
