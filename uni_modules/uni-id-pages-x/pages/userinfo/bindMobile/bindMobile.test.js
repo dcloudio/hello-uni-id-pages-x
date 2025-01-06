@@ -41,6 +41,8 @@ describe('bindMobile', () => {
   // });
 
   it('绑定手机号', async () => {
+    console.log("testSuccess：",await page.data("testSuccess"))
+    console.log("testState：",await page.data("testState"))
     const phone1 = generateRandomPhoneNumber()
     console.log('phone1: ',phone1);
     await smsCodeEl.setData({
@@ -56,8 +58,9 @@ describe('bindMobile', () => {
     if(needCaptcha){
     	await page.setData({captcha:captcha})
     }
+    console.log("testSuccess：",await page.data("testSuccess"))
+    console.log("testState：",await page.data("testState"))
     console.log("data：",await page.data())
-
   });
 
   // 设置验证码
