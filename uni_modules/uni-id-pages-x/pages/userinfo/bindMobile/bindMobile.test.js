@@ -47,7 +47,6 @@ describe('bindMobile', () => {
 
   async function getRes(){
     const startTime = Date.now()
-    console.log("testState：--1",await page.data('testState'))
     // 等待登录结果
     await page.waitFor(async () => {
       if(Date.now()-startTime >8000){
@@ -56,9 +55,8 @@ describe('bindMobile', () => {
       }
     	return await page.data('testState') === true
     })
-    console.log("testState：--2",await page.data('testState'))
     const testSuccessRes = await page.data('testSuccess')
-    console.log("testSuccessRes：",testSuccessRes)
+    console.log("testSuccessRes：",testSuccessRes,"testState：",await page.data('testState'))
     if(testSuccessRes<100){
       return testSuccessRes
     }else{

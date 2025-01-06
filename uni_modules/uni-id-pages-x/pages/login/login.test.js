@@ -9,15 +9,11 @@ describe('loginByPwd', () => {
     await page.waitFor('view')
   });
   it('切换登录方式：密码登录', async () => {
-    // await page.setData({
-    //   loginType: "username"
-    // })
     expect(await page.data('loginType')).toBe('username')
     const title = await page.$('.pwd-login-title')
     expect(await title.text()).toBe('账号密码登录')
     // ios web 没支持通过标签名取组件，用 class。
     loginByPwdEl = await page.$('.loginByPwdTest')
-    console.log('loginByPwdEl: ',loginByPwdEl);
     await loginByPwdEl.setData({isTest: true })
   });
   async function resetPassword(){
@@ -39,7 +35,6 @@ describe('loginByPwd', () => {
     }else{
       agreeEl = await page.$('#agreementsPwdTest')
     }
-    console.log('登录账号-agreeEl: ',agreeEl);
     expect(await agreeEl.data('needAgreements')).toBe(true)
     // setAgree
     await agreeEl.callMethod('confirm')
@@ -90,9 +85,7 @@ describe('loginByPwd', () => {
     // console.log('fabLogin: ',await page.data('loginType'));
     expect(await page.data('loginType')).toBe('smsCode')
     loginBySmsCodeEl = await page.$('.loginBySmsCodeTest')
-    console.log('loginBySmsCodeEl: ',loginBySmsCodeEl);
     smsCodeEl = await page.$('.smsCodeSmsTest')
-    console.log('smsCodeEl: ',smsCodeEl);
     // smsCodeEl = await loginBySmsCodeEl.$('.smsCodeTest')
     await smsCodeEl.setData({
       mobile: "17755555555",
@@ -107,8 +100,6 @@ describe('loginByPwd', () => {
     }else{
       agreeEl = await page.$('#agreementsSmsTest')
     }
-    console.log('agreeEl: ',agreeEl);
-    console.log('needAgreements',await agreeEl.data('needAgreements'))
     expect(await agreeEl.data('needAgreements')).toBe(true)
     await agreeEl.callMethod('confirm')
     await page.waitFor(100)

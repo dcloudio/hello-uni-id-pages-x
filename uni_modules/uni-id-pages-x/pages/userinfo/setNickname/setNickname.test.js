@@ -15,14 +15,13 @@ describe('setNickname', () => {
   it('设置昵称', async () => {
     console.log('原来的nickname: ', await page.data('nickname'));
     const nicknameNew = generateRandomString('dcloud');
-    console.log("nicknameNew", nicknameNew);
     await page.setData({
       "nickname": nicknameNew
     })
-    console.log("-----------nickname", await page.data('nickname'));
+    console.log("新的nickname", await page.data('nickname'));
     await page.waitFor(2000)
     const res = await page.callMethod('setNickname')
-    console.log('结果res: ', res);
+    console.log('更新结果: ', res);
     expect(res).toBe(1)
   });
 });
