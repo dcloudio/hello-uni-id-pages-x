@@ -84,6 +84,12 @@ describe('loginByPwd', () => {
     // await fabLogin.tap()
     // console.log('fabLogin: ',await page.data('loginType'));
     expect(await page.data('loginType')).toBe('smsCode')
+
+    // 截图，检验验证码是否正常显示
+    const image = await program.screenshot({deviceShot: true});
+    expect(image).toSaveImageSnapshot();
+    await page.waitFor(500);
+
     loginBySmsCodeEl = await page.$('.loginBySmsCodeTest')
     smsCodeEl = await page.$('.smsCodeSmsTest')
     // smsCodeEl = await loginBySmsCodeEl.$('.smsCodeTest')
