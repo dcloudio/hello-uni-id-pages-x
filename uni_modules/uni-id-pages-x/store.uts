@@ -64,9 +64,9 @@ export const mutations = {
 
           uniIdCo.getRealNameInfo()
             .then((realNameInfo) => {
-              state.userInfo = Object.assign(res.data[0], {
+              state.userInfo = UTSJSONObject.assign(res.data[0], {
                 realNameInfo
-              }) as UTSJSONObject
+              })
               afterUpdateUserInfo()
             })
         })
