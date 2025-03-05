@@ -116,7 +116,8 @@ export default async function () {
         }
         if(type == "univerify"){
           myUniverify.verify(true)
-          throw new Error('第一优先级是一键登录（且可用），就直接调用一键登录，不打开登录页面')
+          console.log('第一优先级是一键登录（且可用），就直接调用一键登录，不打开登录页面');
+          // throw new Error('第一优先级是一键登录（且可用），就直接调用一键登录，不打开登录页面')
         }
       }
     }
