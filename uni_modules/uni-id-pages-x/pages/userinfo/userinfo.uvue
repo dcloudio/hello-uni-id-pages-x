@@ -8,10 +8,8 @@
       <view class="item">
         <text class="title">昵称</text>
         <view @click="setNickname" class="content">
-          <text class="unset" v-if="!isLogin">未登录</text>
-          <text class="value" v-else-if="userInfo['nickname'] != null && userInfo['nickname'] != ''">{{userInfo['nickname']}}</text>
-          <text class="unset" v-else>未设置</text>
-          <uni-id-pages-x-icons v-if="isLogin" :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icons>
+          <text :class="nicknameClass">{{ nicknameText }}</text>
+          <uni-id-pages-x-icons :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icons>
         </view>
       </view>
       <view class="item">
@@ -77,6 +75,24 @@
           return 0
         }
         return authStatus as number
+      },
+      nicknameText():string {
+        if (!this.isLogin) {
+          return '未登录';
+        }
+        if (this.userInfo['nickname'] != null && this.userInfo['nickname'] !== '') {
+          return this.userInfo['nickname'] as string;
+        }
+        return '未设置';
+      },
+      nicknameClass():string {
+        if (!this.isLogin) {
+          return 'unset';
+        }
+        if (this.userInfo['nickname'] != null && this.userInfo['nickname'] !== '') {
+          return 'value';
+        }
+        return 'unset';
       }
     },
     onLoad(options){
@@ -152,10 +168,15 @@
   }
 
   .list .item {
-      border-bottom: 1px solid #f5f5f5;
-      flex-direction: row;
-      align-items: center;
-      padding: 15px 15px;
+    border-bottom: 1px solid #f5f5f5;
+    flex-direction: row;
+    align-items: center;
+    /* #ifndef APP-HARMONY */
+    padding: 15px;
+    /* #endif */
+    /* #ifdef APP-HARMONY */
+    padding: 15px 24px 15px 15px;
+    /* #endif */
   }
 
   .list .item.deactivate {
