@@ -56,7 +56,6 @@ describe('bindMobile', () => {
     	return await page.data('testState') === true
     })
     const testSuccessRes = await page.data('testSuccess')
-    console.log("testSuccessRes：",testSuccessRes,"testState：",await page.data('testState'))
     if(testSuccessRes<100){
       return testSuccessRes
     }else{
@@ -67,12 +66,10 @@ describe('bindMobile', () => {
 
 	it('绑定手机号', async () => {
     const phone1 = generateRandomPhoneNumber()
-    console.log('phone1: ',phone1);
     await setSmsCode(phone1)
     const res = await getRes()
-    console.log('res: ',res);
 		if(res<100){
-			console.log('绑定成功');
+			// console.log('绑定成功');
 			expect(res).toBe(0)
 			return
 		}else{

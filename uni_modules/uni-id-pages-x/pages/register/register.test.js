@@ -1,4 +1,3 @@
-// uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
 jest.setTimeout(10000)
 const PAGE_PATH = '/uni_modules/uni-id-pages-x/pages/register/register'
 describe('register', () => {
@@ -25,7 +24,7 @@ describe('register', () => {
 			password2: "dcloud2023"
 		})
 		const registerRes =  await page.callMethod('register')
-		console.log('registerRes: ',registerRes);
+		// console.log('registerRes: ',registerRes);
 		if(typeof registerRes == 'string'){
 			expect(registerRes).toHaveLength(24)
 			return

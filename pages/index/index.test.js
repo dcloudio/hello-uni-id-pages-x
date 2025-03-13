@@ -1,4 +1,3 @@
-// uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
 jest.setTimeout(20000)
 describe('pages/index/index.uvue', () => {
   let page, currentPage, listItems, platform;

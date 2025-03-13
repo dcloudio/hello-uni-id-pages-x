@@ -44,7 +44,7 @@ describe('loginByPwd', () => {
       needCaptcha: false
     })
     const loginByPwdRes = await loginByPwdEl.callMethod('loginByPwd')
-    console.log('账号密码登录结果:', loginByPwdRes,typeof loginByPwdRes);
+    console.log('账号密码登录结果:', loginByPwdRes);
     if (typeof loginByPwdRes == 'string') {
       expect(loginByPwdRes).toHaveLength(24)
     } else {
@@ -131,7 +131,7 @@ describe('loginByPwd', () => {
       return await loginBySmsCodeEl.data('testState') === true
     })
     loginSuccess = await loginBySmsCodeEl.data('testSuccess')
-    console.log('手机验证码登录结果： ', loginSuccess,typeof loginSuccess);
+    console.log('手机验证码登录结果： ', loginSuccess);
     if (typeof loginSuccess == 'string') {
       expect(loginSuccess).toHaveLength(24)
     } else {

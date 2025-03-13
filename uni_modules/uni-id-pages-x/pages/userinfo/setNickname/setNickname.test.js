@@ -13,15 +13,12 @@ describe('setNickname', () => {
     return prefix + formattedNumber;
   }
   it('设置昵称', async () => {
-    console.log('原来的nickname: ', await page.data('nickname'));
     const nicknameNew = generateRandomString('dcloud');
     await page.setData({
       "nickname": nicknameNew
     })
-    console.log("新的nickname", await page.data('nickname'));
     await page.waitFor(2000)
     const res = await page.callMethod('setNickname')
-    console.log('更新结果: ', res);
     expect(res).toBe(1)
   });
 });

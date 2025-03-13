@@ -6,18 +6,20 @@ describe('userinfo', () => {
 		page = await program.navigateTo(PAGE_PATH)
 		await page.waitFor('view')
     login = await page.callMethod('getIsLogin')
-    if(!login){
-      console.log('未登录')
-      expect(1).toBe(1)
-      return
-    }
 	});
+  if (!login) {
+    it('未登录', async () => {
+      expect(1).toBe(1)
+    })
+    return
+  }
 	it('昵称-手机号', async () => {
 		const values = await page.$$('.value')
 		await page.waitFor(500)
     if(values.length == 2){
-      console.log('昵称 ', await values[0].text());
-      console.log('手机号', await values[1].text());
+      // 昵称
+      expect(await values[0].text()).toBeTruthy();
+      // 手机号
       expect(await values[1].text()).toHaveLength(11)
     }
 	});
