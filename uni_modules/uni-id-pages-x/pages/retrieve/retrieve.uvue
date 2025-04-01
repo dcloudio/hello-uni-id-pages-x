@@ -62,7 +62,7 @@
 				let isPass = checkPasswordRes.getBoolean("pass") as Boolean
 				if (!isPass) {
 					const errMsg = checkPasswordRes.getString("errMsg")
-					return uni.showModal({
+					uni.showModal({
 						title:"提示",
 						content: errMsg,
 						showCancel: false,
@@ -71,10 +71,11 @@
 							(this.$refs["password"] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 						}
 					});
+          return
 				}
 
 				if (this.password != this.password2) {
-					return uni.showModal({
+					uni.showModal({
 						title:"提示",
 						content: "两次输入的密码不一致",
 						showCancel: false,
@@ -83,6 +84,7 @@
 							(this.$refs["password2"] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 						}
 					});
+          return
 				}
 				this.smsCodeRef!.sendSmsCode(false);
 			},
