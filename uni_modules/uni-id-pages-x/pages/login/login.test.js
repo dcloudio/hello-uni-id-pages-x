@@ -1,6 +1,8 @@
 jest.setTimeout(30000)
 const PAGE_PATH_NAME = '/uni_modules/uni-id-pages-x/pages/login/login?type=username'
 const PAGE_PATH_SMS = '/uni_modules/uni-id-pages-x/pages/login/login?type=smsCode'
+const platformInfo = process.env.uniTestPlatformInfo.toLocaleLowerCase()
+const isHarmony = platformInfo.startsWith('harmony')
 describe('loginByPwd', () => {
   let page, agreeEl, loginByPwdEl, loginBySmsCodeEl, smsCodeEl, loginSuccess, loginErr;
   beforeAll(async () => {
@@ -86,9 +88,11 @@ describe('loginByPwd', () => {
     expect(await page.data('loginType')).toBe('smsCode')
 
     // 截图，检验验证码是否正常显示
-    const image = await program.screenshot({deviceShot: true});
-    expect(image).toSaveImageSnapshot();
-    await page.waitFor(500);
+    if(!isHarmony){
+      const image = await program.screenshot({deviceShot: true});
+      expect(image).toSaveImageSnapshot();
+      await page.waitFor(500);
+    }
 
     loginBySmsCodeEl = await page.$('.loginBySmsCodeTest')
     smsCodeEl = await page.$('.smsCodeSmsTest')

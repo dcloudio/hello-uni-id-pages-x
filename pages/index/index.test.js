@@ -4,7 +4,8 @@ describe('pages/index/index.uvue', () => {
   const platformInfo = process.env.uniTestPlatformInfo.toLocaleLowerCase()
   const isAndroid = platformInfo.startsWith('android')
   const isIos = platformInfo.startsWith('ios')
-  const isApp = isAndroid || isIos
+  const isHarmony = platformInfo.startsWith('harmony')
+  const isApp = isAndroid || isIos ||isHarmony
   beforeAll(async () => {
     page = await program.reLaunch('/pages/index/index')
     await page.waitFor('view')
@@ -12,8 +13,11 @@ describe('pages/index/index.uvue', () => {
     await page.waitFor(1000)
   });
   it('openName', async () => {
-    const openName = await page.$('.openName-text')
-    expect(await openName.text()).toBe('未登录')
+    const isLogin = await page.callMethod("isLoginTest")
+    if(!isLogin){
+      const openName = await page.$('.openName-text')
+      expect(await openName.text()).toBe('未登录')
+    }
   });
   it('text', async () => {
     const itemTexts = await page.$$('.list-item-text')

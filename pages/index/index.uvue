@@ -77,6 +77,10 @@
     },
     onLoad() { },
     methods: {
+      // 测试例使用
+      isLoginTest() : boolean {
+        return state.isLogin
+      },
       toLogin(loginType : string) {
         uni.navigateTo({
           url: "/uni_modules/uni-id-pages-x/pages/login/login?type=" + loginType
