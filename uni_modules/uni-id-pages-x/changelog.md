@@ -1,3 +1,5 @@
+## 1.1.6（2025-04-07）
+- 【重要】兼容HarmonyOS平台（HBuilderX 4.61+）
 ## 1.1.5（2024-12-12）
 - 【重要】兼容微信小程序（HBuilderX 4.41+）
 - 去掉UniverifyManager类型，uni-app x 会自动推导类型。（从HBuilderX 4.41+，UniverifyManager的方法的参数类型进行了调整。[详见](https://doc.dcloud.net.cn/uni-app-x/api/get-univerify-manager.html#typechange)）
