@@ -19,6 +19,7 @@ describe('setNickname', () => {
     })
     await page.waitFor(2000)
     const res = await page.callMethod('setNickname')
+    await page.waitFor(1000)
     expect(res).toBe(1)
   });
 });
