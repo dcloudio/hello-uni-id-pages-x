@@ -12,7 +12,9 @@
 ],
   "repository": "https://gitcode.net/dcloud/hello_uni-id-pages-x",
   "engines": {
-    "HBuilderX": "^3.99"
+    "HBuilderX": "^3.99",
+    "uni-app": "",
+    "uni-app-x": "^4.11"
   },
   "dcloudext": {
     "type": "unicloud-template-page",
@@ -32,65 +34,83 @@
       "data": "无",
       "permissions": "无"
     },
-    "npmurl": ""
+    "npmurl": "",
+    "darkmode": "x",
+    "i18n": "x",
+    "widescreen": "x"
   },
   "uni_modules": {
     "dependencies": [
-    	"uni-captcha",
+      "uni-captcha",
       "uni-cloud-s2s",
-    	"uni-config-center",
-    	"uni-id-common",
-    	"uni-popup",
-    	"uni-scss",
-    	"uni-transition"
+      "uni-config-center",
+      "uni-id-common",
+      "uni-popup",
+      "uni-scss",
+      "uni-transition"
     ],
     "encrypt": [],
     "platforms": {
       "cloud": {
-        "tcb": "y",
-        "aliyun": "y",
-        "alipay": "y"
+        "tcb": "√",
+        "aliyun": "√",
+        "alipay": "√"
       },
       "client": {
-        "Vue": {
-          "vue2": "n",
-          "vue3": "y"
+        "uni-app": {
+          "vue": {
+            "vue2": "-",
+            "vue3": "-"
+          },
+          "web": {
+            "safari": "-",
+            "chrome": "-"
+          },
+          "app": {
+            "vue": "-",
+            "nvue": "-",
+            "android": "-",
+            "ios": "-",
+            "harmony": "-"
+          },
+          "mp": {
+            "weixin": "-",
+            "alipay": "-",
+            "toutiao": "-",
+            "baidu": "-",
+            "kuaishou": "-",
+            "jd": "-",
+            "harmony": "-",
+            "qq": "-",
+            "lark": "-"
+          },
+          "quickapp": {
+            "huawei": "-",
+            "union": "-"
+          }
         },
-        "App": {
-            "app-vue": "n",
-            "app-nvue": "n",
-            "app-uvue": "y",
-            "app-harmony": "u"
-        },
-        "H5-mobile": {
-          "Safari": "n",
-          "Android Browser": "n",
-          "微信浏览器(Android)": "n",
-          "QQ浏览器(Android)": "n"
-        },
-        "H5-pc": {
-          "Chrome": {
-            "minVersion": "HBuilderX4.0+"
-        },
-          "IE": "u",
-          "Edge": "u",
-          "Firefox": "u",
-          "Safari": "u"
-        },
-        "小程序": {
-          "微信": "n",
-          "阿里": "n",
-          "百度": "n",
-          "字节跳动": "n",
-          "QQ": "n",
-          "钉钉": "n",
-          "快手": "n",
-          "飞书": "n",
-          "京东": "n"
-        },
-        "快应用": {
-          "华为": "n",
-          "联盟": "n"
+        "uni-app-x": {
+          "web": {
+            "safari": "√",
+            "chrome": "√"
+          },
+          "app": {
+            "android": {
+                "extVersion": "",
+                "minVersion": "21"
+            },
+            "ios": "√",
+            "harmony": {
+                "extVersion": "1.1.6",
+                "minVersion": ""
+            }
+          },
+          "mp": {
+            "weixin": {
+                "extVersion": "1.1.5",
+                "minVersion": ""
+            }
+          }
         }
       }
     }
