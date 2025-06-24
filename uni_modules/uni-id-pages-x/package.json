@@ -91,15 +91,24 @@
         },
         "uni-app-x": {
           "web": {
-            "safari": "√",
-            "chrome": "√"
+            "safari": {
+                "extVersion": "1.0.7",
+                "minVersion": ""
+            },
+            "chrome": {
+                "extVersion": "1.0.7",
+                "minVersion": ""
+            }
           },
           "app": {
             "android": {
                 "extVersion": "",
                 "minVersion": "21"
             },
-            "ios": "√",
+            "ios": {
+                "extVersion": "1.1.0",
+                "minVersion": ""
+            },
             "harmony": {
                 "extVersion": "1.1.6",
                 "minVersion": ""
