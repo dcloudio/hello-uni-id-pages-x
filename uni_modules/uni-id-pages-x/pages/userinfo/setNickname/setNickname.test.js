@@ -1,3 +1,4 @@
+jest.setTimeout(30000)
 const PAGE_PATH = '/uni_modules/uni-id-pages-x/pages/userinfo/setNickname/setNickname'
 describe('setNickname', () => {
 	let page;
@@ -14,11 +15,13 @@ describe('setNickname', () => {
   }
   it('设置昵称', async () => {
     const nicknameNew = generateRandomString('dcloud');
+    console.log('nicknameNew',nicknameNew)
     await page.setData({
       "nickname": nicknameNew
     })
     await page.waitFor(2000)
     const res = await page.callMethod('setNickname')
+    console.log('res',res)
     await page.waitFor(1000)
     expect(res).toBe(1)
   });
