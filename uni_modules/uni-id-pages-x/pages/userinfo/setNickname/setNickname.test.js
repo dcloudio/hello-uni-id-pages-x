@@ -20,6 +20,7 @@ describe('setNickname', () => {
       "nickname": nicknameNew
     })
     await page.waitFor(2000)
+    console.log('data',await page.data())
     const res = await page.callMethod('setNickname')
     console.log('res',res)
     await page.waitFor(1000)
