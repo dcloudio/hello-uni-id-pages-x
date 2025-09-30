@@ -26,10 +26,11 @@ module.exports = {
     	let option = {
 			text:"1234",//测试
 			scene, //来源客户端传递，表示：使用场景值，用于防止不同功能的验证码混用
-			uniPlatform: platform
+			uniPlatform: platform,
+			isUniAppX
 		}
     if(isUniAppX){
-      option.mode = "bmp"
+      option.mode = "svg"
     }
 		return await uniCaptcha[action](option)
 	}
