@@ -1,7 +1,7 @@
 {
   "id": "uni-id-pages-x",
   "displayName": "uni-id-pages-x",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "适用于 uni-app-x 的云端一体简单、统一、可扩展的用户中心页面模版",
   "keywords": [
     "用户中心",
@@ -110,8 +110,6 @@
                 "minVersion": ""
             },
             "harmony": {
-                "extVersion": "1.1.6",
-                "minVersion": ""
             }
           },
           "mp": {
