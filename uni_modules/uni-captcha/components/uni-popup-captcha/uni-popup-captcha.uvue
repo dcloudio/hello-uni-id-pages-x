@@ -16,7 +16,7 @@
 <script>
   let confirmCallBack = ():void=>console.log('未传入回调函数')
   export default {
-    emits:["confirm","cancel","update:modelValue"],
+    emits:["modelValue","confirm","cancel","update:modelValue"],
     data() {
       return {
         focus: false,
@@ -48,12 +48,12 @@
         // #ifdef VUE2
         this.$emit('input', val);
         // #endif
-
+        
         // TODO　兼容　vue3
         // #ifdef VUE3
         this.$emit('update:modelValue', val)
         // #endif
-
+        
         if(val.length == 4){
           this.confirm()
         }
