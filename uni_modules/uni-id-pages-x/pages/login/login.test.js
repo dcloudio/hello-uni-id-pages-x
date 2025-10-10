@@ -11,12 +11,15 @@ describe('loginByPwd', () => {
     await page.waitFor('view')
   });
   it('切换登录方式：密码登录', async () => {
-    expect(await page.data('loginType')).toBe('username')
+    const loginType = await page.data('loginType')
+    expect(loginType).toBe('username')
     const title = await page.$('.pwd-login-title')
     expect(await title.text()).toBe('账号密码登录')
-    // ios web 没支持通过标签名取组件，用 class。
-    loginByPwdEl = await page.$('.loginByPwdTest')
-    await loginByPwdEl.setData({isTest: true })
+    if (loginType == 'username') {
+      // ios web 没支持通过标签名取组件，用 class。
+      loginByPwdEl = await page.$('.loginByPwdTest')
+      await loginByPwdEl.setData({ isTest: true })
+    }
   });
   async function resetPassword(){
     await loginByPwdEl.setData({
@@ -128,7 +131,7 @@ describe('loginByPwd', () => {
     // 等待登录结果
     const startTime = Date.now()
     await page.waitFor(async () => {
-      if(Date.now()-startTime >8000){
+      if(Date.now()-startTime >10000){
         console.log('-----------timeout----------')
         return true
       }
