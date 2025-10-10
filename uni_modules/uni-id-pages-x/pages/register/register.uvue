@@ -74,7 +74,7 @@
 							icon: "none",
 							duration: 3000
 						});
-						throw Error(errMsg)
+						throw new Error(errMsg)
 					}
 				});
 
@@ -95,9 +95,9 @@
 				// 校验昵称规则
 				if (this.nickname.length > 0) {
 					const nicknameRegExp = new RegExp("^[\u4e00-\u9fa5a-z0-9]{3,20}$");
-					if (!nicknameRegExp.test(this.username)) {
+					if (!nicknameRegExp.test(this.nickname)) {
 						// 给出错的项聚焦
-						(this.$refs['username'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
+						(this.$refs['nickname'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 						uni.showModal({
 							content: "昵称由小写字母、数字、中文组成的3-20位字符串",
 							showCancel: false,
