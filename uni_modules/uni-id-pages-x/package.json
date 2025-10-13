@@ -45,6 +45,7 @@
       "uni-cloud-s2s",
       "uni-config-center",
       "uni-id-common",
+      "uni-open-bridge-common",
       "uni-popup",
       "uni-scss",
       "uni-transition"
