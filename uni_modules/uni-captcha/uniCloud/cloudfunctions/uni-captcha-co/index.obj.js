@@ -7,12 +7,16 @@ const db = uniCloud.database();
 const verifyCodes = db.collection('opendb-verify-codes')
 module.exports = {
 	async getImageCaptcha({
-		scene,isUniAppX
+		scene,
+		isUniAppX
 	}) {
 		//获取设备id
 		let {
 			deviceId,
-			platform
+			platform,
+			osName,
+			osVersion,
+			uniCompilerVersionCode
 		} = this.getClientInfo();
 		//根据：设备id、场景值、状态，查找记录是否存在
 		let res = await verifyCodes.where({
@@ -29,9 +33,12 @@ module.exports = {
 			uniPlatform: platform,
 			isUniAppX
 		}
-    if(isUniAppX){
-      option.mode = "svg"
-    }
+		if (isUniAppX) {
+			// HBuilderX4.81+版本起支持svg验证码，注意iOS13以下仍不支持svg
+			const supportsSvg = uniCompilerVersionCode >= 4.81;
+			const isLegacyIos = osName === 'ios' && parseFloat(osVersion) < 13;
+			option.mode = supportsSvg && !isLegacyIos ? 'svg' : 'bmp';
+		}
 		return await uniCaptcha[action](option)
 	}
 }
