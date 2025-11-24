@@ -36,8 +36,10 @@ module.exports = {
 		if (isUniAppX) {
 			// HBuilderX4.81+版本起支持svg验证码，注意iOS13以下仍不支持svg
 			const supportsSvg = uniCompilerVersionCode >= 4.81;
-			const isLegacyIos = osName === 'ios' && parseFloat(osVersion) < 13;
+			const isLegacyIos = (osName === 'ios' && parseFloat(osVersion) < 13) || osName === 'harmonyos';
 			option.mode = supportsSvg && !isLegacyIos ? 'svg' : 'bmp';
+		}else{
+			option.mode = 'svg';
 		}
 		return await uniCaptcha[action](option)
 	}
