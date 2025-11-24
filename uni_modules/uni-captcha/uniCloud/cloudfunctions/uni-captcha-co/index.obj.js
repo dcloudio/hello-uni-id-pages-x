@@ -38,8 +38,6 @@ module.exports = {
 			const supportsSvg = uniCompilerVersionCode >= 4.81;
 			const isLegacyIos = (osName === 'ios' && parseFloat(osVersion) < 13) || osName === 'harmonyos';
 			option.mode = supportsSvg && !isLegacyIos ? 'svg' : 'bmp';
-		}else{
-			option.mode = 'svg';
 		}
 		return await uniCaptcha[action](option)
 	}
