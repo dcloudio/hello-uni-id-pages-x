@@ -92,7 +92,7 @@ export default async function () {
       }
     });
 
-
+    let lastLoginType: string = ''
     const handleInterceptor = (geturl:string)=>{
       if (geturl.indexOf("/uni_modules/uni-id-pages-x/pages/login/login") == 0) {
         let url = decodeURIComponent(geturl)
@@ -111,25 +111,35 @@ export default async function () {
             type = param["type"] as string
           }
         }
+        lastLoginType = type
         if(type == ''){
           type = loginTypes[0];
         }
-        if(type == "univerify"){
-          myUniverify.verify(true)
-          console.log('第一优先级是一键登录（且可用），就直接调用一键登录，不打开登录页面');
-          // throw new Error('第一优先级是一键登录（且可用），就直接调用一键登录，不打开登录页面')
-        }
+      }
+    }
+
+    const openMyUniverify = ()=>{
+      if(lastLoginType == "univerify"){
+        myUniverify.verify(true)
+        console.log('第一优先级是一键登录（且可用），就直接调用一键登录，不打开登录页面');
       }
     }
 
     uni.addInterceptor('navigateTo',{
       invoke:(e:NavigateToOptions)=>{
         handleInterceptor(e.url)
+      },
+      success() {
+        openMyUniverify()
       }
     })
+
     uni.addInterceptor('redirectTo',{
       invoke:(e:RedirectToOptions)=>{
         handleInterceptor(e.url)
+      },
+      success() {
+        openMyUniverify()
       }
     })
   }
