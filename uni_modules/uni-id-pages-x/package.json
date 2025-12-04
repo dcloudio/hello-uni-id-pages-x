@@ -10,7 +10,7 @@
     "登录",
     "uni-id"
 ],
-  "repository": "https://gitcode.com/dcloud/hello_uni-id-pages-x",
+  "repository": "https://gitcode.net/dcloud/hello_uni-id-pages-x",
   "engines": {
     "HBuilderX": "^3.99",
     "uni-app": "",
@@ -92,22 +92,26 @@
         "uni-app-x": {
           "web": {
             "safari": {
-                "extVersion": "1.0.7",
-                "minVersion": ""
+              "extVersion": "1.1.2",
+              "minVersion": ""
             },
             "chrome": {
-                "extVersion": "1.0.7",
-                "minVersion": ""
+              "extVersion": "1.1.2",
+              "minVersion": ""
             }
           },
           "app": {
             "android": {
-                "extVersion": "",
+                "extVersion": "1.1.2",
                 "minVersion": "21"
             },
             "ios": {
+              "extVersion": "1.2.1",
+              "minVersion": "12"
             },
             "harmony": {
+              "extVersion": "1.1.6",
+              "minVersion": ""
             }
           },
           "mp": {
