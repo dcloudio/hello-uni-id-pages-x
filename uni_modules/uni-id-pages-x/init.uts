@@ -129,8 +129,11 @@ export default async function () {
       invoke:(e:NavigateToOptions)=>{
         handleInterceptor(e.url)
       },
-      success() {
+      success: (_ : NavigateToSuccess)=> {
         openMyUniverify()
+      },
+      fail: (err : NavigateToFail)=> {
+        console.log('拦截 navigateTo 接口 fail 返回参数为：', err)
       }
     })
 
@@ -138,8 +141,11 @@ export default async function () {
       invoke:(e:RedirectToOptions)=>{
         handleInterceptor(e.url)
       },
-      success() {
+      success: (_ : RedirectToSuccess)=> {
         openMyUniverify()
+      },
+      fail: (err : RedirectToFail)=> {
+        console.log('拦截 redirectTo 接口 fail 返回参数为：', err)
       }
     })
   }
