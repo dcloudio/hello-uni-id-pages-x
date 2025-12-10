@@ -104,8 +104,7 @@ describe('loginByPwd', () => {
     console.log('smsCodeEl',smsCodeEl)
     console.log('page',page)
 
-    smsCodeElTT = await loginBySmsCodeEl.$('.smsCodeSmsTest')
-    console.log('smsCodeElTT',smsCodeElTT)
+    console.log('smsCodeEl----data',await smsCodeEl.data())
 
     // smsCodeEl = await loginBySmsCodeEl.$('.smsCodeTest')
     await smsCodeEl.setData({
