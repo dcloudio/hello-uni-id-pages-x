@@ -12,6 +12,7 @@ describe('loginByPwd', () => {
   });
   it('切换登录方式：密码登录', async () => {
     const loginType = await page.data('loginType')
+    console.log('loginType',loginType)
     expect(loginType).toBe('username')
     const title = await page.$('.pwd-login-title')
     expect(await title.text()).toBe('账号密码登录')
@@ -98,7 +99,14 @@ describe('loginByPwd', () => {
     }
 
     loginBySmsCodeEl = await page.$('.loginBySmsCodeTest')
+    console.log('loginBySmsCodeEl',loginBySmsCodeEl)
     smsCodeEl = await page.$('.smsCodeSmsTest')
+    console.log('smsCodeEl',smsCodeEl)
+    console.log('page',page)
+
+    smsCodeElTT = await loginBySmsCodeEl.$('.smsCodeSmsTest')
+    console.log('smsCodeElTT',smsCodeElTT)
+
     // smsCodeEl = await loginBySmsCodeEl.$('.smsCodeTest')
     await smsCodeEl.setData({
       mobile: "17755555555",
