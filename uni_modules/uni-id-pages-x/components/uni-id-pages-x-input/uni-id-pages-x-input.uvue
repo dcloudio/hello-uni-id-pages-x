@@ -112,7 +112,7 @@
 				// this.$emit('update:focus', true);
 			},
 			setFocus(state : boolean) {
-        // console.error('setFocus',state)
+        // console.log('setFocus',state)
 				this.focusInput = state
 			},
 			confirm(event : InputConfirmEvent) {
@@ -123,7 +123,7 @@
         if(eventName == "click" && this.visiblePwdOption == 'click'){
           this.visiblePwd = !this.visiblePwd
         }else if(eventName.includes("touch") && this.visiblePwdOption == 'touch'){
-          console.error('eventName',eventName)
+          // console.log('eventName',eventName)
           switch (eventName){
             case "touchstart":
               this.visiblePwd = true
