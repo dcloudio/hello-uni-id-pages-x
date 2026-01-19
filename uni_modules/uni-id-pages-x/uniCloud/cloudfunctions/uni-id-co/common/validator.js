@@ -80,6 +80,16 @@ baseValidator.nickname = function (nickname) {
       errCode
     }
   };
+
+  // 校验是否包含零宽字符
+  // 零宽字符常见的unicode包含：\u200B-\u200D, \uFEFF, \u2060 等
+  if (/[\u200B-\u200D\uFEFF\u2060]/.test(nickname)) {
+    // 昵称不允许包含零宽字符
+    return {
+      errCode
+    }
+  }
+
   if (/^\d+$/.test(nickname)) {
     // 昵称不能为纯数字
     return {

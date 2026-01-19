@@ -3,7 +3,7 @@
 		<view class="form">
 			<view class="item">
 				<text class="required">*</text>
-				<uni-id-pages-x-input class="my-input" title="用户名" placeholder="请输入用户名（数字+字母的3~20位字符）" v-model="username"
+				<uni-id-pages-x-input class="my-input" title="用户名" placeholder="请输入用户名（不能是纯数字）" v-model="username"
 					ref="username"></uni-id-pages-x-input>
 			</view>
 			<view class="item">
@@ -78,21 +78,42 @@
 					}
 				});
 
-
-				// 校验用户名规则
-				const usernameRegExp = new RegExp("^(?=.*[a-z])(?=.*\\d)[a-z\\d]{3,20}$");
-				if (!usernameRegExp.test(this.username)) {
+				const digitRegExp = new RegExp("^\\d+$");
+				if (digitRegExp.test(this.username)) {
 					// 给出错的项聚焦
 					(this.$refs['username'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
 					uni.showModal({
-						content: "用户名由数字和小写字母的3-20个字符组成",
+						content: "用户名不能为纯数字",
 						showCancel: false,
 						confirmText: "知道了"
 					});
-          return
+				  return
 				}
 
+        const usernameRegExp2 = new RegExp("^[a-zA-Z0-9_-]+$");
+        if (!usernameRegExp2.test(this.username)) {
+        	// 给出错的项聚焦
+        	(this.$refs['username'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
+        	uni.showModal({
+        		content: "用户名仅能使用数字、字母、“_”及“-”",
+        		showCancel: false,
+        		confirmText: "知道了"
+        	});
+          return
+        }
+
 				// 校验昵称规则
+        if (digitRegExp.test(this.nickname)) {
+        	// 给出错的项聚焦
+        	(this.$refs['nickname'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
+        	uni.showModal({
+        		content: "昵称不能为纯数字",
+        		showCancel: false,
+        		confirmText: "知道了"
+        	});
+          return
+        }
+
 				if (this.nickname.length > 0) {
 					const nicknameRegExp = new RegExp("^[\u4e00-\u9fa5a-z0-9]{3,20}$");
 					if (!nicknameRegExp.test(this.nickname)) {
