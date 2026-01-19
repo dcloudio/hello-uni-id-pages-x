@@ -7,7 +7,7 @@
 					ref="username"></uni-id-pages-x-input>
 			</view>
 			<view class="item">
-				<uni-id-pages-x-input class="my-input" title="昵称" placeholder="请输入用户名（限中文、数字、字母组成的3~20位字符）"
+				<uni-id-pages-x-input class="my-input" title="昵称" placeholder="请输入昵称（字母、数字、中文组成3-20位字符串）"
 					v-model="nickname" ref="nickname"></uni-id-pages-x-input>
 			</view>
 			<view class="item">
