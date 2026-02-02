@@ -92,11 +92,9 @@ describe('loginByPwd', () => {
     expect(await page.data('loginType')).toBe('smsCode')
 
     // 截图，检验验证码是否正常显示
-    if(!isHarmony){
-      const image = await program.screenshot({deviceShot: true});
-      expect(image).toSaveImageSnapshot();
-      await page.waitFor(500);
-    }
+    const image = await program.screenshot({deviceShot: true});
+    expect(image).toSaveImageSnapshot();
+    await page.waitFor(500);
 
     // uni-id-pages-x-loginBySmsCode 手机号验证码登录组件
     loginBySmsCodeEl = await page.$('.loginBySmsCodeTest')
@@ -143,7 +141,7 @@ describe('loginByPwd', () => {
     // 等待登录结果
     const startTime = Date.now()
     await page.waitFor(async () => {
-      if(Date.now()-startTime >20000){
+      if(Date.now()-startTime >10000){
         console.log('-----------timeout----------')
         return true
       }
