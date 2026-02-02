@@ -98,47 +98,52 @@ describe('loginByPwd', () => {
       await page.waitFor(500);
     }
 
+    // uni-id-pages-x-loginBySmsCode 手机号验证码登录组件
     loginBySmsCodeEl = await page.$('.loginBySmsCodeTest')
     console.log('loginBySmsCodeEl',loginBySmsCodeEl)
-    smsCodeEl = await page.$('.smsCodeSmsTest')
-    console.log('smsCodeEl',smsCodeEl)
-    console.log('page',page)
 
-    console.log('smsCodeEl----data',await smsCodeEl.data())
-
-    // smsCodeEl = await loginBySmsCodeEl.$('.smsCodeTest')
-    await smsCodeEl.setData({
-      mobile: "17755555555",
-      sendSmsCaptcha: "1234",
-    })
-  });
-
-  it('smsCode-agree', async () => {
-    // 兼容微信小程序
+    // 同意隐私政策协议 uni-id-pages-x-agreements组件
     if(process.env.UNI_PLATFORM == 'mp-weixin'){
       agreeEl = await loginBySmsCodeEl.$('#agreementsSmsTest')
     }else{
       agreeEl = await page.$('#agreementsSmsTest')
     }
+    // console.log('agreeEl',agreeEl)
     expect(await agreeEl.data('needAgreements')).toBe(true)
+    // 设置同意隐私政策协议
     await agreeEl.callMethod('confirm')
     await page.waitFor(100)
-  });
 
-  it('smsCode-callMethod', async () => {
-    await smsCodeEl.callMethod('sendSmsCode', true)
-    await page.waitFor(500)
+
+    // 获取验证码组件 uni-id-pages-x-smsCode
+    smsCodeEl = await page.$('.smsCodeSmsTest')
+    // console.log('smsCodeEl',smsCodeEl)
+    // console.log('page',page)
+
+    // smsCodeEl = await loginBySmsCodeEl.$('.smsCodeTest')
+    // 设置手机号和图形验证码，输入后，自动发送获取短信验证码
     await smsCodeEl.setData({
-      smsCode: "123456"
+      mobile: "17755555555",
+      sendSmsCaptcha: "1234",//获取发送短信的验证码的图形验证码
     })
+
+    // 出现悬浮弹框，输入短信验证码，输入后，自动登录
+    await smsCodeEl.setData({
+      smsCode: "123456" //悬浮的短信验证码
+    })
+    console.log('smsCodeEl----data',await smsCodeEl.data())
+    await page.waitFor(5000)
+
   });
 
   it('手机验证码', async () => {
+
+    // console.log('smsCodeEl----data--2',await smsCodeEl.data())
     // expect.assertions(1);
     // 等待登录结果
     const startTime = Date.now()
     await page.waitFor(async () => {
-      if(Date.now()-startTime >10000){
+      if(Date.now()-startTime >20000){
         console.log('-----------timeout----------')
         return true
       }
