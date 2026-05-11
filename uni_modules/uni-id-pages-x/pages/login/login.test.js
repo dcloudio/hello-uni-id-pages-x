@@ -166,7 +166,7 @@ describe('loginByPwd', () => {
 
     loginSuccess = await loginBySmsCodeEl.data('testSuccess')
     console.log('手机验证码登录结果： ', loginSuccess);
-    if (typeof loginSuccess == 'string') {
+    if (typeof loginSuccess == 'string' && loginSuccess.length > 0) {
       expect(loginSuccess).toHaveLength(24)
     } else {
       loginErr = await loginBySmsCodeEl.data('testErr')
