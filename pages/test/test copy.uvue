@@ -2,7 +2,7 @@
 	<view>
 		<view v-if="inputIsShow">
 			<template v-for="i in 2" :key="i">
-				<input type="number" ref="input" class="input" placeholder="input" />
+				<input type="number" ref="inputRef" class="input" placeholder="input" />
 			</template>
 			<button type="primary" @click="doFocus">doFocus</button>
 		</view>
@@ -10,19 +10,16 @@
 	</view>
 </template>
 
-<script>
-	export default {
-		data() {
-			return {
-				inputIsShow: true
-			}
-		},
-		methods: {
-			doFocus() {
-				console.log('doFocus');
-				(this.$refs["input"] as Element[])[0].focus();
-			}
+<script setup lang="uts">
+	const inputIsShow = ref(true)
+	const inputRef = ref<Element[] | null>(null)
+
+	function doFocus() {
+		console.log('doFocus')
+		if (inputRef.value == null || inputRef.value.length == 0) {
+			return
 		}
+		inputRef.value[0].focus()
 	}
 </script>
 

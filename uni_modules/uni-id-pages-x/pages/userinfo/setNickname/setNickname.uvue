@@ -2,7 +2,9 @@
 	<view class="page">
 		<uni-navbar-lite title="设置昵称" class="uni-navbar-lite">
 			<template v-slot:right>
-				<text class="submit" :class="{disabled:!hasChange || nickname == ''}" @click="setNickname">完成</text>
+				<view class="navbar-right-content">
+					<text class="submit" :class="{ 'submit-disabled': !hasChange || nickname == '' }" @click="setNickname">完成</text>
+				</view>
 			</template>
 		</uni-navbar-lite>
 
@@ -11,91 +13,88 @@
 	</view>
 </template>
 
-<script>
+<script setup lang="uts">
 	type TypeTestErr = {
 		errCode : string,
 		errMsg : string
 	}
-	import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
-	export default {
-		data() {
-			return {
-				nickname: "",
-				testErr: {
-					errCode: '',
-					errMsg: ''
-				} as TypeTestErr,
-				testState: false,
-				testSuccess:100
-			};
-		},
-		computed: {
-			hasChange() : boolean {
-				return this.currentNickname != this.nickname
-			},
-			currentNickname() : string {
-				let currentNickname = state.userInfo.get("nickname");
-				if(currentNickname == null){
-					currentNickname = ""
-				}
-				return currentNickname as string
-			}
-		},
-		onLoad() {
-			this.nickname = this.currentNickname
-		},
-		methods: {
-			async setNickname():Promise<any> {
-				if (this.nickname.length == 0) {
-					uni.showToast({
-						title: '昵称不能为空',
-						icon: 'none'
-					});
-					this.nickname = this.currentNickname
-					return false
-				}
-				if (!this.hasChange) {
-					// console.log('没有变化');
-					return false
-				}
 
-				uni.showLoading({
-					title: '加载中',
-					mask: false
-				});
-				const db = uniCloud.databaseForJQL()
-				const uid = uniCloud.getCurrentUserInfo().uid
-				
-				if (uid != null) {
-					let testRes = await new Promise((resolve)=>{
-						db.collection('uni-id-users')
-							.doc(uid)
-							.update({
-								"nickname": this.nickname
-							})
-							.then<void>((e) => {
-								console.log('e: ',e);
-								mutations.updateUserInfo({ "nickname": this.nickname } as UTSJSONObject)
-								// uni.navigateBack()
-								resolve(e['updated'])
-							})
-							.catch<void>((err : any | null) => {
-								const error = err as UniCloudError
-								console.log('error', error);
-								resolve({errCode:error.errCode,errMsg:error.errMsg})
-							})
-							.finally(() => {
-								uni.hideLoading()
-							})
-					})
-					console.log('testRes: ',testRes);
-					return testRes
-				}else{
-					return false
-				}
-			}
+	import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
+
+	const nickname = ref("")
+	const testErr = ref({
+		errCode: '',
+		errMsg: ''
+	} as TypeTestErr)
+	const testState = ref(false)
+	const testSuccess = ref(100)
+
+	const currentNickname = computed(() : string => {
+		let currentNickname = state.userInfo.get("nickname")
+		if (currentNickname == null) {
+			currentNickname = ""
 		}
+		return currentNickname as string
+	})
+
+	const hasChange = computed(() : boolean => {
+		return currentNickname.value != nickname.value
+	})
+
+	async function setNickname() : Promise<any> {
+		if (nickname.value.length == 0) {
+			uni.showToast({
+				title: '昵称不能为空',
+				icon: 'none'
+			})
+			nickname.value = currentNickname.value
+			return false
+		}
+		if (!hasChange.value) {
+			return false
+		}
+
+		uni.showLoading({
+			title: '加载中',
+			mask: false
+		})
+		const db = uniCloud.databaseForJQL()
+		const uid = uniCloud.getCurrentUserInfo().uid
+
+		if (uid != null) {
+			const testRes = await new Promise((resolve) => {
+				db.collection('uni-id-users')
+					.doc(uid)
+					.update({
+						"nickname": nickname.value
+					})
+					.then<void>((e) => {
+						console.log('e: ', e)
+						mutations.updateUserInfo({ "nickname": nickname.value } as UTSJSONObject)
+						resolve(e['updated'])
+					})
+					.catch<void>((err : any | null) => {
+						const error = err as UniCloudError
+						console.log('error', error)
+						testErr.value.errCode = error.errCode as string
+						testErr.value.errMsg = error.errMsg as string
+						resolve({ errCode: error.errCode, errMsg: error.errMsg })
+					})
+					.finally(() => {
+						uni.hideLoading()
+					})
+			})
+			testState.value = true
+			console.log('testRes: ', testRes)
+			return testRes
+		}
+
+		return false
 	}
+
+	onLoad(() => {
+		nickname.value = currentNickname.value
+	})
 </script>
 
 <style lang="scss">
@@ -109,12 +108,11 @@
 		background-color: #FFF;
 	}
 
-	.uni-navbar-lite .right-content {
+	.navbar-right-content {
 		width: 65px;
 	}
 
 	.submit {
-		// height: 28px;
 		line-height: 28px;
 		width: 50px;
 		text-align: center;
@@ -125,7 +123,7 @@
 		color: #FFF;
 	}
 
-	.submit.disabled {
+	.submit-disabled {
 		background-color: #EFEFEF;
 		color: #AAA;
 	}

@@ -17,7 +17,6 @@ export default {
   ],
   "loginTypes":[
     "username",
-    "smsCode",
     // 以下登录方式 uni-app x 暂不支持
     // "qq",
     // "xiaomi",

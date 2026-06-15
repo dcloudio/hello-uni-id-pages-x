@@ -4,194 +4,194 @@
 			<view class="item">
 				<text class="required">*</text>
 				<uni-id-pages-x-input class="my-input" title="用户名" placeholder="请输入用户名（数字+字母的3~20位字符）" v-model="username"
-					ref="username"></uni-id-pages-x-input>
+					ref="usernameRef"></uni-id-pages-x-input>
 			</view>
 			<view class="item">
 				<uni-id-pages-x-input class="my-input" title="昵称" placeholder="请输入用户名（限中文、数字、字母组成的3~20位字符）"
-					v-model="nickname" ref="nickname"></uni-id-pages-x-input>
+					v-model="nickname" ref="nicknameRef"></uni-id-pages-x-input>
 			</view>
 			<view class="item">
 				<text class="required">*</text>
 				<uni-id-pages-x-input class="my-input" title="设置密码" placeholder="请输入6位数密码" v-model="password"
-					:password="true" ref="password"></uni-id-pages-x-input>
+					:password="true" ref="passwordRef"></uni-id-pages-x-input>
 			</view>
 			<view class="item">
 				<text class="required">*</text>
 				<uni-id-pages-x-input class="my-input" title="重复密码" placeholder="请重新输入密码" v-model="password2" :password="true"
-					ref="password2"></uni-id-pages-x-input>
+					ref="password2Ref"></uni-id-pages-x-input>
 			</view>
 			<view class="item mt">
-				<uni-captcha ref="captcha" scene="register" v-model="captcha" />
+				<uni-captcha ref="captchaRef" scene="register" v-model="captcha" />
 			</view>
-			<!-- 隐私政策协议授权申请框 -->
 
-			<uni-id-pages-x-agreements class="agreements-box" ref="agreements" />
+			<uni-id-pages-x-agreements class="agreements-box" ref="agreementsRef" />
 
 			<button @click="registerBefore" type="primary">注册并登录</button>
 		</view>
 	</view>
 </template>
 
-<script>
+<script setup lang="uts">
 	import { loginSuccess, checkPassword } from '@/uni_modules/uni-id-pages-x/common/common.uts';
 	import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
-	export default {
-		data() {
-			return {
-				username: "",
-				nickname: "",
-				password: "",
-				password2: "",
-				captcha: ""
-			}
-		},
-		methods: {
-			showPopupCaptcha(callback : () => void) {
-				(this.$refs["agreements"] as UniIdPagesXAgreementsComponentPublicInstance).showPopupAgreements(callback)
-			},
-			registerBefore() {
-				// TODO 为了自动化测试构建一个对象
-				let myForm : UTSJSONObject = {
-					username: this.username,
-					password: this.password,
-					password2: this.password2,
-					captcha: this.captcha
-				};
 
-				// 校验是否为空，并聚焦 (注意：这里使用数组格式，以确保校验按顺序执行)
-				[
-					["username", "用户名",],
-					["password", "密码",],
-					["captcha", "验证码"]
-				].forEach((item) => {
-					let key = item[0];
-					let errMsg = item[1] + "不能为空";
-					if (myForm.get(key) == "") {
-						// 给出错的项聚焦
-						(this.$refs[key] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
-						uni.showToast({
-							title: errMsg,
-							icon: "none",
-							duration: 3000
-						});
-						throw Error(errMsg)
-					}
-				});
+	const usernameRef = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
+	const nicknameRef = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
+	const passwordRef = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
+	const password2Ref = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
+	const captchaRef = ref<UniCaptchaComponentPublicInstance | null>(null)
+	const agreementsRef = ref<UniIdPagesXAgreementsComponentPublicInstance | null>(null)
+	const username = ref("")
+	const nickname = ref("")
+	const password = ref("")
+	const password2 = ref("")
+	const captcha = ref("")
 
+	function showPopupCaptcha(callback : () => void) {
+		agreementsRef.value!.showPopupAgreements(callback)
+	}
 
-				// 校验用户名规则
-				const usernameRegExp = new RegExp("^(?=.*[a-z])(?=.*\\d)[a-z\\d]{3,20}$");
-				if (!usernameRegExp.test(this.username)) {
-					// 给出错的项聚焦
-					(this.$refs['username'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
-					return uni.showModal({
-						content: "用户名由数字和小写字母的3-20个字符组成",
-						showCancel: false,
-						confirmText: "知道了"
-					});
-				}
+	function registerBefore() {
+		const myForm : UTSJSONObject = {
+			username: username.value,
+			password: password.value,
+			password2: password2.value,
+			captcha: captcha.value
+		}
+		const inputRefs : UTSJSONObject = {
+			username: usernameRef.value,
+			password: passwordRef.value,
+			password2: password2Ref.value,
+			nickname: nicknameRef.value
+		}
 
-				// 校验昵称规则
-				if (this.nickname.length > 0) {
-					const nicknameRegExp = new RegExp("^[\u4e00-\u9fa5a-z0-9]{3,20}$");
-					if (!nicknameRegExp.test(this.username)) {
-						// 给出错的项聚焦
-						(this.$refs['username'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
-						return uni.showModal({
-							content: "昵称由小写字母、数字、中文组成的3-20位字符串",
-							showCancel: false,
-							confirmText: "知道了"
-						});
-					}
-				}
-
-				let checkPasswordRes = checkPassword(this.password);
-				let isPass = checkPasswordRes.getBoolean("pass") as Boolean
-				if (!isPass) {
-					const errMsg = checkPasswordRes.getString("errMsg")
-					return uni.showModal({
-						content: errMsg,
-						showCancel: false,
-						confirmText: "知道了",
-						complete() {
-							(this.$refs['password'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
-						}
-					});
-				}
-
-				if (this.password != this.password2) {
-					return uni.showModal({
-						content: "两次输入的密码不一致",
-						showCancel: false,
-						confirmText: "知道了",
-						complete() {
-							(this.$refs["password2"] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
-						}
-					});
-				}
-
-				if (this.captcha.length != 4) {
-					return uni.showModal({
-						content: "请输入验证码",
-						showCancel: false,
-						confirmText: "知道了",
-						complete() {
-							(this.$refs["captcha"] as UniCaptchaComponentPublicInstance).setFocus(true);
-						}
-					});
-				}
-
-				if (state.pendingAgreements) {
-					this.showPopupCaptcha(() => {
-						// console.log('state.pendingAgreements', state.pendingAgreements);
-						if (!state.pendingAgreements) {
-							this.registerBefore()
-						}
-					})
-					return
-				}
-				this.register()
-			},
-			async register():Promise<any> {
-				const data : UTSJSONObject = {
-					"username": this.username,
-					"nickname": this.nickname,
-					"password": this.password,
-					"password2": this.password2,
-					"captcha": this.captcha
-				}
-				const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: true });
-				uni.showLoading({ "title": "请求中" })
-				
-				let testRes = await new Promise((resolve)=>{
-					uniIdCo.registerUser(data)
-						.finally(() => uni.hideLoading())
-						.then(e => {
-							console.log('e: ', e);
-							uni.showToast({
-								title: '注册成功',
-								icon: 'none'
-							});
-							loginSuccess(e)
-							resolve(e['uid'])
-						})
-						.catch<void>((err : any | null) : void => {
-							const error = err as UniCloudError
-							console.error(error)
-							if (error.code == 'uni-captcha-verify-fail') {
-								(this.$refs["captcha"] as UniCaptchaComponentPublicInstance).getImageCaptcha(true);
-							}
-							uni.showToast({
-								title: error.message,
-								icon: 'none'
-							});
-							resolve({errCode:error.errCode,errMsg:error.errMsg})
-						})
+		[
+			["username", "用户名"],
+			["password", "密码"],
+			["captcha", "验证码"]
+		].forEach((item) => {
+			const key = item[0] as string
+			const errMsg = (item[1] as string) + "不能为空"
+			if (myForm.get(key) == "") {
+				const inputRef = inputRefs.getAny(key) as UniIdPagesXInputComponentPublicInstance | null
+				inputRef!.setFocus(true)
+				uni.showToast({
+					title: errMsg,
+					icon: "none",
+					duration: 3000
 				})
-				console.log('testRes: ',testRes);
-				return testRes
+				throw Error(errMsg)
+			}
+		})
+
+		const usernameRegExp = new RegExp("^(?=.*[a-z])(?=.*\\d)[a-z\\d]{3,20}$")
+		if (!usernameRegExp.test(username.value)) {
+			usernameRef.value!.setFocus(true)
+			return uni.showModal({
+				content: "用户名由数字和小写字母的3-20个字符组成",
+				showCancel: false,
+				confirmText: "知道了"
+			})
+		}
+
+		if (nickname.value.length > 0) {
+			const nicknameRegExp = new RegExp("^[\u4e00-\u9fa5a-z0-9]{3,20}$")
+			if (!nicknameRegExp.test(username.value)) {
+				usernameRef.value!.setFocus(true)
+				return uni.showModal({
+					content: "昵称由小写字母、数字、中文组成的3-20位字符串",
+					showCancel: false,
+					confirmText: "知道了"
+				})
 			}
 		}
+
+		const checkPasswordRes = checkPassword(password.value)
+		const isPass = checkPasswordRes.getBoolean("pass") as Boolean
+		if (!isPass) {
+			const errMsg = checkPasswordRes.getString("errMsg")
+			return uni.showModal({
+				content: errMsg,
+				showCancel: false,
+				confirmText: "知道了",
+				complete() {
+					passwordRef.value!.setFocus(true)
+				}
+			})
+		}
+
+		if (password.value != password2.value) {
+			return uni.showModal({
+				content: "两次输入的密码不一致",
+				showCancel: false,
+				confirmText: "知道了",
+				complete() {
+					password2Ref.value!.setFocus(true)
+				}
+			})
+		}
+
+		if (captcha.value.length != 4) {
+			return uni.showModal({
+				content: "请输入验证码",
+				showCancel: false,
+				confirmText: "知道了",
+				complete() {
+					captchaRef.value!.setFocus(true)
+				}
+			})
+		}
+
+		if (state.pendingAgreements) {
+			showPopupCaptcha(() => {
+				if (!state.pendingAgreements) {
+					registerBefore()
+				}
+			})
+			return
+		}
+
+		register()
+	}
+
+	async function register() : Promise<any> {
+		const data : UTSJSONObject = {
+			"username": username.value,
+			"nickname": nickname.value,
+			"password": password.value,
+			"password2": password2.value,
+			"captcha": captcha.value
+		}
+		const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: true })
+		uni.showLoading({ "title": "请求中" })
+
+		const testRes = await new Promise((resolve) => {
+			uniIdCo.registerUser(data)
+				.finally(() => uni.hideLoading())
+				.then((e) => {
+					console.log('e: ', e)
+					uni.showToast({
+						title: '注册成功',
+						icon: 'none'
+					})
+					loginSuccess(e)
+					resolve(e['uid'])
+				})
+				.catch<void>((err : any | null) : void => {
+					const error = err as UniCloudError
+					console.error(error)
+					if (error.code == 'uni-captcha-verify-fail') {
+						captchaRef.value!.getImageCaptcha(true)
+					}
+					uni.showToast({
+						title: error.message,
+						icon: 'none'
+					})
+					resolve({ errCode: error.errCode, errMsg: error.errMsg })
+				})
+		})
+		console.log('testRes: ', testRes)
+		return testRes
 	}
 </script>
 
@@ -208,7 +208,8 @@
 		padding-left: 15px;
 		margin-left: -15px;
 	}
-	.mt{
+
+	.mt {
 		margin-top: 16px;
 	}
 

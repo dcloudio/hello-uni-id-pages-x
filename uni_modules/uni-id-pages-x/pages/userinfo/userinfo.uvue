@@ -2,36 +2,36 @@
 	<view class="uni-content">
 		<view class="list">
 			<view class="item">
-				<text class="title">头像</text>
+				<text class="item-title">头像</text>
 				<uni-id-pages-x-avatar ref="avatar" width="60px" height="60px" :border="false"></uni-id-pages-x-avatar>
 			</view>
 			<view class="item">
-				<text class="title">昵称</text>
-				<view @click="setNickname" class="content">
-					<text class="unset" v-if="!isLogin">未登录</text>
-					<text class="value"
+				<text class="item-title">昵称</text>
+				<view @click="setNickname" class="item-content">
+					<text class="item-unset" v-if="!isLogin">未登录</text>
+					<text class="item-value"
 						v-else-if="userInfo['nickname'] != null && userInfo['nickname'] != ''">{{userInfo['nickname']}}</text>
-					<text class="unset" v-else>未设置</text>
+					<text class="item-unset" v-else>未设置</text>
 					<uni-id-pages-x-icons v-if="isLogin" :size="16" type="right-arrow"
 						class="link-icon"></uni-id-pages-x-icons>
 				</view>
 			</view>
 			<view class="item">
-				<text class="title">手机号码</text>
-				<view @click="bindmobile" class="content">
-					<text class="value" v-if="userInfo['mobile'] != null">{{userInfo['mobile']}}</text>
-					<text class="unset" v-else>未绑定</text>
+				<text class="item-title">手机号码</text>
+				<view @click="bindmobile" class="item-content">
+					<text class="item-value" v-if="userInfo['mobile'] != null">{{userInfo['mobile']}}</text>
+					<text class="item-unset" v-else>未绑定</text>
 					<uni-id-pages-x-icons :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icons>
 				</view>
 			</view>
 		</view>
 		<view class="list">
-			<view @click="deactivate" class="item">
-				<text class="title">注销账号</text>
+			<view @click="deactivate" class="item deactivate-item">
+				<text class="item-title">注销账号</text>
 				<uni-id-pages-x-icons :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icons>
 			</view>
 			<view class="item"  v-if="isLogin && showLoginManage" @click="logout">
-				<text class="title">退出登录</text>
+				<text class="item-title">退出登录</text>
 				<uni-id-pages-x-icons :size="16" type="right-arrow" class="link-icon"></uni-id-pages-x-icons>
 			</view>
 			<view class="mask" v-if="!isLogin" @click="login"></view>
@@ -45,64 +45,60 @@
 	</view>
 </template>
 
-<script>
-	import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
-	import { logout } from '@/uni_modules/uni-id-pages-x/common/common.uts';
-	export default {
-		data() {
-			return {
+<script setup lang="uts">
+	import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
+	import { logout as doLogout } from '@/uni_modules/uni-id-pages-x/common/common.uts';
+
+	const showLoginManage = ref(true)
+
+	const userInfo = computed(() : UTSJSONObject => {
+		return state.userInfo
+	})
+
+	const isLogin = computed(() : boolean => {
+		return state.isLogin
+	})
+
+	onLoad((query : Map<string, string>) => {
+		const value = query.get("showLoginManage")
+		showLoginManage.value = value == null ? true : value == "true"
+	})
+
+	function setNickname() {
+		uni.navigateTo({
+			"url": "/uni_modules/uni-id-pages-x/pages/userinfo/setNickname/setNickname"
+		})
+	}
+
+	function bindmobile() {
+		uni.navigateTo({
+			url: "/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile",
+			complete(_) {
+				// console.log('e', e);
 			}
-		},
-		computed: {
-			userInfo() : UTSJSONObject {
-				return state.userInfo
-			},
-			isLogin() : boolean {
-				return state.isLogin
+		})
+	}
+
+	function deactivate() {
+		uni.navigateTo({
+			url: "/uni_modules/uni-id-pages-x/pages/userinfo/deactivate/deactivate",
+			complete(_) {
+				// console.log('e', e);
 			}
-		},
-		onShow() {
-		},
-		props: {
-			showLoginManage: {
-				type: Boolean,
-				default: true
-			}
-		},
-		methods: {
-			setNickname() {
-				uni.navigateTo({
-					"url": "/uni_modules/uni-id-pages-x/pages/userinfo/setNickname/setNickname"
-				})
-			},
-			bindmobile() {
-				uni.navigateTo({
-					url: "/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile",
-					complete(_) {
-						// console.log('e', e);
-					}
-				})
-			},
-			deactivate() {
-				uni.navigateTo({
-					url: "/uni_modules/uni-id-pages-x/pages/userinfo/deactivate/deactivate",
-					complete(_) {
-						// console.log('e', e);
-					}
-				})
-			},
-			logout() {
-				logout()
-			},
-			login() {
-				uni.navigateTo({
-					url: "/uni_modules/uni-id-pages-x/pages/login/login",
-					// complete(e){
-					//   console.log('e',e);
-					// }
-				})
-			}
-		}
+		})
+	}
+
+	function logout() {
+		doLogout()
+	}
+
+	function login() {
+		uni.navigateTo({
+			url: "/uni_modules/uni-id-pages-x/pages/login/login",
+			// complete(e){
+			//   console.log('e',e);
+			// }
+		})
 	}
 </script>
 
@@ -130,36 +126,38 @@
 		height: 100%;
 	}
 
-	.list .item {
-		border-bottom: 1px solid #f5f5f5;
+	.item {
+		display: flex;
 		flex-direction: row;
+		border-bottom: 1px solid #f5f5f5;
 		align-items: center;
 		padding: 15px 15px;
 	}
 
-	.list .item.deactivate {
+	.deactivate-item {
 		margin-top: 20px;
 		border-top: 0.1px solid #EEE;
 	}
 
-	.list .item .title {
+	.item-title {
 		font-size: 14px;
 		flex: 1;
 		color: #333;
 	}
 
-	.list .item .content {
+	.item-content {
+		display: flex;
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
 	}
 
-	.list .item .content .value {
+	.item-value {
 		color: #999;
 		font-size: 12px;
 	}
 
-	.list .item .content .unset {
+	.item-unset {
 		color: #aaa;
 		font-size: 12px;
 	}

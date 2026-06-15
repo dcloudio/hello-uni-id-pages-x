@@ -30,46 +30,41 @@
   </view>
 </template>
 
-<script>
+<script setup lang="uts">
   import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
   import config from '@/uni_modules/uni-id-pages-x/config.uts';
-  export default {
-    computed: {
-      //大快捷登录按钮图
-      imgSrc() : string {
-        return this.loginType == 'weixin' ? '/uni_modules/uni-id-pages-x/static/login/weixin.png' : '/uni_modules/uni-id-pages-x/static/app-plus/apple.png'
-      },
-      pendingAgreements() : boolean {
-        return state.pendingAgreements
-      }
-    },
-    data() {
-      return {
-        loginType: "username" as string,
-        logo: "/static/logo.png"
-      }
-    },
-    onLoad(param : Map<string, string>) {
-      const type = param.get("type")
-      // 如果传递了参数就按参数指定的登录方式，否则指定为 config 中配置的第一项
-      if (type != null) {
-        this.loginType = type
-      } else {
-        let loginTypes = config.getArray<string>("loginTypes");
-        this.loginType =  loginTypes![0];
-      }
-    },
-    methods: {
-      login() {
 
-      },
-      changeLoginType(type : string) {
-        // if (["weixin", "apple", "univerify"].includes(type)) {
-        // }
-        this.loginType = type
-      }
-    }
+  const loginType = ref("username")
+  const logo = "/static/logo.png"
+
+  const imgSrc = computed(() : string => {
+    return loginType.value == 'weixin' ? '/uni_modules/uni-id-pages-x/static/login/weixin.png' : '/uni_modules/uni-id-pages-x/static/app-plus/apple.png'
+  })
+
+  const pendingAgreements = computed(() : boolean => {
+    return state.pendingAgreements
+  })
+
+  function login() {
+
   }
+
+  function changeLoginType(type : string) {
+    // if (["weixin", "apple", "univerify"].includes(type)) {
+    // }
+    loginType.value = type
+  }
+
+  onLoad((query : UTSJSONObject | null) => {
+    const type = query?.getString("type")
+    // 如果传递了参数就按参数指定的登录方式，否则指定为 config 中配置的第一项
+    if (type != null) {
+      loginType.value = type
+    } else {
+      const loginTypes = config.getArray<string>("loginTypes")
+      loginType.value = loginTypes![0]
+    }
+  })
 </script>
 
 <style lang="scss" scoped>
@@ -81,7 +76,7 @@
   margin: 30px 300rpx;
 }
 
-.big-login-box .agreements-box {
+.agreements-box {
   justify-content: center;
 }
 

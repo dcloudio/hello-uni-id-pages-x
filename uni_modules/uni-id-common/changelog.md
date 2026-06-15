@@ -1,3 +1,13 @@
+## 1.0.19（2025-12-16）
+- 增加配置参数缺失时的错误提示，指明配置文件路径
+## 1.0.18（2024-07-08）
+- checkToken时如果传入的token为空则返回uni-id-check-token-failed错误码以便uniIdRouter能正常跳转
+## 1.0.17（2024-04-26）
+- 兼容uni-app-x对客户端uniPlatform的调整（uni-app-x内uniPlatform区分app-android、app-ios）
+## 1.0.16（2023-04-25）
+- 新增maxTokenLength配置，用于限制数据库用户记录token数组的最大长度
+## 1.0.15（2023-04-06）
+- 修复部分语言国际化出错的Bug
 ## 1.0.14（2023-03-07）
 - 修复 admin用户包含其他角色时未包含在token的Bug
 ## 1.0.13（2022-07-21）

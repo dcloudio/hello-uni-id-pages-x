@@ -5,13 +5,9 @@
 			<view class="nickname">
 				<text class="nickname-text">{{isLogin?userInfo['nickname']:'未登录'}}</text>
 			</view>
-			<view class="arrow"></view>
+			<view class="arrow userinfo-arrow"></view>
 		</view>
 		<view class="list">
-			<view class="list-item" hover-class="list-active" @click="toLogin('smsCode')">
-				<text class="list-item-text">手机验证码登录</text>
-				<view class="arrow"></view>
-			</view>
 			<view class="list-item" @click="toLogin('username')">
 				<text class="list-item-text">账号密码登录</text>
 				<view class="arrow"></view>
@@ -20,76 +16,68 @@
 	</view>
 </template>
 
-<script>
+<script setup lang="uts">
 	type ItemType = {
 		value : string
 		name : string
 	}
-	import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
-	export default {
-		computed: {
-			userInfo() : UTSJSONObject {
-				return state.userInfo
-			},
-      isLogin() : boolean {
-      	return state.isLogin
-      },
-			test() : number {
-				return state.test
-			}
-		},
-		data() {
-			return {
-				loginType: "nickname" as string,
-				loginTypeList: [{
-					"value": "smsCode",
-					"name": "手机验证码"
-				},
-				{
-					"value": "nickname",
-					"name": "账号密码"
-				},
-					// 以下登录方式 uni-app x 暂不支持
-					// {
-					//   "value": "univerify",
-					//   "name": "一键登录"
-					// }, {
-					//   "value": "weixin",
-					//   "name": "微信"
-					// }, {
-					//   "value": "apple",
-					//   "name": "苹果登录"
-					// }, {
-					//   "value": "weixinMobile",
-					//   "name": "微信手机号登录"
-					// }
-				] as ItemType[]
-			}
-		},
-		onLoad() {
-			// console.log('test-start');
-			// let testData = {"text":" 测试文本数据","obj":{"text":"测试对象数据"}} as  UTSJSONObject
-			// console.log('test-',testData['obj']);
-			// const value = "abcdefg";
-			// console.log( value.slice(-1)  );
 
+	import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
+
+	const userInfo = computed(() : UTSJSONObject => {
+		return state.userInfo
+	})
+
+	const isLogin = computed(() : boolean => {
+		return state.isLogin
+	})
+
+	const test = computed(() : number => {
+		return state.test
+	})
+
+	const loginTypeList = [
+		{
+			"value": "smsCode",
+			"name": "手机验证码"
 		},
-		methods: {
-			radioChange(e : RadioGroupChangeEvent) {
-				const selected = this.loginTypeList.find((item) : boolean => item.value == e.detail.value);
-				this.loginType = selected!.value
-			},
-			toLogin(loginType:string) {
-				uni.navigateTo({
-					url: "/uni_modules/uni-id-pages-x/pages/login/login?type=" + loginType
-				})
-			},
-			toUserInfoPage() {
-				uni.navigateTo({
-					url: "/uni_modules/uni-id-pages-x/pages/userinfo/userinfo?showLoginManage=true"
-				})
-			},
-		}
+		{
+			"value": "nickname",
+			"name": "账号密码"
+		},
+		// 以下登录方式 uni-app x 暂不支持
+		// {
+		//   "value": "univerify",
+		//   "name": "一键登录"
+		// }, {
+		//   "value": "weixin",
+		//   "name": "微信"
+		// }, {
+		//   "value": "apple",
+		//   "name": "苹果登录"
+		// }, {
+		//   "value": "weixinMobile",
+		//   "name": "微信手机号登录"
+		// }
+	] as ItemType[]
+
+	const loginType = ref("nickname")
+
+	function radioChange(e : RadioGroupChangeEvent) {
+		const selected = loginTypeList.find((item) : boolean => item.value == e.detail.value)
+		loginType.value = selected!.value
+	}
+
+	function toLogin(loginType : string) {
+		uni.navigateTo({
+			url: "/uni_modules/uni-id-pages-x/pages/login/login?type=" + loginType
+		})
+	}
+
+	function toUserInfoPage() {
+		uni.navigateTo({
+			url: "/uni_modules/uni-id-pages-x/pages/userinfo/userinfo?showLoginManage=true"
+		})
 	}
 </script>
 
@@ -107,39 +95,39 @@
 		padding: 15px;
 		// padding-bottom: 30px;
 		background-color: #fff;
+	}
 
-		.nickname {
-			flex: 1;
-			padding: 0 10px;
-			.nickname-text {
-				font-size: 14px;
-				color: #333;
-			}
-		}
-		
-		.arrow {
-			border-color: #fff;
-		}
+	.nickname {
+		flex: 1;
+		padding: 0 10px;
+	}
+
+	.nickname-text {
+		font-size: 14px;
+		color: #333;
+	}
+
+	.userinfo-arrow {
+		border-color: #fff;
 	}
 
 	.list {
 		background-color: #fff;
 		margin-top: 15px;
+	}
 
-		.list-item {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			justify-content: space-between;
-			padding: 0 15px;
-			height: 50px;
-			border-bottom: 1px #f5f5f5 solid;
+	.list-item {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 15px;
+		height: 50px;
+		border-bottom: 1px #f5f5f5 solid;
+	}
 
-			.list-item-text {
-				font-size: 14px;
-			}
-
-		}
+	.list-item-text {
+		font-size: 14px;
 	}
 
 	.arrow {

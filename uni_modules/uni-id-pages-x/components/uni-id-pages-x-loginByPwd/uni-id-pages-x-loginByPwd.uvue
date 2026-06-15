@@ -1,156 +1,154 @@
 <template>
-  <view class="form">
-    <text class="pwd-login-title">账号密码登录</text>
-    <uni-id-pages-x-input class="my-input" title="账号" placeholder="请输入手机号/用户名/邮箱" v-model="username" ref="username"></uni-id-pages-x-input>
-    <uni-id-pages-x-input class="my-input" title="密码" v-model="password" :password="true" ref="password"></uni-id-pages-x-input>
-    <!-- 同意隐私政策协议 -->
-    <uni-id-pages-x-agreements class="agreements-box" ref="agreements" scope="login"/>
-    <button class="uni-btn" :type="password.length > 0 && username.length >0 ? 'primary' : '' " @click="loginByPwd">登录</button>
-  </view>
-  
-  <view class="link-group">
-    <text class="link" @click="toRetrievePwd">忘记密码</text>
-    <text class="link" @click="toRegister">注册账号</text>
-  </view>
-  
-  <!-- 多次登录错误时，获取登录时专用的图形验证码 （悬浮） -->
-  <uni-popup-captcha ref="popup-captcha" scene="login-by-pwd" v-model="loginCaptcha" title="请输入验证码"></uni-popup-captcha>
+	<view class="form">
+		<text class="pwd-login-title">账号密码登录</text>
+		<uni-id-pages-x-input class="my-input" title="账号" placeholder="请输入手机号/用户名/邮箱" v-model="username" ref="usernameRef"></uni-id-pages-x-input>
+		<uni-id-pages-x-input class="my-input" title="密码" v-model="password" :password="true" ref="passwordRef"></uni-id-pages-x-input>
+		<uni-id-pages-x-agreements class="agreements-box" ref="agreementsRef" scope="login" />
+		<button class="uni-btn" :type="password.length > 0 && username.length > 0 ? 'primary' : ''" @click="loginByPwd">登录</button>
+	</view>
+
+	<view class="link-group">
+		<text class="link link-group-link" @click="toRetrievePwd">忘记密码</text>
+		<text class="link link-group-link" @click="toRegister">注册账号</text>
+	</view>
+
+	<uni-popup-captcha ref="popupCaptchaRef" scene="login-by-pwd" v-model="loginCaptcha" title="请输入验证码"></uni-popup-captcha>
 </template>
 
-<script>
-	const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: true })
+<script setup lang="uts">
 	import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
 	import { loginSuccess } from '@/uni_modules/uni-id-pages-x/common/common.uts';
-	export default {
-		name: "uni-id-pages-x-loginByPwd",
-		data() {
-			return {
-				username: "",
-				password: "",
-				needCaptcha: false,
-				loginCaptcha: "",
-			};
-		},
-		mounted() {
-			setTimeout(() => {
-				(this.$refs['username'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
-			}, 300)
-		},
-		methods: {
-			showPopupCaptcha(callback : () => void) {
-				(this.$refs["agreements"] as UniIdPagesXAgreementsComponentPublicInstance).showPopupAgreements(callback)
-			},
-			async loginByPwd():Promise<any> {
-				if (this.username.length == 0) {
-					(this.$refs['username'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
-					return uni.showToast({
-						title: '请输入手机号/用户名/邮箱',
-						icon: 'none',
-						duration: 3000
-					});
-				}
-				if (this.password.length == 0) {
-					(this.$refs['password'] as UniIdPagesXInputComponentPublicInstance).setFocus(true);
-					return uni.showToast({
-						title: '请输入密码',
-						icon: 'none',
-						duration: 3000
-					});
-				}
-				if (this.needCaptcha && this.loginCaptcha.length != 4) {
-					(this.$refs['popup-captcha'] as UniPopupCaptchaComponentPublicInstance).open(() => {
-						this.loginByPwd()
-					});
-					return uni.showToast({
-						title: '请输入验证码',
-						icon: 'none',
-						duration: 3000
-					});
-				}
 
-				const data : UTSJSONObject = {
-					"password": this.password,
-					"captcha": this.loginCaptcha
-				}
+	const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: true })
+	const usernameRef = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
+	const passwordRef = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
+	const agreementsRef = ref<UniIdPagesXAgreementsComponentPublicInstance | null>(null)
+	const popupCaptchaRef = ref<UniPopupCaptchaComponentPublicInstance | null>(null)
+	const username = ref("")
+	const password = ref("")
+	const needCaptcha = ref(false)
+	const loginCaptcha = ref("")
 
-				let keyName = 'username'
-				if (/^1\d{10}$/.test(this.username)) {
-					keyName = "mobile"
-				} else if (/@/.test(this.username)) {
-					keyName = "email"
-				}
-				data.set(keyName, this.username)
-
-				console.log('data',state.pendingAgreements);
-
-				if (state.pendingAgreements) {
-					this.showPopupCaptcha(() => {
-						// console.log('state.pendingAgreements', state.pendingAgreements);
-						if (!state.pendingAgreements) {
-							this.loginByPwd()
-						}
-					})
-					return false;
-				}
-
-				uni.showLoading({
-					title: '登录中',
-					mask: false
-				});
-				
-				let testRes = await new Promise((resolve)=>{
-					uniIdCo.login(data)
-						.finally(() : void => {
-							uni.hideLoading()
-							this.loginCaptcha = ""
-						})
-						.then(e => {
-							console.log('uniIdCo.login res',e);
-							loginSuccess(e)
-							resolve(e['uid'])
-						})
-						.catch<void>((err : any | null) : void => {
-							const error = err as UniCloudError
-							console.error(error)
-							console.error(error.code)
-							if (error.code == 'uni-id-captcha-required') {
-								this.needCaptcha = true;
-								//登录失败，自动重新获取验证码
-								(this.$refs['popup-captcha'] as UniPopupCaptchaComponentPublicInstance).open(() => {
-									this.loginByPwd()
-								});
-							} else {
-								uni.showToast({
-									title: error.message,
-									icon: 'none',
-									duration: 3000
-								});
-							}
-							resolve({errCode:error.errCode,errMsg:error.errMsg})
-						})
-				})
-				console.log('testRes: ',testRes);
-				return testRes
-			},
-			toRegister() {
-				uni.navigateTo({
-					url: "/uni_modules/uni-id-pages-x/pages/register/register"
-				})
-			},
-			toRetrievePwd() {
-				let url = "/uni_modules/uni-id-pages-x/pages/retrieve/retrieve"
-				if (/^1\d{10}$/.test(this.username)) {
-					url += "?mobile=" + this.username
-				} else if (/@/.test(this.username)) {
-					url += "?email=" + this.username
-				}
-				uni.navigateTo({ url })
-			},
-		}
+	function showPopupCaptcha(callback : () => void) {
+		agreementsRef.value!.showPopupAgreements(callback)
 	}
+
+	async function loginByPwd() : Promise<any> {
+		if (username.value.length == 0) {
+			usernameRef.value!.setFocus(true)
+			return uni.showToast({
+				title: '请输入手机号/用户名/邮箱',
+				icon: 'none',
+				duration: 3000
+			})
+		}
+		if (password.value.length == 0) {
+			passwordRef.value!.setFocus(true)
+			return uni.showToast({
+				title: '请输入密码',
+				icon: 'none',
+				duration: 3000
+			})
+		}
+		if (needCaptcha.value && loginCaptcha.value.length != 4) {
+			popupCaptchaRef.value!.open(() => {
+				loginByPwd()
+			})
+			return uni.showToast({
+				title: '请输入验证码',
+				icon: 'none',
+				duration: 3000
+			})
+		}
+
+		const data : UTSJSONObject = {
+			"password": password.value,
+			"captcha": loginCaptcha.value
+		}
+
+		let keyName = 'username'
+		if (/^1\d{10}$/.test(username.value)) {
+			keyName = "mobile"
+		} else if (/@/.test(username.value)) {
+			keyName = "email"
+		}
+		data.set(keyName, username.value)
+
+		console.log('data', state.pendingAgreements)
+
+		if (state.pendingAgreements) {
+			showPopupCaptcha(() => {
+				if (!state.pendingAgreements) {
+					loginByPwd()
+				}
+			})
+			return false
+		}
+
+		uni.showLoading({
+			title: '登录中',
+			mask: false
+		})
+
+		const testRes = await new Promise((resolve) => {
+			uniIdCo.login(data)
+				.finally(() : void => {
+					uni.hideLoading()
+					loginCaptcha.value = ""
+				})
+				.then((e) => {
+					console.log('uniIdCo.login res', e)
+					loginSuccess(e)
+					resolve(e['uid'])
+				})
+				.catch<void>((err : any | null) : void => {
+					const error = err as UniCloudError
+					console.error(error)
+					console.error(error.code)
+					if (error.code == 'uni-id-captcha-required') {
+						needCaptcha.value = true
+						popupCaptchaRef.value!.open(() => {
+							loginByPwd()
+						})
+					} else {
+						uni.showToast({
+							title: error.message,
+							icon: 'none',
+							duration: 3000
+						})
+					}
+					resolve({ errCode: error.errCode, errMsg: error.errMsg })
+				})
+		})
+		console.log('testRes: ', testRes)
+		return testRes
+	}
+
+	function toRegister() {
+		uni.navigateTo({
+			url: "/uni_modules/uni-id-pages-x/pages/register/register"
+		})
+	}
+
+	function toRetrievePwd() {
+		let url = "/uni_modules/uni-id-pages-x/pages/retrieve/retrieve"
+		if (/^1\d{10}$/.test(username.value)) {
+			url += "?mobile=" + username.value
+		} else if (/@/.test(username.value)) {
+			url += "?email=" + username.value
+		}
+		uni.navigateTo({ url })
+	}
+
+	onMounted(() => {
+		setTimeout(() => {
+			usernameRef.value!.setFocus(true)
+		}, 300)
+	})
 </script>
 
 <style lang="scss" scoped>
+	@import url("/uni_modules/uni-id-pages-x/common/common.scss");
 	.pwd-login-title {
 		font-size: 14px;
 		font-weight: 700;
@@ -164,7 +162,7 @@
 		justify-content: space-between;
 	}
 
-	.link-group .link {
+	.link-group-link {
 		color: #083679;
 		font-size: 12px;
 	}

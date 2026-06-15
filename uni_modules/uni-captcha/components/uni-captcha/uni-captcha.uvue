@@ -5,117 +5,120 @@
       <image class="captcha-img" :class="{opacity:loging}" @click="getImageCaptcha(true)" :src="captchaBase64" mode="widthFix" />
     </view>
     <input @blur="focusCaptchaInput = false" @focus="focusCaptchaInput = true" :focus="focusCaptchaInput" type="digit" class="captcha" :inputBorder="false"
-      maxlength="4" v-model="val" placeholder="请输入验证码" :cursor-spacing="cursorSpacing" />
+		:maxlength="4" v-model="val" placeholder="请输入验证码" :cursor-spacing="cursorSpacing" />
   </view>
 </template>
 
-<script>
-  export default {
-    emits: ["modelValue"],
-    props: {
-      cursorSpacing: {
-        type: Number,
-        default: 100
-      },
-      modelValue: {
-        type: String,
-        default: ""
-      },
-      value: {
-        type: String,
-        default: ""
-      },
-      scene: {
-        type: String,
-        default: ""
-      },
-      focus: {
-        type: Boolean,
-        default: false
-      }
+<script setup lang="uts">
+  const emit = defineEmits(['input', 'update:modelValue'])
+  const props = defineProps({
+    cursorSpacing: {
+      type: Number,
+      default: 100
     },
-    data() {
-      return {
-        focusCaptchaInput: false,
-        captchaBase64: "" as string,
-        loging: false,
-        val: ""
-      };
+    modelValue: {
+      type: String,
+      default: ""
     },
-    watch: {
-      value: {
-        handler(value : string) {
-          // console.log('setvue', value);
-          this.val = value
-        },
-        immediate: true
-      },
-      modelValue: {
-        handler(modelValue : string) {
-          // console.log('setvue', modelValue);
-          this.val = modelValue
-        },
-        immediate: true
-      },
-      scene: {
-        handler(scene : string) {
-          if (scene.length != 0) {
-            this.getImageCaptcha(this.focus)
-          } else {
-            uni.showToast({
-              title: 'scene不能为空',
-              icon: 'none'
-            });
-          }
-        },
-        immediate: true
-      },
-      val(value : string) {
-        // console.log('setvue', value);
-        // TODO 兼容 vue2
-        // #ifdef VUE2
-        this.$emit('input', value);
-        // #endif
-        // TODO　兼容　vue3
-        // #ifdef VUE3
-        this.$emit('update:modelValue', value)
-        // #endif
-      }
+    value: {
+      type: String,
+      default: ""
     },
-    methods: {
-      setFocus(state:boolean){
-        this.focusCaptchaInput = state
-      },
-      getImageCaptcha(focus : boolean) {
-        this.loging = true
-        if (focus) {
-          this.val = ''
-          this.focusCaptchaInput = true
-        }
-        const uniIdCo = uniCloud.importObject("uni-captcha-co", {
-          customUI: true
-        })
-        uniIdCo.getImageCaptcha({
-          scene: this.scene,
-          isUniAppX:true
-        }).then((result : UTSJSONObject) => {
-          this.captchaBase64 = (result.getString('captchaBase64') as string)
-        })
-       .catch<void>((err : any | null) : void => {
-         const error = err as UniCloudError
-         console.error(error)
-         console.error(error.code)
-        	uni.showToast({
-        		title: error.message,
-        		icon: 'none'
-        	});
-        })
-        .finally(()=> {
-        	this.loging = false
-        })
-      }
+    scene: {
+      type: String,
+      default: ""
+    },
+    focus: {
+      type: Boolean,
+      default: false
     }
+  })
+
+  const focusCaptchaInput = ref(false)
+  const captchaBase64 = ref("" as string)
+  const loging = ref(false)
+  const val = ref("")
+
+  const cursorSpacing = computed(() : number => {
+    return props.cursorSpacing
+  })
+
+  function setFocus(state : boolean) {
+    focusCaptchaInput.value = state
   }
+
+  function getImageCaptcha(focus : boolean) {
+    loging.value = true
+    if (focus) {
+      val.value = ''
+      focusCaptchaInput.value = true
+    }
+    const uniIdCo = uniCloud.importObject("uni-captcha-co", {
+      customUI: true
+    })
+    uniIdCo.getImageCaptcha({
+      scene: props.scene,
+      isUniAppX: true
+    }).then((result : UTSJSONObject) => {
+      captchaBase64.value = result.getString('captchaBase64') as string
+    })
+      .catch<void>((err : any | null) : void => {
+        const error = err as UniCloudError
+        console.error(error)
+        console.error(error.code)
+        uni.showToast({
+          title: error.message,
+          icon: 'none'
+        })
+      })
+      .finally(() => {
+        loging.value = false
+      })
+  }
+
+  watch(() => props.value, (value : string) => {
+    // console.log('setvue', value);
+    val.value = value
+  }, {
+    immediate: true
+  })
+
+  watch(() => props.modelValue, (modelValue : string) => {
+    // console.log('setvue', modelValue);
+    val.value = modelValue
+  }, {
+    immediate: true
+  })
+
+  watch(() => props.scene, (scene : string) => {
+    if (scene.length != 0) {
+      getImageCaptcha(props.focus)
+    } else {
+      uni.showToast({
+        title: 'scene不能为空',
+        icon: 'none'
+      })
+    }
+  }, {
+    immediate: true
+  })
+
+  watch(val, (value : string) => {
+    // console.log('setvue', value);
+    // TODO 兼容 vue2
+    // #ifdef VUE2
+    emit('input', value)
+    // #endif
+    // TODO　兼容　vue3
+    // #ifdef VUE3
+    emit('update:modelValue', value)
+    // #endif
+  })
+
+  defineExpose({
+    setFocus,
+    getImageCaptcha
+  })
 </script>
 
 <style lang="scss" scoped>

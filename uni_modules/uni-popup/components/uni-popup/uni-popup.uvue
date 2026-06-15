@@ -6,72 +6,74 @@
   </view>
 </template>
 
-<script>
+<script setup lang="uts">
   type CloseCallBack = ()=> void;
   let closeCallBack:CloseCallBack = () :void => {};
-  export default {
-    emits:["close","clickMask"],
-    data() {
-      return {
-        isShow:false,
-        isOpen:false
-      }
+
+  const emit = defineEmits(['close', 'clickMask'])
+  const props = defineProps({
+    maskClick: {
+      type: Boolean,
+      default: true
     },
-    props: {
-      maskClick: {
-        type: Boolean,
-        default: true
-      },
-    },
-    watch: {
-      // 设置show = true 时，如果没有 open 需要设置为 open
-      isShow:{
-        handler(isShow) {
-          // console.log("isShow",isShow)
-          if(isShow && this.isOpen == false){
-            this.isOpen = true
-          }
-        },
-        immediate:true
-      },
-      // 设置isOpen = true 时，如果没有 isShow 需要设置为 isShow
-      isOpen:{
-        handler(isOpen) {
-          // console.log("isOpen",isOpen)
-          if(isOpen && this.isShow == false){
-            this.isShow = true
-          }
-        },
-        immediate:true
-      }
-    },
-    methods:{
-      open(){
-        // ...funs : CloseCallBack[]
-        // if(funs.length > 0){
-        //   closeCallBack = funs[0]
-        // }
-        this.isOpen = true;
-      },
-      clickMask(){
-        if(this.maskClick == true){
-          this.$emit('clickMask')
-          this.close()
-        }
-      },
-      close(): void{
-        this.isOpen = false;
-        this.$emit('close')
-        closeCallBack()
-      },
-      hiden(){
-        this.isShow = false
-      },
-      show(){
-        this.isShow = true
-      }
+  })
+
+  const isShow = ref(false)
+  const isOpen = ref(false)
+
+  function open() {
+    // ...funs : CloseCallBack[]
+    // if(funs.length > 0){
+    //   closeCallBack = funs[0]
+    // }
+    isOpen.value = true
+  }
+
+  function close() : void {
+    isOpen.value = false
+    emit('close')
+    closeCallBack()
+  }
+
+  function clickMask() {
+    if (props.maskClick == true) {
+      emit('clickMask')
+      close()
     }
   }
+
+  function hiden() {
+    isShow.value = false
+  }
+
+  function show() {
+    isShow.value = true
+  }
+
+  // 设置show = true 时，如果没有 open 需要设置为 open
+  watch(isShow, (value : boolean) => {
+    if (value && isOpen.value == false) {
+      isOpen.value = true
+    }
+  }, {
+    immediate: true
+  })
+
+  // 设置isOpen = true 时，如果没有 isShow 需要设置为 isShow
+  watch(isOpen, (value : boolean) => {
+    if (value && isShow.value == false) {
+      isShow.value = true
+    }
+  }, {
+    immediate: true
+  })
+
+  defineExpose({
+    open,
+    close,
+    hiden,
+    show
+  })
 </script>
 
 <style>
