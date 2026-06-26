@@ -8,7 +8,7 @@ const {
 
 /**
  * 解绑apple
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#unbind-apple
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#unbind-apple
  * @returns
  */
 module.exports = async function () {

@@ -5,7 +5,7 @@ const { ERROR } = require('../../common/error')
 
 /**
  * 查询认证结果
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#get-frv-auth-result
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#get-frv-auth-result
  * @param {Object} params
  * @param {String} params.certifyId       认证ID
  * @returns
@@ -109,6 +109,7 @@ module.exports = async function (params) {
         fileID
       } = await uniCloud.uploadFile({
         cloudPath: `user/id-card/${uid}.b64`,
+        cloudPathAsRealPath: true,
         fileContent: Buffer.from(encryptData.call(this, pictureRes.data.toString('base64')))
       })
       updateData.realname_auth.in_hand = fileID

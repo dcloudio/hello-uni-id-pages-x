@@ -13,7 +13,7 @@ const {
 
 /**
  * 发送短信验证码
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#send-sms-code
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#send-sms-code
  * @param {Object} params
  * @param {String} params.mobile    手机号
  * @param {String} params.captcha   图形验证码
@@ -49,7 +49,7 @@ module.exports = async function (params = {}) {
     this.config.service.sms &&
     this.config.service.sms.scene &&
     this.config.service.sms.scene[scene]) || {}
-  if (!templateId) {
+  if (!templateId || !templateId.replace(/[^0-9a-zA-Z]/g, '')) {
     await require('../../lib/utils/verify-code')
       .setMobileVerifyCode.call(this, {
         mobile: params.mobile,

@@ -11,7 +11,7 @@ const PasswordUtils = require('../../lib/utils/password')
 
 /**
  * 修改用户
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#update-user
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#update-user
  * @param {Object}  params
  * @param {String}  params.uid            要更新的用户id
  * @param {String}  params.username       用户名

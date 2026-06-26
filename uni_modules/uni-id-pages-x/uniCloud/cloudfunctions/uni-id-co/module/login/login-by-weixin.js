@@ -21,7 +21,7 @@ const url = require('url')
 
 /**
  * 微信登录
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#login-by-weixin
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#login-by-weixin
  * @param {Object} params
  * @param {String} params.code          微信登录返回的code
  * @param {String} params.inviteCode    邀请码

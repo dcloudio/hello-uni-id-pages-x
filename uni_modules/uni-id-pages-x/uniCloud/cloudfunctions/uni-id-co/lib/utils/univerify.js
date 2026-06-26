@@ -1,9 +1,9 @@
-async function getmobileNumber ({
+async function getPhoneNumber ({
   // eslint-disable-next-line camelcase
   access_token,
   openid
 } = {}) {
-  const requiredParams = ['apiKey', 'apiSecret']
+  const requiredParams = []
   const univerifyConfig = (this.config.service && this.config.service.univerify) || {}
   for (let i = 0; i < requiredParams.length; i++) {
     const key = requiredParams[i]
@@ -11,7 +11,7 @@ async function getmobileNumber ({
       throw new Error(`Missing config param: service.univerify.${key}`)
     }
   }
-  return uniCloud.getmobileNumber({
+  return uniCloud.getPhoneNumber({
     provider: 'univerify',
     appid: this.getUniversalClientInfo().appId,
     apiKey: univerifyConfig.apiKey,
@@ -23,5 +23,5 @@ async function getmobileNumber ({
 }
 
 module.exports = {
-  getmobileNumber
+  getPhoneNumber
 }

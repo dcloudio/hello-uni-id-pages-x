@@ -7,7 +7,7 @@ const { getCurrentDateTimestamp } = require('../../common/utils')
 
 /**
  * 获取认证ID
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#get-frv-certify-id
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#get-frv-certify-id
  * @param {Object} params
  * @param {String} params.realName  真实姓名
  * @param {String} params.idCard    身份证号码

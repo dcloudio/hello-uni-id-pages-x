@@ -14,7 +14,7 @@ const {
 
 /**
  * 支付宝登录
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#login-by-alipay
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#login-by-alipay
  * @param {Object} params
  * @param {String} params.code        支付宝小程序客户端登录返回的code
  * @param {String} params.inviteCode  邀请码

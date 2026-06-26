@@ -10,9 +10,7 @@
 			<!-- #endif -->
 
 			<cloud-image v-if="avatarFile != null" :src="avatarFile!.getString('url')" :width="width" :height="height"></cloud-image>
-			<image v-else-if="readOnly" class="default-avatarUrl"
-				src="@/uni_modules/uni-id-pages-x/static/default-avatar.png" :style="{ width, height }"
-				mode="aspectFill"></image>
+			<image v-else-if="readOnly" class="default-avatarUrl" src="@/uni_modules/uni-id-pages-x/static/default-avatar.png" mode="widthFix"></image>
 			<view v-else class="upload-img-icon">
 				<uni-id-pages-x-icons :size="35" color="#eee" type="jiahao"></uni-id-pages-x-icons>
 			</view>
@@ -80,18 +78,7 @@
 	})
 
 	const avatarFile = computed(() : UTSJSONObject | null => {
-		if (!hasLogin.value) {
-			return null
-		}
-		const file = userInfo.value.getJSON("avatar_file")
-		if (file == null) {
-			return null
-		}
-		const url = file.getString("url")
-		if (url == null || url == "") {
-			return null
-		}
-		return file
+		return userInfo.value.getJSON("avatar_file")
 	})
 
 	function setAvatarFile() {
@@ -120,31 +107,25 @@
 			count: 1,
 			crop,
 			success(res) : void {
-				const tempFiles = res.tempFiles as UTSJSONObject[]
-				const tempFile = tempFiles[0]
-				let tempFileName = tempFile.getString('name')
-				let tempFilePath = tempFile.getString('path')
-				if (tempFileName == null) {
-					tempFileName = ""
-				}
-				if (tempFilePath == null) {
-					tempFilePath = ""
+				let filePath = res.tempFilePaths[0]
+				if (filePath == null) {
+					uni.showModal({
+						content: '未获取到图片路径',
+						showCancel: false
+					})
+					return
 				}
 
 				const nextUserInfo = userInfo.value
+				const extnameParts = filePath.split('.')
+				const extname = extnameParts[extnameParts.length - 1]
 				let nextAvatarFile = {
-					// #ifdef H5
-					extname: tempFileName.split(".")[tempFileName.split(".").length - 1],
-					// #endif
-					// #ifndef H5
-					extname: tempFilePath.split(".")[tempFilePath.split(".").length - 1],
-					// #endif
-					name: tempFileName,
-					url: tempFilePath
+					extname: extname,
+					name: '',
+					url: filePath
 				} as UTSJSONObject
 				console.error('avatar_file', nextAvatarFile)
 
-				let filePath = res.tempFilePaths[0]
 				// #ifndef UNI-APP-X
 				filePath = await new Promise((callback) => {
 					// #ifdef H5

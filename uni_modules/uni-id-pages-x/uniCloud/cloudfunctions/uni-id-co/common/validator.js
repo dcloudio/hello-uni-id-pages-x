@@ -80,6 +80,16 @@ baseValidator.nickname = function (nickname) {
       errCode
     }
   };
+
+  // 校验是否包含零宽字符
+  // 零宽字符常见的unicode包含：\u200B-\u200D, \uFEFF, \u2060 等
+  if (/[\u200B-\u200D\uFEFF\u2060]/.test(nickname)) {
+    // 昵称不允许包含零宽字符
+    return {
+      errCode
+    }
+  }
+
   if (/^\d+$/.test(nickname)) {
     // 昵称不能为纯数字
     return {
@@ -198,52 +208,6 @@ function getRuleCategory(rule) {
   }
 }
 
-function isMatchUnionType(val, rule) {
-  if (!rule.children || rule.children.length === 0) {
-    return true
-  }
-  const children = rule.children
-  for (let i = 0; i < children.length; i++) {
-    const child = children[i]
-    const category = getRuleCategory(child)
-    let pass = false
-    switch (category) {
-      case 'base':
-        pass = isMatchBaseType(val, child)
-        break
-      case 'array':
-        pass = isMatchArrayType(val, child)
-        break
-      default:
-        break
-    }
-    if (pass) {
-      return true
-    }
-  }
-  return false
-}
-
-function isMatchBaseType(val, rule) {
-  if (typeof baseValidator[rule.type] !== 'function') {
-    throw new Error(`invalid schema type: ${rule.type}`)
-  }
-  const validateRes = baseValidator[rule.type](val)
-  if (validateRes && validateRes.errCode) {
-    return false
-  }
-  return true
-}
-
-function isMatchArrayType(arr, rule) {
-  if (getType(arr) !== 'array') {
-    return false
-  }
-  if (rule.children && rule.children.length && arr.some(item => !isMatchUnionType(item, rule))) {
-    return false
-  }
-  return true
-}
 
 // 特殊符号 https://www.ibm.com/support/pages/password-strength-rules  ~!@#$%^&*_-+=`|\(){}[]:;"'<>,.?/
 // const specialChar = '~!@#$%^&*_-+=`|\(){}[]:;"\'<>,.?/'
@@ -320,7 +284,57 @@ class Validator {
     return this.customValidator[type] || this.baseValidator[type]
   }
 
+  
+  _isMatchUnionType(val, rule) {
+    if (!rule.children || rule.children.length === 0) {
+      return true
+    }
+    const children = rule.children
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i]
+      const category = getRuleCategory(child)
+      let pass = false
+      switch (category) {
+        case 'base':
+          pass = this._isMatchBaseType(val, child)
+          break
+        case 'array':
+          pass = this._isMatchArrayType(val, child)
+          break
+        default:
+          break
+      }
+      if (pass) {
+        return true
+      }
+    }
+    return false
+  }
+
+  _isMatchBaseType(val, rule) {
+    const method = this.getRealBaseValidator(rule.type)
+    if (typeof method !== 'function') {
+      throw new Error(`invalid schema type: ${rule.type}`)
+    }
+    const validateRes = method(val)
+    if (validateRes && validateRes.errCode) {
+      return false
+    }
+    return true
+  }
+
+  _isMatchArrayType(arr, rule) {
+    if (getType(arr) !== 'array') {
+      return false
+    }
+    if (rule.children && rule.children.length && arr.some(item => !this._isMatchUnionType(item, rule))) {
+      return false
+    }
+    return true
+  }
+
   get validator() {
+    const _this = this
     return new Proxy({}, {
       get: (_, prop) => {
         if (typeof prop !== 'string') {
@@ -332,7 +346,7 @@ class Validator {
         }
         const rule = parseValidatorName(prop)
         return function (val) {
-          if (!isMatchUnionType(val, rule)) {
+          if (!_this._isMatchUnionType(val, rule)) {
             return {
               errCode: ERROR.INVALID_PARAM
             }

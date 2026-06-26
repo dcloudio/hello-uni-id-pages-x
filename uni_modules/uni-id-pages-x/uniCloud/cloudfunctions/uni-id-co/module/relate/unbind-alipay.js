@@ -8,7 +8,7 @@ const {
 
 /**
  * 解绑支付宝
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#unbind-alipay
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#unbind-alipay
  * @returns
  */
 module.exports = async function () {

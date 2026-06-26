@@ -7,7 +7,7 @@ const {
 const PasswordUtils = require('../../lib/utils/password')
 /**
  * 更新密码
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#update-pwd
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#update-pwd
  * @param {object} params
  * @param {string} params.oldPassword 旧密码
  * @param {string} params.newPassword 新密码

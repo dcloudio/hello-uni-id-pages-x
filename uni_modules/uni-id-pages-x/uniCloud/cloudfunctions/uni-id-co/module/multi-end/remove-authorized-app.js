@@ -5,7 +5,7 @@ const {
 
 /**
  * 移除用户登录授权
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#remove-authorized-app
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#remove-authorized-app
  * @param {Object} params
  * @param {String} params.uid   用户id
  * @param {String} params.appId 取消授权的应用的AppId

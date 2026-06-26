@@ -6,7 +6,7 @@
 			<view class="code-input-list">
 				<template v-for="(item,i) in smsCodeList" :key="i">
 					<input @input="setSmsCode(i,$event as InputEvent)" :value="item" type="number" ref="codeInputRef"
-						class="code-input code-input-list-item" :maxlength="7" @focus="onFocus(i)" />
+						class="code-input code-input-list-item" :maxlength="6" :focus="isOpen && focusIndex == i" @focus="onFocus(i)" />
 				</template>
 			</view>
 			<view class="fab-sms-code-input-foot">
@@ -40,8 +40,13 @@
 
 	const popupRef = ref<UniPopupComponentPublicInstance | null>(null)
 	const codeInputRef = ref<Element[] | null>(null)
-	const smsCodeList = ref(["\u200b", "\u200b", "\u200b", "\u200b", "\u200b", "\u200b"])
+	// 旧方案曾用 "\u200b" 作为每一格的占位值，方便在空格子里维持光标位置。
+	// 但在 uni-app x Android 下，type="number" 的 input 搭配非数字占位字符会导致
+	// 弹窗打开后焦点被冲掉，且手动点击也可能无法重新输入，因此改为空字符串方案。
+	// const smsCodeList = ref(["\u200b", "\u200b", "\u200b", "\u200b", "\u200b", "\u200b"])
+	const smsCodeList = ref(["", "", "", "", "", ""])
 	const isOpen = ref(false)
+	const focusIndex = ref(-1)
 
 	const title = computed(() : string => {
 		return props.title
@@ -63,40 +68,47 @@
 	})
 
 	const smsCode = computed(() : string => {
-		return smsCodeList.value.map((item) : string => item.replace(/\u200b/g, '')).join("")
+		return smsCodeList.value.join("")
 	})
 
 	function show() {
-		popupRef.value!.open()
-		nextTick(() => {
-			codeInputRef.value![0].focus()
-		})
+		focusIndex.value = 0
 		isOpen.value = true
+		popupRef.value!.open()
+		setTimeout(() => {
+			focusIndex.value = -1
+			nextTick(() => {
+				focusIndex.value = 0
+			})
+		}, 120)
 	}
 
 	function hide() {
+		focusIndex.value = -1
 		popupRef.value!.close()
 		isOpen.value = false
 	}
 
 	function clear() {
-		smsCodeList.value = ["\u200b", "\u200b", "\u200b", "\u200b", "\u200b", "\u200b"]
+		// 旧方案：smsCodeList.value = ["\u200b", "\u200b", "\u200b", "\u200b", "\u200b", "\u200b"]
+		smsCodeList.value = ["", "", "", "", "", ""]
 		if (isOpen.value) {
-			codeInputRef.value![0].focus()
+			focusIndex.value = 0
 		}
 	}
 
 	function setSmsCode(i : number, e : InputEvent) {
 		const value = e.detail.value
-		let currentValue = value.replace(/\u200b/g, '')
+		let currentValue = value
 		if (currentValue.length == 6) {
 			currentValue.split('').forEach((item : string, index : number) => {
-				smsCodeList.value[index] = "\u200b" + item
+				smsCodeList.value[index] = item
 			})
+			focusIndex.value = smsCodeList.value.length - 1
 			return
 		}
 
-		if (value.length > 2) {
+		if (value.length > 1) {
 			nextTick(() => {
 				const newValue = value.slice(value.length - 1)
 				smsCodeList.value[i] = newValue
@@ -105,25 +117,20 @@
 
 		if (value.length == 0) {
 			smsCodeList.value[i] = ""
-			nextTick(() => {
-				smsCodeList.value[i] = '\u200b'
-			})
 			if (i != 0) {
-				codeInputRef.value![i - 1].focus()
+				focusIndex.value = i - 1
 				smsCodeList.value[i - 1] = ""
 			}
-		} else if (value != "\u200b") {
+		} else {
 			smsCodeList.value[i] = value
 			if (i != (smsCodeList.value.length - 1)) {
-				codeInputRef.value![i + 1].focus()
+				focusIndex.value = i + 1
 			}
 		}
 	}
 
 	function onFocus(i : number) {
-		if (smsCodeList.value[i].length == 0) {
-			smsCodeList.value[i] = '\u200b'
-		}
+		focusIndex.value = i
 	}
 
 	function reGetSmsCode() {

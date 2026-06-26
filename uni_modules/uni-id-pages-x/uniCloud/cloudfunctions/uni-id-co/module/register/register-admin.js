@@ -11,7 +11,7 @@ const {
 
 /**
  * 注册管理员
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#register-admin
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#register-admin
  * @param {Object} params
  * @param {String} params.username   用户名
  * @param {String} params.password   密码

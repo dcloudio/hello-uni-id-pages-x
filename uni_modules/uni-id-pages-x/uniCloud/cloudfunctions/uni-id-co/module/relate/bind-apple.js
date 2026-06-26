@@ -14,7 +14,7 @@ const {
 
 /**
  * 绑定苹果账号
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#bind-apple
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#bind-apple
  * @param {Object} params
  * @param {String} params.identityToken 苹果登录返回identityToken
  * @returns

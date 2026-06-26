@@ -4,7 +4,7 @@ const {
 
 /**
  * 用户退出登录
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#logout
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#logout
  * @returns
  */
 module.exports = async function () {

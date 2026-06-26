@@ -79,10 +79,14 @@
 	}
 
 	.button-group-btn {
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
 		border-radius: 100px;
 		border: solid 1px #0070ff;
 		width: 300rpx;
 		height: 42px;
+		padding: 0;
 		line-height: 42px;
 		font-size: 32rpx;
 	}

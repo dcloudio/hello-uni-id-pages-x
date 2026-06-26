@@ -6,7 +6,7 @@ const PasswordUtils = require('../../lib/utils/password')
 
 /**
  * 使用 uid 或 externalUid 获取用户信息
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#external-update-userinfo
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#external-update-userinfo
  * @param {object} params
  * @param {string} params.uid   uni-id体系的用户id
  * @param {string} params.externalUid   业务系统的用户id
@@ -198,6 +198,14 @@ module.exports = async function (params = {}) {
     }
 
     realData.identities = user.identities
+  }
+
+  if (mobile) {
+    realData.mobile_confirmed = 1
+  }
+
+  if (email) {
+    realData.email_confirmed = 1
   }
 
   await userCollection.where(query).update(realData)

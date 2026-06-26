@@ -22,6 +22,7 @@
 	import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
 
 	const nickname = ref("")
+	const savedNickname = ref("")
 	const testErr = ref({
 		errCode: '',
 		errMsg: ''
@@ -29,17 +30,14 @@
 	const testState = ref(false)
 	const testSuccess = ref(100)
 
-	const currentNickname = computed(() : string => {
-		let currentNickname = state.userInfo.get("nickname")
-		if (currentNickname == null) {
-			currentNickname = ""
-		}
-		return currentNickname as string
+	const hasChange = computed(() : boolean => {
+		return savedNickname.value != nickname.value
 	})
 
-	const hasChange = computed(() : boolean => {
-		return currentNickname.value != nickname.value
-	})
+	function getCurrentNickname() : string {
+		const currentNickname = state.userInfo.getString('nickname')
+		return currentNickname == null ? '' : currentNickname
+	}
 
 	async function setNickname() : Promise<any> {
 		if (nickname.value.length == 0) {
@@ -47,7 +45,7 @@
 				title: '昵称不能为空',
 				icon: 'none'
 			})
-			nickname.value = currentNickname.value
+			nickname.value = savedNickname.value
 			return false
 		}
 		if (!hasChange.value) {
@@ -70,6 +68,7 @@
 					})
 					.then<void>((e) => {
 						console.log('e: ', e)
+						savedNickname.value = nickname.value
 						mutations.updateUserInfo({ "nickname": nickname.value } as UTSJSONObject)
 						resolve(e['updated'])
 					})
@@ -93,7 +92,8 @@
 	}
 
 	onLoad(() => {
-		nickname.value = currentNickname.value
+		savedNickname.value = getCurrentNickname()
+		nickname.value = savedNickname.value
 	})
 </script>
 

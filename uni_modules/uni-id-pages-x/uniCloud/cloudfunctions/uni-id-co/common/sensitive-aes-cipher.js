@@ -21,9 +21,9 @@ function checkSecret (secret) {
   }
 }
 function encryptData (text = '') {
-  if (!text) return text
-
   const encryptSecret = this.config.sensitiveInfoEncryptSecret
+
+  if (!text || !encryptSecret) return text
 
   checkSecret(encryptSecret)
 
@@ -40,9 +40,9 @@ function encryptData (text = '') {
 }
 
 function decryptData (text = '') {
-  if (!text) return text
-
   const encryptSecret = this.config.sensitiveInfoEncryptSecret
+
+  if (!text || !encryptSecret) return text
 
   checkSecret(encryptSecret)
 

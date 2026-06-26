@@ -7,7 +7,7 @@ const {
 
 /**
  * 刷新图形验证码
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#refresh-captcha
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#refresh-captcha
  * @param {Object} params
  * @param {String} params.scene   图形验证码使用场景
  * @returns

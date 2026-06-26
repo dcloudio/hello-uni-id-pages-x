@@ -77,6 +77,7 @@
 				console.log(e)
 				testSuccess.value = e['errCode'] as number
 				console.log(testSuccess.value)
+				smsCodeRef.value!.hideCodeInput()
 
 				uni.showToast({
 					title: '绑定成功',
@@ -86,6 +87,9 @@
 				mutations.updateUserInfo({
 					"mobile": param.getString("mobile")
 				} as UTSJSONObject)
+				setTimeout(() => {
+					uni.navigateBack()
+				}, 300)
 			})
 			.catch<void>((err : any | null) : void => {
 				testState.value = true

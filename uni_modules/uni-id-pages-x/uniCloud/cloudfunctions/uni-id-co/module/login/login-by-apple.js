@@ -14,7 +14,7 @@ const {
 
 /**
  * 苹果登录
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#login-by-apple
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#login-by-apple
  * @param {Object} params
  * @param {String} params.identityToken 苹果登录返回的identityToken
  * @param {String} params.nickname      用户昵称

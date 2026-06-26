@@ -17,7 +17,7 @@ const {
 
 /**
  * 短信验证码登录
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#login-by-sms
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#login-by-sms
  * @param {Object} params
  * @param {String} params.mobile      手机号
  * @param {String} params.code        短信验证码

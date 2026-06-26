@@ -66,7 +66,7 @@ async function setOpendbDevice ({
 
 /**
  * 更新device表的push_clien_id
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#set-push-cid
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#set-push-cid
  * @param {object} params
  * @param {string} params.pushClientId  客户端pushClientId
  * @returns

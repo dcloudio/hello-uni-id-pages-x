@@ -64,12 +64,13 @@
 			password2: password2Ref.value,
 			nickname: nicknameRef.value
 		}
-
-		[
+		const requiredFields = [
 			["username", "用户名"],
 			["password", "密码"],
 			["captcha", "验证码"]
-		].forEach((item) => {
+		] as string[][]
+
+		requiredFields.forEach((item) => {
 			const key = item[0] as string
 			const errMsg = (item[1] as string) + "不能为空"
 			if (myForm.get(key) == "") {

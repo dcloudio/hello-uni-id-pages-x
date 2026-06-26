@@ -17,7 +17,7 @@ const {
 
 /**
  * 通过短信验证码绑定手机号
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#bind-mobile-by-sms
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#bind-mobile-by-sms
  * @param {Object} params
  * @param {String} params.mobile    手机号
  * @param {String} params.code      短信验证码

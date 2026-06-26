@@ -7,7 +7,7 @@ const {
 
 /**
  * 设置用户允许登录的应用列表
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#set-authorized-app
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#set-authorized-app
  * @param {Object} params
  * @param {String} params.uid       用户id
  * @param {Array} params.appIdList 允许登录的应用AppId列表

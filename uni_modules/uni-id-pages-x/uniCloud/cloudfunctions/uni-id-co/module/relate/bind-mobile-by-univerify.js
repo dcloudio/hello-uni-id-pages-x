@@ -1,5 +1,5 @@
 const {
-  getmobileNumber
+  getPhoneNumber
 } = require('../../lib/utils/univerify')
 const {
   LOG_TYPE
@@ -11,7 +11,7 @@ const {
 
 /**
  * 通过一键登录绑定手机号
- * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages-x.html#bind-mobile-by-univerify
+ * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#bind-mobile-by-univerify
  * @param {Object} params
  * @param {String} params.openid        APP端一键登录返回的openid
  * @param {String} params.access_token  APP端一键登录返回的access_token
@@ -31,12 +31,12 @@ module.exports = async function (params = {}) {
   const uid = this.authInfo.uid
   let mobile
   try {
-    const mobileInfo = await getmobileNumber.call(this, {
+    const phoneInfo = await getPhoneNumber.call(this, {
       // eslint-disable-next-line camelcase
       access_token,
       openid
     })
-    mobile = mobileInfo.mobileNumber
+    mobile = phoneInfo.phoneNumber
   } catch (error) {
     await this.middleware.uniIdLog({
       success: false,

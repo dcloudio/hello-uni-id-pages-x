@@ -15,13 +15,14 @@ export const loginSuccess = (_ : UTSJSONObject) => {
 		const currentPage = pages[pages.length - 1]
 		const uniIdRedirectUrl = currentPage.options.get("uniIdRedirectUrl");
 		if (uniIdRedirectUrl != null) {
+			const targetUrl = decodeURIComponent(uniIdRedirectUrl)
 			// console.log('uniIdRedirectUrl', uniIdRedirectUrl);
 			uni.redirectTo({
-				url: uniIdRedirectUrl,
+				url: targetUrl,
 				fail() {
 					console.error("uniIdRouter redirectTo fail");
 					uni.switchTab({
-						"url": uniIdRedirectUrl
+						"url": targetUrl
 					})
 				},
 				success() {
