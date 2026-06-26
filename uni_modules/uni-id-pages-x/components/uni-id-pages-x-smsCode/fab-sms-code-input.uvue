@@ -6,7 +6,7 @@
 			<view class="code-input-list">
 				<template v-for="(item,i) in smsCodeList" :key="i">
 					<input @input="setSmsCode(i,$event as InputEvent)" :value="item" type="number" ref="codeInputRef"
-						class="code-input code-input-list-item" maxlength="7" @focus="onFocus(i)" />
+						class="code-input code-input-list-item" :maxlength="7" @focus="onFocus(i)" />
 				</template>
 			</view>
 			<view class="fab-sms-code-input-foot">
