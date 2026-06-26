@@ -10,7 +10,9 @@
 			<!-- #endif -->
 
 			<cloud-image v-if="avatarFile != null" :src="avatarFile!.getString('url')" :width="width" :height="height"></cloud-image>
-			<image v-else-if="readOnly" class="default-avatarUrl" src="@/uni_modules/uni-id-pages-x/static/default-avatar.png" mode="widthFix"></image>
+			<image v-else-if="readOnly" class="default-avatarUrl"
+				src="@/uni_modules/uni-id-pages-x/static/default-avatar.png" :style="{ width, height }"
+				mode="aspectFill"></image>
 			<view v-else class="upload-img-icon">
 				<uni-id-pages-x-icons :size="35" color="#eee" type="jiahao"></uni-id-pages-x-icons>
 			</view>
@@ -78,7 +80,18 @@
 	})
 
 	const avatarFile = computed(() : UTSJSONObject | null => {
-		return userInfo.value.getJSON("avatar_file")
+		if (!hasLogin.value) {
+			return null
+		}
+		const file = userInfo.value.getJSON("avatar_file")
+		if (file == null) {
+			return null
+		}
+		const url = file.getString("url")
+		if (url == null || url == "") {
+			return null
+		}
+		return file
 	})
 
 	function setAvatarFile() {

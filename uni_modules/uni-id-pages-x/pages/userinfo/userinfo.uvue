@@ -3,7 +3,8 @@
 		<view class="list">
 			<view class="item">
 				<text class="item-title">头像</text>
-				<uni-id-pages-x-avatar ref="avatar" width="60px" height="60px" :border="false"></uni-id-pages-x-avatar>
+				<uni-id-pages-x-avatar ref="avatar" width="60px" height="60px" :border="false"
+					:readOnly="!isLogin"></uni-id-pages-x-avatar>
 			</view>
 			<view class="item">
 				<text class="item-title">昵称</text>
