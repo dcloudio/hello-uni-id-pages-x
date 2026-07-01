@@ -7,9 +7,9 @@
     <image class="app-logo" :src="logo" mode="aspectFit"></image>
 
     <!-- 苹果账号 微信账号 微信账号手机号 登录 -->
-    <view class="big-login-box" v-if="['apple','weixin', 'weixinMobile'].includes(loginType)">
+    <view class="big-login-box" v-if="['apple','weixin', 'weixinMobile'].includes(data.loginType)">
       <text class="tip">将根据第三方账号服务平台的授权范围获取你的信息</text>
-      <image v-if="loginType !== 'weixinMobile'" @click="login" :src="imgSrc" mode="widthFix" class="big-login-img">
+      <image v-if="data.loginType !== 'weixinMobile'" @click="login" :src="imgSrc" mode="widthFix" class="big-login-img">
       </image>
       <button v-else type="primary" open-type="getmobileNumber" @getmobilenumber="login"
         class="uni-btn">微信授权手机号登录</button>
@@ -18,13 +18,13 @@
     </view>
 
     <!-- 密码登录 -->
-    <uni-id-pages-x-loginByPwd v-if="loginType == 'username'" />
+    <uni-id-pages-x-loginByPwd v-if="data.loginType == 'username'" />
 
     <!-- 手机号验证码登录 -->
-    <uni-id-pages-x-loginBySmsCode v-if="loginType == 'smsCode'" />
+    <uni-id-pages-x-loginBySmsCode v-if="data.loginType == 'smsCode'" />
 
     <!-- 固定定位的快捷登录按钮 -->
-    <uni-id-pages-x-fab-login :currentLoginType="loginType"
+    <uni-id-pages-x-fab-login :currentLoginType="data.loginType"
       @changeLoginType="changeLoginType"></uni-id-pages-x-fab-login>
 
   </view>
@@ -34,11 +34,17 @@
   import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
   import config from '@/uni_modules/uni-id-pages-x/config.uts';
 
-  const loginType = ref("username")
+  type PageData = {
+    loginType : string
+  }
+  // 使用reactive避免ref数据在自动化测试中无法访问
+  const data = reactive({
+    loginType: "username"
+  } as PageData)
   const logo = "/static/logo.png"
 
   const imgSrc = computed(() : string => {
-    return loginType.value == 'weixin' ? '/uni_modules/uni-id-pages-x/static/login/weixin.png' : '/uni_modules/uni-id-pages-x/static/app-plus/apple.png'
+    return data.loginType == 'weixin' ? '/uni_modules/uni-id-pages-x/static/login/weixin.png' : '/uni_modules/uni-id-pages-x/static/app-plus/apple.png'
   })
 
   const pendingAgreements = computed(() : boolean => {
@@ -52,18 +58,22 @@
   function changeLoginType(type : string) {
     // if (["weixin", "apple", "univerify"].includes(type)) {
     // }
-    loginType.value = type
+    data.loginType = type
   }
 
   onLoad((query : UTSJSONObject | null) => {
     const type = query?.getString("type")
     // 如果传递了参数就按参数指定的登录方式，否则指定为 config 中配置的第一项
     if (type != null) {
-      loginType.value = type
+      data.loginType = type
     } else {
       const loginTypes = config.getArray<string>("loginTypes")
-      loginType.value = loginTypes![0]
+      data.loginType = loginTypes![0]
     }
+  })
+
+  defineExpose({
+    data
   })
 </script>
 
