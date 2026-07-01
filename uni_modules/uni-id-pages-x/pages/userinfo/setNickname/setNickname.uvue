@@ -1,6 +1,6 @@
 <template>
 	<view class="page">
-		<uni-nav-bar title="设置昵称" navigation-bar-text-style="black" class="uni-navbar-lite" right-class="set-nickname-navbar-right">
+		<uni-nav-bar title="设置昵称" navigation-bar-text-style="black" class="set-nickname-nav-bar" right-class="set-nickname-navbar-right">
 			<template v-slot:right>
 				<view class="navbar-right-content">
 					<view class="submit" :class="{ 'submit-disabled': !hasChange || nickname == '' }" @click="setNickname">
@@ -117,7 +117,7 @@
 		background-color: #FFF;
 	}
 
-	.uni-navbar-lite {
+	.set-nickname-nav-bar {
 		background-color: #fff;
 	}
 

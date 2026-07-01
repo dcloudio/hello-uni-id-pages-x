@@ -1,9 +1,9 @@
 <template>
 	<view class="content">
 		<view class="userinfo" @click="toUserInfoPage">
-      <uni-id-pages-x-avatar class="avatar" ref="avatar" width="45px" height="45px" :readOnly="true" :border="false"></uni-id-pages-x-avatar>
+			<uni-id-pages-x-avatar class="avatar" ref="avatar" width="45px" height="45px" :readOnly="true" :border="false"></uni-id-pages-x-avatar>
 			<view class="nickname">
-				<text class="nickname-text">{{isLogin?userInfo['nickname']:'未登录'}}</text>
+				<text class="nickname-text">{{ displayName }}</text>
 			</view>
 			<view class="arrow userinfo-arrow"></view>
 		</view>
@@ -34,6 +34,25 @@
 
 	const isLogin = computed(() : boolean => {
 		return state.isLogin
+	})
+
+	const displayName = computed(() : string => {
+		if (!isLogin.value) {
+			return '未登录'
+		}
+		const nickname = userInfo.value.getString('nickname')
+		if (nickname != null && nickname.length > 0) {
+			return nickname
+		}
+		const username = userInfo.value.getString('username')
+		if (username != null && username.length > 0) {
+			return username
+		}
+		const mobile = userInfo.value.getString('mobile')
+		if (mobile != null && mobile.length > 0) {
+			return mobile
+		}
+		return ''
 	})
 
 	const test = computed(() : number => {
