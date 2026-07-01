@@ -99,12 +99,19 @@
 		height: 45px;
 	}
 
-	.left-content,
-	.right-content {
+	.left-content {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		width: 45px;
+		height: 100%;
+	}
+
+	.right-content {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 70px;
 		height: 100%;
 	}
 
@@ -114,7 +121,7 @@
 		top: 0;
 		bottom: 0;
 		left: 45px;
-		right: 45px;
+		right: 70px;
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
