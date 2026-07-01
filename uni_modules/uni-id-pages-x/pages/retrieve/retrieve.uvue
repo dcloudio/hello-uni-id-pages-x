@@ -95,11 +95,14 @@
 				testSuccess.value = e['errCode'] as number
 				console.log(testSuccess.value)
 				smsCodeRef.value!.hideCodeInput()
-				uni.showToast({
-					title: '重置成功',
-					icon: 'none'
+					uni.showToast({
+						title: '重置成功',
+						icon: 'none'
+					})
+					setTimeout(() => {
+						uni.navigateBack()
+					}, 1500)
 				})
-			})
 			.catch<void>((err : any | null) : void => {
 				testState.value = true
 				const error = err as UniCloudError
