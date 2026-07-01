@@ -8,6 +8,10 @@
 			<view class="arrow userinfo-arrow"></view>
 		</view>
 		<view class="list">
+			<view class="list-item" hover-class="list-active" @click="toLogin('smsCode')">
+			  <text class="list-item-text">手机验证码登录</text>
+			  <uni-id-pages-x-icons type="right-arrow" color="#999" />
+			</view>
 			<view class="list-item" @click="toLogin('username')">
 				<text class="list-item-text">账号密码登录</text>
 				<view class="arrow"></view>
