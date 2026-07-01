@@ -10,7 +10,7 @@ describe('loginByPwd', () => {
 		// console.log('currentPage: ',await program.currentPage());
 	});
 	it('账号密码登录', async () => {
-		loginType = await page.data('loginType')
+		loginType = await page.data('data.loginType')
 		expect(loginType).toBe('username')
 		loginByPwdEl = await page.$('uni-id-pages-x-loginByPwd')
 		const title = await page.$('.pwd-login-title')
@@ -61,7 +61,9 @@ describe('loginByPwd', () => {
 		page = await program.redirectTo(PAGE_PATH)
 		await page.waitFor(1000)
 		await page.setData({
-			loginType: "smsCode"
+			data: {
+				loginType: "smsCode"
+			}
 		})
 		loginBySmsCodeEl = await page.$('uni-id-pages-x-loginBySmsCode')
 		smsCodeEl = await page.$('uni-id-pages-x-smsCode')
@@ -119,5 +121,3 @@ describe('loginByPwd', () => {
 		}
 	});
 });
-
-
