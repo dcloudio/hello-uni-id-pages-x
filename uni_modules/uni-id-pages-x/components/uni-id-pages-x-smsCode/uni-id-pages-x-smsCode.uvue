@@ -29,9 +29,14 @@
 		autoSend: {
 			type: Boolean,
 			default: true
+		},
+		checkAgreements: {
+			type: Boolean,
+			default: false
 		}
 	})
 
+	const currentInstance = getCurrentInstance()
 	const fabSmsCodeInputRef = ref<ComponentPublicInstance | null>(null)
 	const sendSmsCaptchaRef = ref<UniCaptchaComponentPublicInstance | null>(null)
 	const mobileInputRef = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
@@ -99,13 +104,16 @@
 	}
 
 	function sendSmsCode() {
-		if (state.pendingAgreements) {
+		if (props.checkAgreements && state.pendingAgreements) {
 			sendSmsCaptchaRef.value!.setFocus(false)
-			;(getCurrentInstance()!.proxy!.$parent as ComponentPublicInstance).$callMethod("showPopupCaptcha", () => {
-				if (!state.pendingAgreements) {
-					sendSmsCode()
-				}
-			})
+			const parent = currentInstance?.proxy?.$parent as ComponentPublicInstance | null
+			if (parent != null) {
+				parent.$callMethod("showPopupCaptcha", () => {
+					if (!state.pendingAgreements) {
+						sendSmsCode()
+					}
+				})
+			}
 			uni.showToast({
 				title: '未同意隐私政策协议',
 				icon: 'none'
