@@ -1,6 +1,6 @@
 <template>
 	<view class="page">
-		<uni-navbar-lite title="设置昵称" class="uni-navbar-lite">
+		<uni-nav-bar title="设置昵称" navigation-bar-text-style="black" class="uni-navbar-lite" right-class="set-nickname-navbar-right">
 			<template v-slot:right>
 				<view class="navbar-right-content">
 					<view class="submit" :class="{ 'submit-disabled': !hasChange || nickname == '' }" @click="setNickname">
@@ -8,7 +8,7 @@
 					</view>
 				</view>
 			</template>
-		</uni-navbar-lite>
+		</uni-nav-bar>
 
 		<uni-id-pages-x-input class="my-input" v-model="nickname" @confirm="setNickname" placeholder="请输入昵称" :focus="true"
 			:maxlength="25"></uni-id-pages-x-input>
@@ -117,9 +117,18 @@
 		background-color: #FFF;
 	}
 
+	.uni-navbar-lite {
+		background-color: #fff;
+	}
+
+	.set-nickname-navbar-right {
+		width: 70px;
+		margin-right: 0;
+	}
+
 	.navbar-right-content {
 		width: 70px;
-		height: 45px;
+		height: 44px;
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;

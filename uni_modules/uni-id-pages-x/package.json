@@ -41,7 +41,9 @@
     "widescreen": "-"
   },
   "uni_modules": {
-    "dependencies": [],
+    "dependencies": [
+      "uni-nav-bar-x"
+    ],
     "encrypt": [],
     "platforms": {
       "cloud": {
