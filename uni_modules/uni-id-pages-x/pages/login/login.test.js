@@ -33,7 +33,7 @@ describe('loginByPwd', () => {
 	});
 	it('登录账号', async () => {
 		agreeEl = await page.$('uni-id-pages-x-agreements')
-		expect(await agreeEl.data('needAgreements')).toBe(true)
+		expect(await agreeEl.data('data.needAgreements')).toBe(true)
 		// setAgree
 		await agreeEl.callMethod('confirm')
 		await loginByPwdEl.setData({
@@ -75,7 +75,7 @@ describe('loginByPwd', () => {
 	
 	it('smsCode-agree', async () => {
 		agreeEl = await page.$('uni-id-pages-x-agreements')
-		expect(await agreeEl.data('needAgreements')).toBe(true)
+		expect(await agreeEl.data('data.needAgreements')).toBe(true)
 		await agreeEl.callMethod('confirm')
 		await page.waitFor(100)
 	});

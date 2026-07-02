@@ -9,16 +9,19 @@ describe('/uni_modules/uni-id-pages-x/pages/register/register', () => {
 	});
 
 	it('register', async () => {
-		const agreeEl = await page.$('uni-id-pages-x-agreements')
-		expect(await agreeEl.data('needAgreements')).toBe(true)
+		// const agreeEl = await page.$('uni-id-pages-x-agreements')
+		const agreeEl = await page.$('.agreements-box')
+		expect(await agreeEl.data('data.needAgreements')).toBe(true)
 		// setAgree
 		await agreeEl.callMethod('confirm')
 		await page.setData({
-			username: "dcloud88",
-			nickname: "",
-			password: "dcloud2023",
-			captcha: "1234",
-			password2: "dcloud2023"
+			data: {
+				username: "dcloud88",
+				nickname: "",
+				password: "dcloud2023",
+				captcha: "1234",
+				password2: "dcloud2023"
+			}
 		})
 		const registerRes =  await page.callMethod('register')
 		console.log('registerRes: ',registerRes);
