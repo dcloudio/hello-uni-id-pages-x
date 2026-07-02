@@ -3,28 +3,28 @@
 		<view class="form">
 			<view class="item">
 				<text class="required">*</text>
-				<uni-id-pages-x-input class="my-input" title="用户名" placeholder="请输入用户名（数字+字母的3~20位字符）" v-model="username"
+				<uni-id-pages-x-input class="my-input" title="用户名" placeholder="请输入用户名（数字+字母的3~20位字符）" v-model="data.username"
 					ref="usernameRef"></uni-id-pages-x-input>
 			</view>
 			<view class="item">
 				<uni-id-pages-x-input class="my-input" title="昵称" placeholder="请输入用户名（限中文、数字、字母组成的3~20位字符）"
-					v-model="nickname" ref="nicknameRef"></uni-id-pages-x-input>
+					v-model="data.nickname" ref="nicknameRef"></uni-id-pages-x-input>
 			</view>
 			<view class="item">
 				<text class="required">*</text>
-				<uni-id-pages-x-input class="my-input" title="设置密码" placeholder="请输入6位数密码" v-model="password"
+				<uni-id-pages-x-input class="my-input" title="设置密码" placeholder="请输入6位数密码" v-model="data.password"
 					:password="true" ref="passwordRef"></uni-id-pages-x-input>
 			</view>
 			<view class="item">
 				<text class="required">*</text>
-				<uni-id-pages-x-input class="my-input" title="重复密码" placeholder="请重新输入密码" v-model="password2" :password="true"
+				<uni-id-pages-x-input class="my-input" title="重复密码" placeholder="请重新输入密码" v-model="data.password2" :password="true"
 					ref="password2Ref"></uni-id-pages-x-input>
 			</view>
 			<view class="item mt">
-				<uni-captcha ref="captchaRef" scene="register" v-model="captcha" />
+				<uni-captcha ref="captchaRef" scene="register" v-model="data.captcha" />
 			</view>
 
-			<uni-id-pages-x-agreements class="agreements-box" ref="agreementsRef" />
+			<uni-id-pages-x-agreements class="agreements-box" ref="agreementsRef" scope="register" />
 
 			<button @click="registerBefore" type="primary">注册并登录</button>
 		</view>
@@ -41,11 +41,14 @@
 	const password2Ref = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
 	const captchaRef = ref<UniCaptchaComponentPublicInstance | null>(null)
 	const agreementsRef = ref<UniIdPagesXAgreementsComponentPublicInstance | null>(null)
-	const username = ref("")
-	const nickname = ref("")
-	const password = ref("")
-	const password2 = ref("")
-	const captcha = ref("")
+	// 使用 reactive，便于自动化测试直接 setData 和读取页面状态
+	const data = reactive({
+		username: "",
+		nickname: "",
+		password: "",
+		password2: "",
+		captcha: ""
+	})
 
 	function showPopupCaptcha(callback : () => void) {
 		agreementsRef.value!.showPopupAgreements(callback)
@@ -53,10 +56,10 @@
 
 	function registerBefore() {
 		const myForm : UTSJSONObject = {
-			username: username.value,
-			password: password.value,
-			password2: password2.value,
-			captcha: captcha.value
+			username: data.username,
+			password: data.password,
+			password2: data.password2,
+			captcha: data.captcha
 		}
 		const inputRefs : UTSJSONObject = {
 			username: usernameRef.value,
@@ -86,7 +89,7 @@
 		})
 
 		const usernameRegExp = new RegExp("^(?=.*[a-z])(?=.*\\d)[a-z\\d]{3,20}$")
-		if (!usernameRegExp.test(username.value)) {
+		if (!usernameRegExp.test(data.username)) {
 			usernameRef.value!.setFocus(true)
 			return uni.showModal({
 				content: "用户名由数字和小写字母的3-20个字符组成",
@@ -95,9 +98,9 @@
 			})
 		}
 
-		if (nickname.value.length > 0) {
+		if (data.nickname.length > 0) {
 			const nicknameRegExp = new RegExp("^[\u4e00-\u9fa5a-z0-9]{3,20}$")
-			if (!nicknameRegExp.test(username.value)) {
+			if (!nicknameRegExp.test(data.username)) {
 				usernameRef.value!.setFocus(true)
 				return uni.showModal({
 					content: "昵称由小写字母、数字、中文组成的3-20位字符串",
@@ -107,7 +110,7 @@
 			}
 		}
 
-		const checkPasswordRes = checkPassword(password.value)
+		const checkPasswordRes = checkPassword(data.password)
 		const isPass = checkPasswordRes.getBoolean("pass") as Boolean
 		if (!isPass) {
 			const errMsg = checkPasswordRes.getString("errMsg")
@@ -121,7 +124,7 @@
 			})
 		}
 
-		if (password.value != password2.value) {
+		if (data.password != data.password2) {
 			return uni.showModal({
 				content: "两次输入的密码不一致",
 				showCancel: false,
@@ -132,7 +135,7 @@
 			})
 		}
 
-		if (captcha.value.length != 4) {
+		if (data.captcha.length != 4) {
 			return uni.showModal({
 				content: "请输入验证码",
 				showCancel: false,
@@ -156,18 +159,18 @@
 	}
 
 	async function register() : Promise<any> {
-		const data : UTSJSONObject = {
-			"username": username.value,
-			"nickname": nickname.value,
-			"password": password.value,
-			"password2": password2.value,
-			"captcha": captcha.value
+		const payload : UTSJSONObject = {
+			"username": data.username,
+			"nickname": data.nickname,
+			"password": data.password,
+			"password2": data.password2,
+			"captcha": data.captcha
 		}
 		const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: true })
 		uni.showLoading({ "title": "请求中" })
 
 		const testRes = await new Promise((resolve) => {
-			uniIdCo.registerUser(data)
+			uniIdCo.registerUser(payload)
 				.finally(() => uni.hideLoading())
 				.then((e) => {
 					console.log('e: ', e)
@@ -194,6 +197,11 @@
 		console.log('testRes: ', testRes)
 		return testRes
 	}
+
+	defineExpose({
+		data,
+		register
+	})
 </script>
 
 <style lang="scss" scoped>

@@ -1,6 +1,6 @@
 <template>
 	<view class="agreements-root" v-if="agreements.length != 0">
-		<template v-if="needAgreements">
+		<template v-if="data.needAgreements">
 			<checkbox-group @change="setAgree">
 				<checkbox class="checkbox" style="transform: scale(0.7);margin-right: -6px;padding-right: 3px;margin-left: 1px;"
 					:checked="!pendingAgreements" value="agreement">
@@ -56,7 +56,10 @@
 
 	const popupRef = ref<UniPopupComponentPublicInstance | null>(null)
 	const popupBoxRef = ref<UniElement | null>(null)
-	const needAgreements = ref(true)
+	// 使用 reactive，便于自动化测试直接读取组件数据
+	const data = reactive({
+		needAgreements: true
+	})
 
 	const agreements = computed(() : Agreement[] => {
 		const agreements = config.getJSON('agreements')
@@ -115,11 +118,11 @@
 	onMounted(() => {
 		const scopeList = config.getArray<string>('agreements.scopeList')
 		if (scopeList == null) {
-			needAgreements.value = false
+			data.needAgreements = false
 		} else {
-			needAgreements.value = scopeList.includes(props.scope)
+			data.needAgreements = scopeList.includes(props.scope)
 		}
-		state.pendingAgreements = needAgreements.value
+		state.pendingAgreements = data.needAgreements
 
 		uni.$on("uni-id-pages-x-agreements-shake", () => {
 			popupBoxRef.value?.style.setProperty("top", 0)
@@ -127,6 +130,8 @@
 	})
 
 	defineExpose({
+		data,
+		confirm,
 		showPopupAgreements
 	})
 </script>
