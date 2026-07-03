@@ -3,14 +3,14 @@
 		<uni-nav-bar title="设置昵称" navigation-bar-text-style="black" class="set-nickname-nav-bar" right-class="set-nickname-navbar-right">
 			<template v-slot:right>
 				<view class="navbar-right-content">
-					<view class="submit" :class="{ 'submit-disabled': !hasChange || nickname == '' }" @click="setNickname">
-						<text class="submit-text" :class="{ 'submit-text-disabled': !hasChange || nickname == '' }">完成</text>
+					<view class="submit" :class="{ 'submit-disabled': !hasChange || data.nickname == '' }" @click="setNickname">
+						<text class="submit-text" :class="{ 'submit-text-disabled': !hasChange || data.nickname == '' }">完成</text>
 					</view>
 				</view>
 			</template>
 		</uni-nav-bar>
 
-		<uni-id-pages-x-input class="my-input" v-model="nickname" @confirm="setNickname" placeholder="请输入昵称" :focus="true"
+		<uni-id-pages-x-input class="my-input" v-model="data.nickname" @confirm="setNickname" placeholder="请输入昵称" :focus="true"
 			:maxlength="25"></uni-id-pages-x-input>
 	</view>
 </template>
@@ -22,18 +22,20 @@
 	}
 
 	import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
-
-	const nickname = ref("")
-	const savedNickname = ref("")
-	const testErr = ref({
-		errCode: '',
-		errMsg: ''
-	} as TypeTestErr)
-	const testState = ref(false)
-	const testSuccess = ref(100)
+	// 使用reactive避免ref数据在自动化测试中无法访问
+	const data = reactive({
+		nickname: '',
+		savedNickname: '',
+		testErr: {
+			errCode: '',
+			errMsg: ''
+		} as TypeTestErr,
+		testState: false,
+		testSuccess: 100
+	})
 
 	const hasChange = computed(() : boolean => {
-		return savedNickname.value != nickname.value
+		return data.savedNickname != data.nickname
 	})
 
 	function getCurrentNickname() : string {
@@ -42,12 +44,12 @@
 	}
 
 	async function setNickname() : Promise<any> {
-		if (nickname.value.length == 0) {
+		if (data.nickname.length == 0) {
 			uni.showToast({
 				title: '昵称不能为空',
 				icon: 'none'
 			})
-			nickname.value = savedNickname.value
+			data.nickname = data.savedNickname
 			return false
 		}
 		if (!hasChange.value) {
@@ -66,12 +68,12 @@
 				db.collection('uni-id-users')
 					.doc(uid)
 					.update({
-						"nickname": nickname.value
+						"nickname": data.nickname
 					})
-						.then<void>((e) => {
-							console.log('e: ', e)
-							savedNickname.value = nickname.value
-							mutations.updateUserInfo({ "nickname": nickname.value } as UTSJSONObject)
+					.then<void>((e) => {
+						console.log('e: ', e)
+						data.savedNickname = data.nickname
+						mutations.updateUserInfo({ "nickname": data.nickname } as UTSJSONObject)
 							uni.showToast({
 								title: '修改成功',
 								icon: 'none'
@@ -84,15 +86,15 @@
 					.catch<void>((err : any | null) => {
 						const error = err as UniCloudError
 						console.log('error', error)
-						testErr.value.errCode = error.errCode as string
-						testErr.value.errMsg = error.errMsg as string
+						data.testErr.errCode = error.errCode as string
+						data.testErr.errMsg = error.errMsg as string
 						resolve({ errCode: error.errCode, errMsg: error.errMsg })
 					})
 					.finally(() => {
 						uni.hideLoading()
 					})
 			})
-			testState.value = true
+			data.testState = true
 			console.log('testRes: ', testRes)
 			return testRes
 		}
@@ -101,8 +103,13 @@
 	}
 
 	onLoad(() => {
-		savedNickname.value = getCurrentNickname()
-		nickname.value = savedNickname.value
+		data.savedNickname = getCurrentNickname()
+		data.nickname = data.savedNickname
+	})
+
+	defineExpose({
+		data,
+		setNickname
 	})
 </script>
 

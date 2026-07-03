@@ -102,6 +102,10 @@
 			// }
 		})
 	}
+	
+	defineExpose({
+		logout
+	})
 </script>
 
 <style>

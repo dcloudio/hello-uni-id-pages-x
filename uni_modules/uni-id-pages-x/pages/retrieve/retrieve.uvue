@@ -3,16 +3,16 @@
 		<view class="form">
 			<!-- 获取验证码组件（输入手机号码+发送短信验证码所需的图形验证码，获得短信验证码） -->
 			<uni-id-pages-x-smsCode scene="reset-pwd-by-sms" ref="smsCodeRef" @input="smsCodeInput"
-				:autoSend="false"></uni-id-pages-x-smsCode>
-			<uni-id-pages-x-input class="my-input" :border="false" v-model="password" placeholder="请输入新密码" ref="passwordRef"
+				:autoSend="false" class="test-smsCode"></uni-id-pages-x-smsCode>
+			<uni-id-pages-x-input class="my-input" :border="false" v-model="data.password" placeholder="请输入新密码" ref="passwordRef"
 				:password="true"></uni-id-pages-x-input>
-			<uni-id-pages-x-input class="my-input" :border="false" v-model="password2" placeholder="请再次输入密码" ref="password2Ref"
+			<uni-id-pages-x-input class="my-input" :border="false" v-model="data.password2" placeholder="请再次输入密码" ref="password2Ref"
 				:password="true"></uni-id-pages-x-input>
 			<button class="uni-btn" type="primary" @click="doNext">下一步</button>
 		</view>
 
 		<!-- 多次重置输入错误时，需要额外输入图形验证码 （悬浮） -->
-		<uni-popup-captcha ref="captchaRef" scene="reset-pwd-by-sms" v-model="captcha" title="请输入验证码"></uni-popup-captcha>
+		<uni-popup-captcha ref="captchaRef" scene="reset-pwd-by-sms" v-model="data.captcha" title="请输入验证码"></uni-popup-captcha>
 	</view>
 </template>
 
@@ -29,15 +29,18 @@
 	const passwordRef = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
 	const password2Ref = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
 	const captchaRef = ref<UniPopupCaptchaComponentPublicInstance | null>(null)
-	const password = ref("")
-	const password2 = ref("")
-	const captcha = ref("")
-	const testErr = ref({
-		errCode: '',
-		errMsg: ''
-	} as TypeTestErr)
-	const testSuccess = ref(100)
-	const testState = ref(false)
+	// 使用reactive避免ref数据在自动化测试中无法访问
+	const data = reactive({
+		password: '',
+		password2: '',
+		captcha: '',
+		testErr: {
+			errCode: '',
+			errMsg: ''
+		} as TypeTestErr,
+		testSuccess: 100,
+		testState: false
+	})
 
 	function smsCodeInput(param : UTSJSONObject) {
 		const mobile = param.getString("mobile") as string
@@ -52,7 +55,7 @@
 	}
 
 	function doNext() {
-		const checkPasswordRes = checkPassword(password.value)
+		const checkPasswordRes = checkPassword(data.password)
 		const isPass = checkPasswordRes.getBoolean("pass") as Boolean
 		if (!isPass) {
 			const errMsg = checkPasswordRes.getString("errMsg")
@@ -67,7 +70,7 @@
 			})
 		}
 
-		if (password.value != password2.value) {
+		if (data.password != data.password2) {
 			return uni.showModal({
 				title: "提示",
 				content: "两次输入的密码不一致",
@@ -83,34 +86,34 @@
 
 	function resetPwdBySms(param : UTSJSONObject) {
 		uni.showLoading({ "title": "请求中" })
-		param.set("password", password.value)
-		param.set("captcha", captcha.value)
+		param.set("password", data.password)
+		param.set("captcha", data.captcha)
 		uniIdCo.resetPwdBySms(param)
 			.finally(() : void => {
 				uni.hideLoading()
 			})
 			.then<void>((e : UTSJSONObject) : void => {
-				testState.value = true
+				data.testState = true
 				console.log(e)
-				testSuccess.value = e['errCode'] as number
-				console.log(testSuccess.value)
+				data.testSuccess = e['errCode'] as number
+				console.log(data.testSuccess)
 				smsCodeRef.value!.hideCodeInput()
-					uni.showToast({
-						title: '重置成功',
-						icon: 'none'
-					})
-					setTimeout(() => {
-						uni.navigateBack()
-					}, 1500)
+				uni.showToast({
+					title: '重置成功',
+					icon: 'none'
 				})
+				setTimeout(() => {
+					uni.navigateBack()
+				}, 1500)
+			})
 			.catch<void>((err : any | null) : void => {
-				testState.value = true
+				data.testState = true
 				const error = err as UniCloudError
 				console.error(error)
 				console.error(error.code)
-				testErr.value.errCode = error.errCode as string
-				testErr.value.errMsg = error.errMsg as string
-				console.log(JSON.stringify(testErr.value))
+				data.testErr.errCode = error.errCode as string
+				data.testErr.errMsg = error.errMsg as string
+				console.log(JSON.stringify(data.testErr))
 			})
 	}
 
@@ -121,6 +124,11 @@
 				smsCodeRef.value!.mobile = mobile
 			})
 		}
+	})
+
+	defineExpose({
+		data,
+		doNext
 	})
 </script>
 
