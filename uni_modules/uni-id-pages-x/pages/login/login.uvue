@@ -21,7 +21,7 @@
     <uni-id-pages-x-loginByPwd v-if="data.loginType == 'username'" class="test-loginByPwd" />
 
     <!-- 手机号验证码登录 -->
-    <uni-id-pages-x-loginBySmsCode v-if="data.loginType == 'smsCode'" />
+    <uni-id-pages-x-loginBySmsCode v-if="data.loginType == 'smsCode'"  class="test-loginBySmsCode" />
 
     <!-- 固定定位的快捷登录按钮 -->
     <uni-id-pages-x-fab-login :currentLoginType="data.loginType"

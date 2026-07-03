@@ -2,10 +2,10 @@
 	<view>
 		<view class="form">
 			<text class="pwd-login-title">账号密码登录</text>
-			<uni-id-pages-x-input class="my-input" title="账号" placeholder="请输入手机号/用户名/邮箱" v-model="username" ref="usernameRef"></uni-id-pages-x-input>
-			<uni-id-pages-x-input class="my-input" title="密码" v-model="password" :password="true" ref="passwordRef"></uni-id-pages-x-input>
+			<uni-id-pages-x-input class="my-input" title="账号" placeholder="请输入手机号/用户名/邮箱" v-model="data.username" ref="usernameRef"></uni-id-pages-x-input>
+			<uni-id-pages-x-input class="my-input" title="密码" v-model="data.password" :password="true" ref="passwordRef"></uni-id-pages-x-input>
 			<uni-id-pages-x-agreements class="agreements-box" ref="agreementsRef" scope="login" />
-			<button class="uni-btn" :type="password.length > 0 && username.length > 0 ? 'primary' : ''" @click="loginByPwd">登录</button>
+			<button class="uni-btn" :type="data.password.length > 0 && data.username.length > 0 ? 'primary' : ''" @click="loginByPwd">登录</button>
 		</view>
 
 		<view class="link-group">
@@ -13,7 +13,7 @@
 			<text class="link link-group-link" @click="toRegister">注册账号</text>
 		</view>
 
-		<uni-popup-captcha ref="popupCaptchaRef" scene="login-by-pwd" v-model="loginCaptcha" title="请输入验证码"></uni-popup-captcha>
+		<uni-popup-captcha ref="popupCaptchaRef" scene="login-by-pwd" v-model="data.loginCaptcha" title="请输入验证码"></uni-popup-captcha>
 	</view>
 </template>
 
@@ -26,17 +26,19 @@
 	const passwordRef = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
 	const agreementsRef = ref<UniIdPagesXAgreementsComponentPublicInstance | null>(null)
 	const popupCaptchaRef = ref<UniPopupCaptchaComponentPublicInstance | null>(null)
-	const username = ref("")
-	const password = ref("")
-	const needCaptcha = ref(false)
-	const loginCaptcha = ref("")
+	const data = reactive({
+		username: "",
+		password: "",
+		needCaptcha: false,
+		loginCaptcha: ""
+	})
 
 	function showPopupCaptcha(callback : () => void) {
 		agreementsRef.value!.showPopupAgreements(callback)
 	}
 
 	async function loginByPwd() : Promise<any> {
-		if (username.value.length == 0) {
+		if (data.username.length == 0) {
 			usernameRef.value!.setFocus(true)
 			return uni.showToast({
 				title: '请输入手机号/用户名/邮箱',
@@ -44,7 +46,7 @@
 				duration: 3000
 			})
 		}
-		if (password.value.length == 0) {
+		if (data.password.length == 0) {
 			passwordRef.value!.setFocus(true)
 			return uni.showToast({
 				title: '请输入密码',
@@ -52,7 +54,7 @@
 				duration: 3000
 			})
 		}
-		if (needCaptcha.value && loginCaptcha.value.length != 4) {
+		if (data.needCaptcha && data.loginCaptcha.length != 4) {
 			popupCaptchaRef.value!.open(() => {
 				loginByPwd()
 			})
@@ -64,17 +66,17 @@
 		}
 
 		const data : UTSJSONObject = {
-			"password": password.value,
-			"captcha": loginCaptcha.value
+			"password": data.password,
+			"captcha": data.loginCaptcha
 		}
 
 		let keyName = 'username'
-		if (/^1\d{10}$/.test(username.value)) {
+		if (/^1\d{10}$/.test(data.username)) {
 			keyName = "mobile"
-		} else if (/@/.test(username.value)) {
+		} else if (/@/.test(data.username)) {
 			keyName = "email"
 		}
-		data.set(keyName, username.value)
+		data.set(keyName, data.username)
 
 		console.log('data', state.pendingAgreements)
 
@@ -96,7 +98,7 @@
 			uniIdCo.login(data)
 				.finally(() : void => {
 					uni.hideLoading()
-					loginCaptcha.value = ""
+					data.loginCaptcha = ""
 				})
 				.then((e) => {
 					console.log('uniIdCo.login res', e)
@@ -108,7 +110,7 @@
 					console.error(error)
 					console.error(error.code)
 					if (error.code == 'uni-id-captcha-required') {
-						needCaptcha.value = true
+						data.needCaptcha = true
 						popupCaptchaRef.value!.open(() => {
 							loginByPwd()
 						})
@@ -134,10 +136,10 @@
 
 	function toRetrievePwd() {
 		let url = "/uni_modules/uni-id-pages-x/pages/retrieve/retrieve"
-		if (/^1\d{10}$/.test(username.value)) {
-			url += "?mobile=" + username.value
-		} else if (/@/.test(username.value)) {
-			url += "?email=" + username.value
+		if (/^1\d{10}$/.test(data.username)) {
+			url += "?mobile=" + data.username
+		} else if (/@/.test(data.username)) {
+			url += "?email=" + data.username
 		}
 		uni.navigateTo({ url })
 	}
@@ -149,8 +151,10 @@
 	})
 	
 	defineExpose({
+		data,
 		toRegister,
-		toRetrievePwd
+		toRetrievePwd,
+		loginByPwd
 	})
 </script>
 

@@ -5,14 +5,14 @@
 			<uni-id-pages-x-icons :size="10" color="#666" @click="chooseArea" type="down" />
 		</view>
 		<view class="input-box mobile-box-input-box">
-			<uni-id-pages-x-input type="number" :border="false" v-model="mobile" :maxlength="11" placeholder="请输入11位手机号"
+			<uni-id-pages-x-input type="number" :border="false" v-model="data.mobile" :maxlength="11" placeholder="请输入11位手机号"
 				ref="mobileInputRef"></uni-id-pages-x-input>
 		</view>
 	</view>
 	<view class="send-sms-captcha-box">
-		<uni-captcha ref="sendSmsCaptchaRef" scene="send-sms-code" v-model="sendSmsCaptcha" />
+		<uni-captcha ref="sendSmsCaptchaRef" scene="send-sms-code" v-model="data.sendSmsCaptcha" />
 	</view>
-	<fab-sms-code-input v-model="smsCode" :mobile="mobile" :reverseNumber="reverseNumber" ref="fabSmsCodeInputRef"
+	<fab-sms-code-input v-model="data.smsCode" :mobile="data.mobile" :reverseNumber="reverseNumber" ref="fabSmsCodeInputRef"
 		@reGetSmsCode="reGetSmsCode" title="验证并登录" />
 </template>
 
@@ -40,9 +40,11 @@
 	const fabSmsCodeInputRef = ref<ComponentPublicInstance | null>(null)
 	const sendSmsCaptchaRef = ref<UniCaptchaComponentPublicInstance | null>(null)
 	const mobileInputRef = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
-	const mobile = ref("")
-	const sendSmsCaptcha = ref("")
-	const smsCode = ref("")
+	const data = reactive({
+		mobile: "",
+		sendSmsCaptcha: "",
+		smsCode: ""
+	})
 	const reverseNumber = ref(0)
 
 	function setMobileInputFocus(val : boolean) {
@@ -68,9 +70,9 @@
 
 	function emitInput() {
 		const param : UTSJSONObject = {
-			"mobile": mobile.value,
-			"code": smsCode.value,
-			"sendSmsCaptcha": sendSmsCaptcha.value
+			"mobile": data.mobile,
+			"code": data.smsCode,
+			"sendSmsCaptcha": data.sendSmsCaptcha
 		}
 		emit('input', param)
 	}
@@ -97,8 +99,8 @@
 	}
 
 	function reset() {
-		smsCode.value = ""
-		sendSmsCaptcha.value = ""
+		data.smsCode = ""
+		data.sendSmsCaptcha = ""
 		clearCodeInput()
 		hideCodeInput()
 	}
@@ -126,7 +128,7 @@
 		}
 
 		const reg_mobile = /^1\d{10}$/
-		if (!reg_mobile.test(mobile.value)) {
+		if (!reg_mobile.test(data.mobile)) {
 			mobileInputRef.value!.setFocus(true)
 			uni.showToast({
 				title: "手机号格式错误",
@@ -136,7 +138,7 @@
 			return
 		}
 
-		if (sendSmsCaptcha.value.length != 4) {
+		if (data.sendSmsCaptcha.length != 4) {
 			sendSmsCaptchaRef.value!.setFocus(true)
 			uni.showToast({
 				title: '请先输入图形验证码',
@@ -149,9 +151,9 @@
 		uni.showLoading({ "title": "发送中" })
 		const uniIdCo = uniCloud.importObject("uni-id-co", { "customUI": true })
 		uniIdCo.sendSmsCode({
-			"mobile": mobile.value,
+			"mobile": data.mobile,
 			"scene": props.scene,
-			"captcha": sendSmsCaptcha.value
+			"captcha": data.sendSmsCaptcha
 		})
 			.finally(() : void => {
 				uni.hideLoading()
@@ -175,7 +177,7 @@
 							mask: false
 						})
 						sendSmsCaptchaRef.value!.getImageCaptcha(true)
-						sendSmsCaptcha.value = ""
+						data.sendSmsCaptcha = ""
 						break
 					case "uni-id-invalid-sms-template-id":
 						showCodeInput()
@@ -197,7 +199,7 @@
 			})
 	}
 
-	watch(mobile, (value : string) => {
+	watch(() => data.mobile, (value : string) => {
 		emitInput()
 		if (value.length == 11) {
 			sendSmsCaptchaRef.value!.setFocus(true)
@@ -205,14 +207,14 @@
 		}
 	})
 
-	watch(sendSmsCaptcha, () => {
+	watch(() => data.sendSmsCaptcha, () => {
 		emitInput()
-		if (props.autoSend && sendSmsCaptcha.value.length == 4 && mobile.value.length == 11) {
+		if (props.autoSend && data.sendSmsCaptcha.length == 4 && data.mobile.length == 11) {
 			sendSmsCode()
 		}
 	})
 
-	watch(smsCode, () => {
+	watch(() => data.smsCode, () => {
 		emitInput()
 	})
 
@@ -223,7 +225,7 @@
 	})
 
 	defineExpose({
-		mobile,
+		data,
 		sendSmsCode,
 		hideCodeInput,
 		clearCodeInput,

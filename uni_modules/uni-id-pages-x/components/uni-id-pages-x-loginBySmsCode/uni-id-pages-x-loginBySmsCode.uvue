@@ -3,7 +3,7 @@
 		<text class="tip">未注册的账号验证通过后将自动注册</text>
 
 		<view class="form">
-			<uni-id-pages-x-smsCode ref="smsCodeRef" @input="smsCodeInput" :checkAgreements="true"></uni-id-pages-x-smsCode>
+			<uni-id-pages-x-smsCode ref="smsCodeRef" class="test-smsCode" @input="smsCodeInput" :checkAgreements="true"></uni-id-pages-x-smsCode>
 			<uni-id-pages-x-agreements class="agreements-box" ref="agreementsRef" scope="login" />
 			<button class="uni-btn" type="primary" @click="sendSmsCode">获取手机验证码</button>
 		</view>
