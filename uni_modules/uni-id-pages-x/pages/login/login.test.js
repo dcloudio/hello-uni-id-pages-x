@@ -12,7 +12,8 @@ describe('loginByPwd', () => {
 	it('账号密码登录', async () => {
 		loginType = await page.data('data.loginType')
 		expect(loginType).toBe('username')
-		loginByPwdEl = await page.$('uni-id-pages-x-loginByPwd')
+		loginByPwdEl = await page.$('.test-loginByPwd')
+		console.log('loginByPwdEl',loginByPwdEl)
 		const title = await page.$('.pwd-login-title')
 		expect(await title.text()).toBe('账号密码登录')
 	});
@@ -32,17 +33,20 @@ describe('loginByPwd', () => {
 		expect((await program.navigateBack()).path).toBe('uni_modules/uni-id-pages-x/pages/login/login')
 	});
 	it('登录账号', async () => {
-		agreeEl = await page.$('uni-id-pages-x-agreements')
+		agreeEl = await page.$('.agreements-box')
 		expect(await agreeEl.data('data.needAgreements')).toBe(true)
 		// setAgree
 		await agreeEl.callMethod('confirm')
 		await loginByPwdEl.setData({
-			username: "dcloud88",
-			password: "dcloud2023",
-			needCaptcha: false
+			data:{
+				username: "dcloud88",
+				password: "dcloud2023",
+				needCaptcha: false
+			}
 		})
+		
 		const loginByPwdRes = await loginByPwdEl.callMethod('loginByPwd')
-		console.log('loginByPwdRes: ',loginByPwdRes);
+		console.log('登录账号--loginByPwdRes: ',loginByPwdRes);
 		if(loginByPwdRes.uid){
 			expect(loginByPwdRes.uid).toHaveLength(24)
 			return;
@@ -65,16 +69,19 @@ describe('loginByPwd', () => {
 				loginType: "smsCode"
 			}
 		})
-		loginBySmsCodeEl = await page.$('uni-id-pages-x-loginBySmsCode')
-		smsCodeEl = await page.$('uni-id-pages-x-smsCode')
+		loginBySmsCodeEl = await page.$('.test-loginBySmsCode')
+		smsCodeEl = await page.$('.test-smsCode')
 		await smsCodeEl.setData({
-			mobile: "17755555555",
-			sendSmsCaptcha: "1234",
+			data:{
+				mobile: "17755555555",
+				sendSmsCaptcha: "1234",
+			}
 		})
+		
 	});
 	
 	it('smsCode-agree', async () => {
-		agreeEl = await page.$('uni-id-pages-x-agreements')
+		agreeEl = await page.$('.agreements-box')
 		expect(await agreeEl.data('data.needAgreements')).toBe(true)
 		await agreeEl.callMethod('confirm')
 		await page.waitFor(100)
@@ -84,7 +91,9 @@ describe('loginByPwd', () => {
 		await smsCodeEl.callMethod('sendSmsCode')
 		await page.waitFor(500)
 		await smsCodeEl.setData({
-			smsCode: "123456"
+			data:{
+				smsCode: "123456"
+			}
 		})
 	});
 	
@@ -94,12 +103,12 @@ describe('loginByPwd', () => {
 			return await loginBySmsCodeEl.data('testState') === true
 		})
 		loginSuccess = await loginBySmsCodeEl.data('testSuccess')
-		console.log('loginSuccess:---2 ', loginSuccess);
+		console.log('手机验证码---loginSuccess:', loginSuccess);
 		if (loginSuccess.errCode === 0) {
 			expect(loginSuccess.uid).toHaveLength(24)
 		}
 		loginErr = await loginBySmsCodeEl.data('testErr')
-		console.log('loginErr:---2 ', loginErr);
+		console.log('手机验证码---loginErr:', loginErr);
 		if (loginErr.errCode) {
 			switch (loginErr.errCode) {
 				case 'uni-id-account-not-exists':
