@@ -1,19 +1,21 @@
 <template>
-	<view class="mobile-box">
-		<view @click="chooseArea" class="area">
-			<text>+86</text>
-			<uni-id-pages-x-icons :size="10" color="#666" @click="chooseArea" type="down" />
+	<view>
+		<view class="mobile-box">
+			<view @click="chooseArea" class="area">
+				<text>+86</text>
+				<uni-id-pages-x-icons :size="10" color="#666" @click="chooseArea" type="down" />
+			</view>
+			<view class="input-box mobile-box-input-box">
+				<uni-id-pages-x-input type="number" :border="false" v-model="data.mobile" :maxlength="11" placeholder="请输入11位手机号"
+					ref="mobileInputRef"></uni-id-pages-x-input>
+			</view>
 		</view>
-		<view class="input-box mobile-box-input-box">
-			<uni-id-pages-x-input type="number" :border="false" v-model="data.mobile" :maxlength="11" placeholder="请输入11位手机号"
-				ref="mobileInputRef"></uni-id-pages-x-input>
+		<view class="send-sms-captcha-box">
+			<uni-captcha ref="sendSmsCaptchaRef" scene="send-sms-code" v-model="data.sendSmsCaptcha" />
 		</view>
+		<fab-sms-code-input v-model="data.smsCode" :mobile="data.mobile" :reverseNumber="reverseNumber" ref="fabSmsCodeInputRef"
+			@reGetSmsCode="reGetSmsCode" title="验证并登录" />
 	</view>
-	<view class="send-sms-captcha-box">
-		<uni-captcha ref="sendSmsCaptchaRef" scene="send-sms-code" v-model="data.sendSmsCaptcha" />
-	</view>
-	<fab-sms-code-input v-model="data.smsCode" :mobile="data.mobile" :reverseNumber="reverseNumber" ref="fabSmsCodeInputRef"
-		@reGetSmsCode="reGetSmsCode" title="验证并登录" />
 </template>
 
 <script setup lang="uts">
