@@ -65,7 +65,7 @@
 			})
 		}
 
-		const data : UTSJSONObject = {
+		const payload : UTSJSONObject = {
 			"password": data.password,
 			"captcha": data.loginCaptcha
 		}
@@ -76,7 +76,7 @@
 		} else if (/@/.test(data.username)) {
 			keyName = "email"
 		}
-		data.set(keyName, data.username)
+		payload.set(keyName, data.username)
 
 		console.log('data', state.pendingAgreements)
 
@@ -95,7 +95,7 @@
 		})
 
 		const testRes = await new Promise((resolve) => {
-			uniIdCo.login(data)
+			uniIdCo.login(payload)
 				.finally(() : void => {
 					uni.hideLoading()
 					data.loginCaptcha = ""
