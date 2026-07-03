@@ -28,6 +28,7 @@ module.exports = {
 		let action = res.data.length ? 'refresh' : 'create'
 		//执行并返回结果
 		let option = {
+			text:"1234",//测试专用
 			scene, //来源客户端传递，表示：使用场景值，用于防止不同功能的验证码混用
 			uniPlatform: platform,
 			isUniAppX
