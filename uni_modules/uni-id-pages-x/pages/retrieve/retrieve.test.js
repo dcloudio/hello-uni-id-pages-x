@@ -11,29 +11,29 @@ describe('/uni_modules/uni-id-pages-x/pages/retrieve/retrieve.uvue', () => {
 		mobile = "17766666666"
 		sendSmsCaptcha = "1234"
 		smsCode = "123456"
-		const smsCodeEl = await page.$('uni-id-pages-x-smsCode')
+		const smsCodeEl = await page.$('.test-smsCode')
 		// console.log('smsCodeEl: ',smsCodeEl);
 		await smsCodeEl.setData({
 			mobile,
 			sendSmsCaptcha
 		})
 		await page.setData({
-			password:"2023dcloud",
-			password2:"2023dcloud"
+			'data.password': "2023dcloud",
+			'data.password2': "2023dcloud"
 		})
 		await smsCodeEl.setData({smsCode})
 		await page.callMethod('doNext')
 		//等待登录结果
 		await page.waitFor(async () => {
-			return await page.data('testState') === true
+			return await page.data('data.testState') === true
 		}) 
-		const testSuccessRes = await page.data('testSuccess')
+		const testSuccessRes = await page.data('data.testSuccess')
 		if(testSuccessRes < 100){
 			console.log('重置成功');
 			expect(testSuccessRes).toBe(0)
 			return
 		}
-		const testErrRes = await page.data('testErr')
+		const testErrRes = await page.data('data.testErr')
 		console.log('testErrRes: ',testErrRes);
 		switch (testErrRes.errCode){
 			case 'uni-id-mobile-verify-code-error':

@@ -9,13 +9,15 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/setNickname/setNickname.uvu
 	});
 	
 	it('设置昵称', async () => {
-		nickname = await page.data('nickname')
+		nickname = await page.data('data.savedNickname')
 		if (!nickname || nickname === "dcloud99") {  
 		   nickname = "dcloud00";  
 		} else {  
 		   nickname = "dcloud99";  
 		}
-		await page.setData({nickname})
+		await page.setData({
+			'data.nickname': nickname
+		})
 		await page.waitFor(300)
 		const res = await page.callMethod('setNickname')
 		// console.log(nickname,'res: ---',res,typeof res);

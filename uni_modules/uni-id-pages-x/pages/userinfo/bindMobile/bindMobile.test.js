@@ -11,18 +11,22 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile.uvue'
 		mobile = "17766666666"
 		captcha = "1234"
 		smsCode = "123456"
-		smsCodeEl = await page.$('uni-id-pages-x-smsCode')
+		smsCodeEl = await page.$('.test-smsCode')
 		await smsCodeEl.setData({
-			mobile,
-			sendSmsCaptcha:captcha
+			data:{
+				mobile,
+				sendSmsCaptcha:captcha
+			}
 		})
 		await page.waitFor(1000)
 		await smsCodeEl.setData({
-			smsCode
+			data:{smsCode}
 		})
-		const needCaptcha = await page.data('needCaptcha')
+		const needCaptcha = await page.data('data.needCaptcha')
 		if(needCaptcha){
-			await page.setData({captcha:captcha})
+			await page.setData({
+				'data.captcha': captcha,
+			})
 		}
 	});
 	it('绑定手机号', async () => {
@@ -33,16 +37,16 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile.uvue'
 		// })
 		// 等待登录结果
 		await page.waitFor(async () => {
-			return await page.data('testState') === true
+			return await page.data('data.testState') === true
 		}) 
-		const testSuccessRes = await page.data('testSuccess')
+		const testSuccessRes = await page.data('data.testSuccess')
 		// console.log('testSuccessRes: ',testSuccessRes);
 		if(testSuccessRes == 0){
 			console.log('绑定成功');
 			expect(testSuccessRes).toBe(0)
 			return
 		}
-		const testErrRes = await page.data('testErr')
+		const testErrRes = await page.data('data.testErr')
 		console.log('testErrRes: ',testErrRes);
 		switch (testErrRes.errCode){
 			case 'uni-id-bind-conflict':
