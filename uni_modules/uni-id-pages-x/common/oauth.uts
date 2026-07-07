@@ -1,0 +1,270 @@
+import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
+import { loginSuccess } from '@/uni_modules/uni-id-pages-x/common/common.uts';
+
+type OAuthLoginConfig = {
+	id : string,
+	provider : string,
+	text : string,
+	buttonText : string,
+	logo : string,
+	largeLogo : string
+}
+
+const oauthLoginConfigs = [
+	{
+		id: 'weixin',
+		provider: 'weixin',
+		text: '微信登录',
+		buttonText: '微信账号登录',
+		logo: '/uni_modules/uni-id-pages-x/static/login/uni-fab-login/weixin.png',
+		largeLogo: '/uni_modules/uni-id-pages-x/static/login/weixin.png'
+	},
+	{
+		id: 'apple',
+		provider: 'apple',
+		text: '苹果登录',
+		buttonText: 'Apple账号登录',
+		logo: '/uni_modules/uni-id-pages-x/static/login/uni-fab-login/apple.png',
+		largeLogo: '/uni_modules/uni-id-pages-x/static/login/apple.png'
+	},
+	{
+		id: 'huawei',
+		provider: 'huawei',
+		text: '华为登录',
+		buttonText: '华为账号登录',
+		logo: '/uni_modules/uni-id-pages-x/static/login/uni-fab-login/huawei.png',
+		largeLogo: '/uni_modules/uni-id-pages-x/static/login/huawei.png'
+	}
+] as OAuthLoginConfig[]
+
+let oauthLoginPending = false
+
+function getOAuthLoginConfig(type : string) : OAuthLoginConfig | null {
+	const matched = oauthLoginConfigs.find((item) : boolean => item.id == type)
+	return matched == null ? null : matched
+}
+
+export function isOAuthLoginType(type : string) : boolean {
+	return getOAuthLoginConfig(type) != null
+}
+
+export function getOAuthLoginText(type : string) : string {
+	const config = getOAuthLoginConfig(type)
+	return config == null ? '' : config.text
+}
+
+export function getOAuthLoginButtonText(type : string) : string {
+	const config = getOAuthLoginConfig(type)
+	return config == null ? '' : config.buttonText
+}
+
+export function getOAuthLoginLogo(type : string) : string {
+	const config = getOAuthLoginConfig(type)
+	return config == null ? '' : config.logo
+}
+
+export function getOAuthLoginLargeLogo(type : string) : string {
+	const config = getOAuthLoginConfig(type)
+	return config == null ? '' : config.largeLogo
+}
+
+function showOAuthError(title : string) {
+	uni.showToast({
+		title,
+		icon: 'none',
+		duration: 3000
+	})
+}
+
+function isProviderAvailable(provider : string) : boolean {
+	// #ifndef APP
+	return false
+	// #endif
+
+	// #ifdef APP
+	try {
+		const providerOptions : GetProviderSyncOptions = {
+			service: 'oauth'
+		}
+		const providerResult = uni.getProviderSync(providerOptions)
+		console.log('[uni-id-pages-x][oauth] providerIds before login', providerResult.providerIds)
+		return providerResult.providerIds.includes(provider)
+	} catch (e) {
+		console.error('get oauth provider failed', e)
+		return false
+	}
+	// #endif
+}
+
+function buildUniIdLoginParams(type : string, loginResult : any) : UTSJSONObject | null {
+	const params = {} as UTSJSONObject
+	const loginResultString = JSON.stringify(loginResult)!
+	const loginResultObject = JSON.parseObject(loginResultString)!
+	if (type == 'apple') {
+		const appleInfo = loginResultObject.getAny('appleInfo') as UTSJSONObject | null
+		const identityToken = appleInfo == null ? null : appleInfo.getString('identityToken')
+		console.log('[uni-id-pages-x][oauth] apple identityToken ready', identityToken != null && identityToken != '')
+		if (identityToken == null || identityToken == '') {
+			showOAuthError('未获取到Apple身份令牌')
+			return null
+		}
+
+		params.set('identityToken', identityToken)
+		const fullName = appleInfo == null ? null : appleInfo.getString('fullName')
+		if (fullName != null && fullName != '') {
+			params.set('nickname', fullName)
+		}
+		return params
+	}
+
+	const code = loginResultObject.getString('code')
+	console.log('[uni-id-pages-x][oauth] ' + type + ' code before uni-id-co', 'hasCode', code != null && code != '', 'codeLength', code == null ? 0 : code.length)
+	if (code == null || code == '') {
+		showOAuthError('未获取到授权code')
+		return null
+	}
+
+	params.set('code', code)
+	return params
+}
+
+function callUniIdOAuthLogin(type : string, params : UTSJSONObject) : Promise<UTSJSONObject> {
+	const code = params.getString('code')
+	const identityToken = params.getString('identityToken')
+	console.log('[uni-id-pages-x][oauth] enter callUniIdOAuthLogin', type, 'hasCode', code != null && code != '', 'codeLength', code == null ? 0 : code.length, 'hasIdentityToken', identityToken != null && identityToken != '', 'identityTokenLength', identityToken == null ? 0 : identityToken.length)
+	const uniIdCo = uniCloud.importObject('uni-id-co', { customUI: true })
+	if (type == 'weixin') {
+		console.log('[uni-id-pages-x][oauth] call uniIdCo.loginByWeixin')
+		return uniIdCo.loginByWeixin(params) as Promise<UTSJSONObject>
+	}
+	if (type == 'apple') {
+		console.log('[uni-id-pages-x][oauth] call uniIdCo.loginByApple')
+		return uniIdCo.loginByApple(params) as Promise<UTSJSONObject>
+	}
+	const uniIdCoAny = uniIdCo as any
+	console.log('[uni-id-pages-x][oauth] call uniIdCo.loginByHuawei')
+	return uniIdCoAny.loginByHuawei(params) as Promise<UTSJSONObject>
+}
+
+export function loginByOAuth(type : string) : Promise<UTSJSONObject> {
+	const oauthConfig = getOAuthLoginConfig(type)
+	return new Promise((resolve) => {
+		if (oauthLoginPending) {
+			console.log('[uni-id-pages-x][oauth] ignore duplicate login request', type)
+			resolve({} as UTSJSONObject)
+			return
+		}
+
+		if (oauthConfig == null) {
+			showOAuthError('不支持此登录方式')
+			resolve({} as UTSJSONObject)
+			return
+		}
+
+		if (state.pendingAgreements) {
+			showOAuthError('你未同意隐私政策协议')
+			resolve({} as UTSJSONObject)
+			return
+		}
+
+		if (!isProviderAvailable(oauthConfig.provider)) {
+			showOAuthError(oauthConfig.text + '未配置或当前平台不支持')
+			resolve({} as UTSJSONObject)
+			return
+		}
+		oauthLoginPending = true
+		console.log('[uni-id-pages-x][oauth] start uni.login', oauthConfig.provider)
+
+		uni.showLoading({
+			title: '登录中',
+			mask: false
+		})
+
+		const loginSuccessCallback = (loginResult : any) : void => {
+			console.log('[uni-id-pages-x][oauth] uni.login success')
+			let params : UTSJSONObject | null = null
+			try {
+				params = buildUniIdLoginParams(type, loginResult)
+			} catch (e) {
+				console.error('[uni-id-pages-x][oauth] build params sync error', e)
+				oauthLoginPending = false
+				uni.hideLoading()
+				showOAuthError('解析登录返回结果失败')
+				resolve({ "errMsg": '解析登录返回结果失败' } as UTSJSONObject)
+				return
+			}
+			if (params == null) {
+				oauthLoginPending = false
+				uni.hideLoading()
+				resolve({} as UTSJSONObject)
+				return
+			}
+			console.log('[uni-id-pages-x][oauth] params ready, before uni-id-co login')
+
+			try {
+				callUniIdOAuthLogin(type, params)
+					.finally(() : void => {
+						console.log('[uni-id-pages-x][oauth] uni-id-co login finished')
+						oauthLoginPending = false
+						uni.hideLoading()
+					})
+					.then((res : UTSJSONObject) : void => {
+						console.log('[uni-id-pages-x][oauth] uni-id-co login success', res)
+						loginSuccess(res)
+						resolve(res)
+					})
+					.catch((err : any | null) : void => {
+						const error = err as UniCloudError
+						console.error('[uni-id-pages-x][oauth] uni-id-co login error', error)
+						showOAuthError(error.message)
+						resolve({ "errCode": error.errCode, "errMsg": error.errMsg } as UTSJSONObject)
+					})
+			} catch (e) {
+				console.error('[uni-id-pages-x][oauth] callUniIdOAuthLogin sync error', e)
+				oauthLoginPending = false
+				uni.hideLoading()
+				showOAuthError('调用登录服务失败')
+				resolve({ "errMsg": '调用登录服务失败' } as UTSJSONObject)
+				return
+			}
+		}
+
+		const loginFailCallback = (err : LoginFail) : void => {
+			console.log('[uni-id-pages-x][oauth] uni.login fail', err)
+			oauthLoginPending = false
+			uni.hideLoading()
+			showOAuthError(err.errMsg)
+			resolve({ "errCode": err.errCode, "errMsg": err.errMsg } as UTSJSONObject)
+		}
+
+		if (oauthConfig.provider == 'weixin') {
+			uni.login({
+				provider: 'weixin',
+				success: loginSuccessCallback,
+				fail: loginFailCallback
+			})
+			return
+		}
+		if (oauthConfig.provider == 'apple') {
+			uni.login({
+				provider: 'apple',
+				success: loginSuccessCallback,
+				fail: loginFailCallback
+			})
+			return
+		}
+		if (oauthConfig.provider == 'huawei') {
+			uni.login({
+				provider: 'huawei',
+				success: loginSuccessCallback,
+				fail: loginFailCallback
+			})
+			return
+		}
+
+		showOAuthError('不支持此登录方式')
+		oauthLoginPending = false
+		uni.hideLoading()
+		resolve({} as UTSJSONObject)
+	})
+}

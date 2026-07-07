@@ -2,7 +2,8 @@
 	<view class="fab-login-box">
 		<template v-for="(item,index) in servicesList" :key="item.id">
 			<view class="item fab-login-item" @click="changeLoginType(index)">
-				<image class="logo fab-login-logo" :src="item.logo" mode="scaleToFill"></image>
+				<image v-if="item.logo.length > 0" class="logo fab-login-logo" :src="item.logo" mode="scaleToFill"></image>
+				<text v-else class="fab-login-logo fab-login-logo-text">{{ item.text.substring(0, 1) }}</text>
 				<text class="title fab-login-title">{{ item.text }}</text>
 			</view>
 		</template>
@@ -10,7 +11,7 @@
 </template>
 <script setup lang="uts">
 	import config from '@/uni_modules/uni-id-pages-x/config.uts';
-	import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
+	import { getOAuthLoginLogo, getOAuthLoginText, isOAuthLoginType } from '@/uni_modules/uni-id-pages-x/common/oauth.uts';
 
 	type Services = {
 		id : string,
@@ -26,9 +27,6 @@
 		}
 	})
 
-	const agreements = computed(() => {
-	})
-
 	const servicesList = computed(() : Services[] => {
 		const servicesList = [{
 			"id": "username",
@@ -42,20 +40,33 @@
 		},
 		{
 			"id": "weixin",
-			"text": "微信登录",
-			"logo": "/uni_modules/uni-id-pages-x/static/login/uni-fab-login/weixin.png"
+			"text": getOAuthLoginText('weixin'),
+			"logo": getOAuthLoginLogo('weixin')
 		},
 		{
 			"id": "weixinMobile",
 			"text": "微信手机号",
 			"logo": "/uni_modules/uni-id-pages-x/static/login/uni-fab-login/weixin.png"
 		},
+		// #ifdef APP-IOS
 		// #ifndef MP-WEIXIN
 		{
 			"id": "apple",
-			"text": "苹果登录",
-			"logo": "/uni_modules/uni-id-pages-x/static/app-plus/uni-fab-login/apple.png"
+			"text": getOAuthLoginText('apple'),
+			"logo": getOAuthLoginLogo('apple')
 		},
+		// #endif
+		// #endif
+		// #ifdef APP-HARMONY
+		// #ifndef MP-WEIXIN
+		{
+			"id": "huawei",
+			"text": getOAuthLoginText('huawei'),
+			"logo": getOAuthLoginLogo('huawei')
+		},
+		// #endif
+		// #endif
+		// #ifndef MP-WEIXIN
 		{
 			"id": "univerify",
 			"text": "一键登录",
@@ -100,25 +111,13 @@
 		] as Services[]
 		const loginTypes = config.getArray<string>('loginTypes')
 		return servicesList.filter((item) : boolean => {
-			// #ifndef APP
-			if (item.id == 'apple') {
-				return false
-			}
-			// #endif
-
-			// #ifdef APP
-			if (item.id == 'apple' && uni.getSystemInfoSync().osName != 'ios') {
-				return false
-			}
-			// #endif
-
 			return item.id != props.currentLoginType && loginTypes!.includes(item.id)
 		})
 	})
 
 	function changeLoginType(index : number) {
 		const id = servicesList.value[index].id
-		if (!["username", "smsCode"].includes(id)) {
+		if (!["username", "smsCode", "weixinMobile"].includes(id) && !isOAuthLoginType(id)) {
 			return uni.showToast({
 				title: 'uni-app x暂未支持此登录方式',
 				icon: 'none',
@@ -128,36 +127,6 @@
 
 		emit('changeLoginType', id)
 
-		if (["weixin", "apple", "univerify"].includes(id)) {
-			login_before(id)
-		}
-	}
-
-	function toPage(path : string) {
-	}
-
-	function login_before(type : string) {
-		if (["qq", "xiaomi", "sinaweibo", "taobao", "facebook", "google", "alipay", "douyin"].includes(type)) {
-			return uni.showToast({
-				title: '该登录方式暂未实现，欢迎提交pr',
-				icon: 'none',
-				duration: 3000
-			})
-		}
-
-		const scope = config.getAny('agreements.scope') as string[]
-		const needAgreements = scope.includes('register')
-		if (type != 'univerify' && needAgreements && !state.pendingAgreements) {
-			return uni.showToast({
-				title: '你未同意隐私政策协议',
-				icon: 'none'
-			})
-		}
-
-		uni.showToast({
-			title: 'login_type:' + type,
-			icon: 'none'
-		})
 	}
 
 	if (servicesList.value.map((i) : string => i.id).includes('univerify')) {
@@ -190,6 +159,14 @@
 		height: 30px;
 		border-radius: 100px;
 		border: solid 1px #F6F6F6;
+	}
+
+	.fab-login-logo-text {
+		line-height: 30px;
+		text-align: center;
+		font-size: 15px;
+		font-weight: bold;
+		color: #C8102E;
 	}
 
 	.fab-login-title {

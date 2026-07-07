@@ -11,6 +11,44 @@
 	},
 	/* 快应用特有相关 */
 	"quickapp": {},
+	"app-android": {
+		"distribute": {
+			"modules": {
+				"uni-oauth": {
+					"weixin": {
+						"appid": ""
+					}
+				}
+			}
+		}
+	},
+	"app-ios": {
+		"distribute": {
+			"modules": {
+				"uni-oauth": {
+					"apple": {},
+					"weixin": {
+						"appid": "",
+						"universalLink": ""
+					}
+				}
+			}
+		}
+	},
+	"app-harmony": {
+		"distribute": {
+			"modules": {
+				"uni-oauth": {
+					"huawei": {
+						"client_id": "111405187"
+					},
+					"weixin": {
+						"appid": "wxda5fe1ee1cf39183"
+					}
+				}
+			}
+		}
+	},
 	/* 小程序特有相关 */
 	"mp-weixin": {
 		"appid": "",

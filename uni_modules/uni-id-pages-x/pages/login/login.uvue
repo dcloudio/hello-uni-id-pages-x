@@ -1,17 +1,25 @@
 <template>
   <view class="page">
     <!-- 顶部文字 -->
-    <!-- <text class="title">请选择登录方式{{loginType}}--isAgree:{{pendingAgreements}}</text> -->
+    <!-- <text class="title">请选择登录方式{{data.loginType}}--isAgree:{{pendingAgreements}}</text> -->
 
     <!--  应用图标 -->
     <image class="app-logo" :src="logo" mode="aspectFit"></image>
 
-    <!-- 苹果账号 微信账号 微信账号手机号 登录 -->
-    <view class="big-login-box" v-if="['apple','weixin', 'weixinMobile'].includes(data.loginType)">
+    <!-- 第三方账号登录 -->
+    <view class="big-login-box" v-if="isOauthLogin">
       <text class="tip">将根据第三方账号服务平台的授权范围获取你的信息</text>
-      <image v-if="data.loginType !== 'weixinMobile'" @click="login" :src="imgSrc" mode="widthFix" class="big-login-img">
+      <image v-if="imgSrc.length > 0" @click="login" :src="imgSrc" mode="widthFix" class="big-login-img">
       </image>
-      <button v-else type="primary" open-type="getmobileNumber" @getmobilenumber="login"
+      <button v-else type="primary" @click="login" class="uni-btn">{{ oauthLoginButtonText }}</button>
+      <!-- 同意隐私政策协议 -->
+      <uni-id-pages-x-agreements class="agreements-box" ref="agreementsRef" scope="login" />
+    </view>
+
+    <!-- 微信账号手机号 登录 -->
+    <view v-if="data.loginType == 'weixinMobile'">
+      <text class="tip">将根据第三方账号服务平台的授权范围获取你的信息</text>
+      <button type="primary" open-type="getmobileNumber" @getmobilenumber="login"
         class="uni-btn">微信授权手机号登录</button>
       <!-- 同意隐私政策协议 -->
       <uni-id-pages-x-agreements class="agreements-box" scope="login" />
@@ -21,7 +29,7 @@
     <uni-id-pages-x-loginByPwd v-if="data.loginType == 'username'" class="test-loginByPwd" />
 
     <!-- 手机号验证码登录 -->
-    <uni-id-pages-x-loginBySmsCode v-if="data.loginType == 'smsCode'"  class="test-loginBySmsCode" />
+    <uni-id-pages-x-loginBySmsCode v-if="data.loginType == 'smsCode'" class="test-loginBySmsCode" />
 
     <!-- 固定定位的快捷登录按钮 -->
     <uni-id-pages-x-fab-login :currentLoginType="data.loginType"
@@ -33,6 +41,7 @@
 <script setup lang="uts">
   import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
   import config from '@/uni_modules/uni-id-pages-x/config.uts';
+  import { getOAuthLoginButtonText, getOAuthLoginLargeLogo, isOAuthLoginType, loginByOAuth } from '@/uni_modules/uni-id-pages-x/common/oauth.uts';
 
   type PageData = {
     loginType : string
@@ -42,9 +51,18 @@
     loginType: "username"
   } as PageData)
   const logo = "/static/logo.png"
+  const agreementsRef = ref<UniIdPagesXAgreementsComponentPublicInstance | null>(null)
 
   const imgSrc = computed(() : string => {
-    return data.loginType == 'weixin' ? '/uni_modules/uni-id-pages-x/static/login/weixin.png' : '/uni_modules/uni-id-pages-x/static/app-plus/apple.png'
+    return getOAuthLoginLargeLogo(data.loginType)
+  })
+
+  const isOauthLogin = computed(() : boolean => {
+    return isOAuthLoginType(data.loginType)
+  })
+
+  const oauthLoginButtonText = computed(() : string => {
+    return getOAuthLoginButtonText(data.loginType)
   })
 
   const pendingAgreements = computed(() : boolean => {
@@ -52,13 +70,32 @@
   })
 
   function login() {
+    if (isOAuthLoginType(data.loginType)) {
+      loginByCurrentOAuth()
+      return
+    }
+    console.log("login", data.loginType)
+  }
 
+  function loginByCurrentOAuth() {
+    if (state.pendingAgreements) {
+      agreementsRef.value!.showPopupAgreements(() => {
+        if (!state.pendingAgreements) {
+          loginByOAuth(data.loginType)
+        }
+      })
+      return
+    }
+    loginByOAuth(data.loginType)
   }
 
   function changeLoginType(type : string) {
-    // if (["weixin", "apple", "univerify"].includes(type)) {
-    // }
     data.loginType = type
+    if (isOAuthLoginType(type)) {
+      setTimeout(() => {
+        loginByCurrentOAuth()
+      }, 0)
+    }
   }
 
   onLoad((query : UTSJSONObject | null) => {
@@ -91,8 +128,8 @@
 }
 
 .big-login-img {
-  margin: 10px 25rpx;
-  height: 60px;
-  width: 700rpx;
+  margin: 10px 151rpx;
+  height: 38px;
+  width: 448rpx;
 }
 </style>

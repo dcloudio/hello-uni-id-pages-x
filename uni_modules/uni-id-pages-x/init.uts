@@ -38,6 +38,7 @@ export default async function () {
       "google": 'google',
       "alipay": 'alipay',
       "apple": 'apple',
+      "huawei": 'huawei',
       "weixinMobile": 'weixin'
     };
     // 遍历客户端配置的登录方式，与服务端比对。并在错误时抛出错误提示
@@ -49,8 +50,8 @@ export default async function () {
       return !(supportedLoginType.includes(currentType))
     })
     if (list?.length != 0) {
-      console.error(
-    		`错误：前端启用的登录方式:${list?.join('，')};没有在服务端完成配置。配置文件路径："/uni_modules/uni-config-center/uniCloud/cloudfunctions/common/uni-config-center/uni-id/config.json"`
+      console.warn(
+			`配置提示：前端启用的登录方式:${list?.join('，')};当前服务端配置未检测通过。请确认配置文件路径："/uni_modules/uni-config-center/uniCloud/cloudfunctions/common/uni-config-center/uni-id/config.json"`
       )
     } 
   }
