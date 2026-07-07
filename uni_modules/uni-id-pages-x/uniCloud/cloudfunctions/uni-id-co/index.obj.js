@@ -33,7 +33,9 @@ const {
   loginByAlipay,
   loginByQQ,
   loginByApple,
-  loginByWeixinMobile
+  loginByWeixinMobile,
+  loginByHuawei,
+  loginByHuaweiMobile
 } = require('./module/login/index')
 const {
   logout
@@ -49,7 +51,10 @@ const {
   unbindWeixin,
   unbindAlipay,
   unbindQQ,
-  unbindApple
+  unbindApple,
+  bindHuawei,
+  unbindHuawei,
+  bindMobileByHuawei
 } = require('./module/relate/index')
 const {
   setPwd,
@@ -58,7 +63,9 @@ const {
   resetPwdByEmail,
   closeAccount,
   getAccountInfo,
-  getRealNameInfo
+  getRealNameInfo,
+  getTempFileURL,
+  getUploadFileOptions
 } = require('./module/account/index')
 const {
   createCaptcha,
@@ -222,7 +229,7 @@ module.exports = {
       messages: JSON.parse(JSON.stringify(messages))
     })
     if (!messages[i18n.locale]) {
-      i18n.setLocale(fallbackLocale)      
+      i18n.setLocale(fallbackLocale)
     }
     this.t = i18n.t.bind(i18n)
 
@@ -417,6 +424,8 @@ module.exports = {
    */
   loginByApple,
   loginByWeixinMobile,
+  loginByHuawei,
+  loginByHuaweiMobile,
   /**
    * 用户退出登录
    * @tutorial https://uniapp.dcloud.net.cn/uniCloud/uni-id-pages.html#logout
@@ -692,5 +701,24 @@ module.exports = {
    * @param {Boolean} params.decryptData 是否解密数据
    * @returns
    */
-  getRealNameInfo
+  getRealNameInfo,
+  /**
+   * 获取 uni-id 范围内文件的临时访问链接
+   * 内置存储 (cloud://) 由前端 uniCloud.getTempFileURL 直接换链；扩展存储 URI 必须经此接口
+   * @param {Object} params
+   * @param {String} params.fileID 文件 fileID
+   * @returns
+   */
+  getTempFileURL,
+  /**
+   * 获取 uni-id 范围内文件的上传参数
+   * 前端按返回的 mode 分流到内置存储或扩展存储
+   * @param {Object} params
+   * @param {String} params.cloudPath 云端文件路径，必须以 user/ 开头且包含调用用户的 uid
+   * @returns
+   */
+  getUploadFileOptions,
+  bindHuawei,
+  unbindHuawei,
+  bindMobileByHuawei
 }

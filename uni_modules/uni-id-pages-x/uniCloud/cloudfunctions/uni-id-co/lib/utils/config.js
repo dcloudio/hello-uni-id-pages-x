@@ -76,7 +76,7 @@ class ConfigUtils {
       (this.platform === 'web' && appConfig.h5)
     ) {
       throw new Error(
-        `Client platform is ${this.platform}, but ${this.platform === 'web' ? 'h5' : 'app-plus'} was found in config. Please refer to: https://uniapp.dcloud.net.cn/uniCloud/uni-id-summary?id=m-to-co`
+        `Client platform is ${this.platform}, but ${this.platform === 'web' ? 'h5' : 'app-plus'} was found in config. Please refer to: https://doc.dcloud.net.cn/uniCloud/uni-id/cloud-object.html#m-to-co`
       )
     }
     

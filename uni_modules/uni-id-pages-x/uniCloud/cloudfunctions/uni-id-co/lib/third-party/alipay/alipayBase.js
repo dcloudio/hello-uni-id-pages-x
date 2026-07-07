@@ -4,7 +4,15 @@ const {
   getOffsetDate,
   getFullTimeStr
 } = require('../../../common/utils')
+const {
+  alipay: alipayCertUtil
+} = require('../share/certutil')
+const fs = require('fs')
 const crypto = require('crypto')
+const createConfig = require('uni-config-center')
+const uniIdConfig = createConfig({
+  pluginId: 'uni-id'
+})
 
 const ALIPAY_ALGORITHM_MAPPING = {
   RSA: 'RSA-SHA1',
@@ -38,12 +46,32 @@ module.exports = class AlipayBase {
       this.options.privateKey,
       privateKeyType
     )
+
     if (this.options.alipayPublicKey) {
       this.options.alipayPublicKey = this._formatKey(
         this.options.alipayPublicKey,
         'PUBLIC KEY'
       )
     }
+
+    if (this.options.appCertPath && this.options.alipayRootCertPath) {
+      this._loadCerts()
+    }
+  }
+
+  _loadCerts () {
+    if (!uniIdConfig.hasFile(this.options.appCertPath)) {
+      throw new Error(`appCertPath 未找到对应的文件 ${uniIdConfig.resolve(this.options.appCertPath)}`)
+    }
+
+    if (!uniIdConfig.hasFile(this.options.alipayRootCertPath)) {
+      throw new Error(`alipayRootCertPath 未找到对应的文件 ${uniIdConfig.resolve(this.options.alipayRootCertPath)}`)
+    }
+
+    const appPublicCertContent = fs.readFileSync(uniIdConfig.resolve(this.options.appCertPath), 'utf8')
+    const alipayRootCertContent = fs.readFileSync(uniIdConfig.resolve(this.options.alipayRootCertPath), 'utf8')
+    this.options.appPublicCertSN = alipayCertUtil.getSN(appPublicCertContent, false)
+    this.options.alipayRootCertSN = alipayCertUtil.getSN(alipayRootCertContent, true)
   }
 
   _formatKey (key, type) {
@@ -96,6 +124,15 @@ module.exports = class AlipayBase {
 
     if (bizContent) {
       signParams.bizContent = JSON.stringify(camel2snakeJson(bizContent))
+    }
+
+    if (this.options.appAuthToken) {
+      signParams.appAuthToken = this.options.appAuthToken
+    }
+
+    if (this.options.appPublicCertSN && this.options.alipayRootCertSN) {
+      signParams.appCertSn = this.options.appPublicCertSN
+      signParams.alipayRootCertSn = this.options.alipayRootCertSN
     }
 
     // params key 驼峰转下划线

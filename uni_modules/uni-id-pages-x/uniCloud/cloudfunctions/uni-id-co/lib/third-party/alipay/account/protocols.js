@@ -3,8 +3,8 @@ module.exports = {
     // args (fromArgs) {
     //   return fromArgs
     // },
-    returnValue: {
-      openid: 'userId'
+    returnValue: (values) => {
+      return Object.assign(values, { openid: values.userId || values.openId })
     }
   }
 }

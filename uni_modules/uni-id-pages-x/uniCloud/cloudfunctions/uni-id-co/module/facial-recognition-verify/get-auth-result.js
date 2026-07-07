@@ -2,6 +2,7 @@ const { userCollection, REAL_NAME_STATUS, frvLogsCollection } = require('../../c
 const { dataDesensitization, catchAwait } = require('../../common/utils')
 const { encryptData, decryptData } = require('../../common/sensitive-aes-cipher')
 const { ERROR } = require('../../common/error')
+const uploadFile = require('../../lib/utils/upload-file')
 
 /**
  * 查询认证结果
@@ -107,7 +108,7 @@ module.exports = async function (params) {
     if (pictureRes.status < 400) {
       const {
         fileID
-      } = await uniCloud.uploadFile({
+      } = await uploadFile.call(this, {
         cloudPath: `user/id-card/${uid}.b64`,
         cloudPathAsRealPath: true,
         fileContent: Buffer.from(encryptData.call(this, pictureRes.data.toString('base64')))

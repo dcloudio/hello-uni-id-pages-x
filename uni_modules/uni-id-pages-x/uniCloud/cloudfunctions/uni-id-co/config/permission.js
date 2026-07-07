@@ -86,5 +86,11 @@ module.exports = {
   },
   getRealNameInfo: {
     auth: true
+  },
+  getTempFileURL: {
+    auth: true
+  },
+  getUploadFileOptions: {
+    auth: true
   }
 }

@@ -8,6 +8,7 @@ const {
   preUnifiedLogin,
   postUnifiedLogin
 } = require('../../lib/utils/unified-login')
+const uploadFile = require('../../lib/utils/upload-file')
 const {
   generateWeixinCache,
   getWeixinPlatform,
@@ -136,7 +137,7 @@ module.exports = async function (params = {}) {
 
       const {
         fileID
-      } = await uniCloud.uploadFile({
+      } = await uploadFile.call(this, {
         cloudPath,
         fileContent: getAvatarRes.data
       })

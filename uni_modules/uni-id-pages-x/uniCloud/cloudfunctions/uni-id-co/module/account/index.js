@@ -5,5 +5,7 @@ module.exports = {
   resetPwdByEmail: require('./reset-pwd-by-email'),
   closeAccount: require('./close-account'),
   getAccountInfo: require('./get-account-info'),
-  getRealNameInfo: require('./get-realname-info')
+  getRealNameInfo: require('./get-realname-info'),
+  getTempFileURL: require('./get-temp-file-url'),
+  getUploadFileOptions: require('./get-upload-file-options')
 }

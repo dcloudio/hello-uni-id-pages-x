@@ -9,5 +9,8 @@ module.exports = {
   unbindWeixin: require('./unbind-weixin'),
   unbindAlipay: require('./unbind-alipay'),
   unbindQQ: require('./unbind-qq'),
-  unbindApple: require('./unbind-apple')
+  unbindApple: require('./unbind-apple'),
+  bindHuawei: require('./bind-huawei'),
+  unbindHuawei: require('./unbind-huawei'),
+  bindMobileByHuawei: require('./bind-mobile-by-huawei'),
 }
