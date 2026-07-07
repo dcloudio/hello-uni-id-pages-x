@@ -10,8 +10,7 @@
 				<text class="item-title">昵称</text>
 				<view @click="setNickname" class="item-content">
 					<text class="item-unset" v-if="!isLogin">未登录</text>
-					<text class="item-value"
-						v-else-if="userInfo['nickname'] != null && userInfo['nickname'] != ''">{{userInfo['nickname']}}</text>
+					<text class="item-value" v-else-if="hasNickname">{{nickname}}</text>
 					<text class="item-unset" v-else>未设置</text>
 					<uni-id-pages-x-icons v-if="isLogin" :size="16" type="right-arrow"
 						class="link-icon"></uni-id-pages-x-icons>
@@ -60,9 +59,17 @@
 		return state.isLogin
 	})
 
+	const nickname = computed(() : string => {
+		const value = userInfo.value.getString('nickname')
+		return value == null ? '' : value
+	})
+
+	const hasNickname = computed(() : boolean => {
+		return nickname.value.trim().length > 0
+	})
+
 	onLoad((options : OnLoadOptions) => {
 		const value = options["showLoginManage"]
-		console.log('value',value)
 		showLoginManage.value = value == null ? true : value == "true"
 	})
 

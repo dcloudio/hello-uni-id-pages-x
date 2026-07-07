@@ -52,7 +52,7 @@
 		if (mobile != null && mobile.length > 0) {
 			return mobile
 		}
-		return ''
+		return '未设置昵称'
 	})
 
 	const test = computed(() : number => {
