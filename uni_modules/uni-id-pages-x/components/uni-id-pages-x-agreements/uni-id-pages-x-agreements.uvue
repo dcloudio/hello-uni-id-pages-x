@@ -15,7 +15,9 @@
 			</view>
 		</template>
 
-		<uni-popup ref="popupRef">
+		<page-container :show="popupShow" position="center" :overlay="true"
+		overlay-style="background-color: rgba(0, 0, 0, 0.35);" :custom-style="popupContainerStyle"
+		@clickoverlay="cancel" @afterleave="closePopup">
 			<view class="popup-content" ref="popupBoxRef">
 				<view class="popup-header">
 					<uni-id-pages-x-icons :size="18" color="#E6A23C" type="advert" />
@@ -32,7 +34,7 @@
 					<text class="btn confirm popup-btn popup-btn-confirm" @click="confirm">同意</text>
 				</view>
 			</view>
-		</uni-popup>
+		</page-container>
 	</view>
 </template>
 
@@ -54,7 +56,8 @@
 		}
 	})
 
-	const popupRef = ref<UniPopupComponentPublicInstance | null>(null)
+	const popupShow = ref<boolean>(false)
+	const popupContainerStyle = "display: flex; align-items: center; justify-content: center; background-color: transparent;"
 	const popupBoxRef = ref<UniElement | null>(null)
 	// 使用 reactive，便于自动化测试直接读取组件数据
 	const data = reactive({
@@ -101,18 +104,22 @@
 
 	function showPopupAgreements(callback : () => void) {
 		confirmCallBack = callback
-		popupRef.value!.open()
+		popupShow.value = true
+	}
+
+	function closePopup() {
+		popupShow.value = false
 	}
 
 	function cancel() {
 		state.pendingAgreements = true
-		popupRef.value!.close()
+		closePopup()
 	}
 
 	function confirm() {
 		state.pendingAgreements = false
 		confirmCallBack()
-		popupRef.value!.close()
+		closePopup()
 	}
 
 	onMounted(() => {

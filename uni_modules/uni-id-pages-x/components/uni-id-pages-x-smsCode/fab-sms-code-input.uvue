@@ -1,5 +1,7 @@
 <template>
-	<uni-popup ref="popupRef" :mask-click="false">
+	<page-container :show="isOpen" position="center" :overlay="true"
+		overlay-style="background-color: rgba(0, 0, 0, 0.35);" :custom-style="popupContainerStyle"
+		@afterleave="hide">
 		<view class="sms-code-content">
 			<text class="sms-code-title">{{ title }}</text>
 			<text class="sms-code-tip">短信验证码已发送至{{ mobile }}</text>
@@ -14,7 +16,7 @@
 				<text @click="reGetSmsCode" :class="reverseNumber == 0 ? 'get-sms-code-tip-active' : 'get-sms-code-tip'">{{ reGetSmsCodeTip }}</text>
 			</view>
 		</view>
-	</uni-popup>
+	</page-container>
 </template>
 
 <script setup lang="uts">
@@ -38,7 +40,7 @@
 		}
 	})
 
-	const popupRef = ref<UniPopupComponentPublicInstance | null>(null)
+	const popupContainerStyle = "display: flex; align-items: center; justify-content: center; background-color: transparent;"
 	const codeInputRef = ref<Element[] | null>(null)
 	// 旧方案曾用 "\u200b" 作为每一格的占位值，方便在空格子里维持光标位置。
 	// 但在 uni-app x Android 下，type="number" 的 input 搭配非数字占位字符会导致
@@ -74,7 +76,6 @@
 	function show() {
 		focusIndex.value = 0
 		isOpen.value = true
-		popupRef.value!.open()
 		setTimeout(() => {
 			focusIndex.value = -1
 			nextTick(() => {
@@ -85,7 +86,6 @@
 
 	function hide() {
 		focusIndex.value = -1
-		popupRef.value!.close()
 		isOpen.value = false
 	}
 

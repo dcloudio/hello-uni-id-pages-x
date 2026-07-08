@@ -1,5 +1,7 @@
 <template>
-	<uni-popup ref="popupRef">
+	<page-container :show="popupShow" position="center" :overlay="true"
+		overlay-style="background-color: rgba(0, 0, 0, 0.35);" :custom-style="popupContainerStyle"
+		@clickoverlay="closePopup" @afterleave="closePopup">
 		<view class="dialog-box">
 			<text class="title dialog-box-title">{{ title }}</text>
 			<input class="input dialog-box-input" ref="inputRef" type="text" v-model="value" cursor-spacing="210" />
@@ -8,14 +10,15 @@
 				<text class="btn confirm dialog-box-btn dialog-box-btn-confirm" @click="confirm">确认</text>
 			</view>
 		</view>
-	</uni-popup>
+	</page-container>
 </template>
 
 <script setup lang="uts">
 	let confirmCallBack = (_ : string) : void => {}
 
 	const emit = defineEmits(['confirm', 'cancel'])
-	const popupRef = ref<UniPopupComponentPublicInstance | null>(null)
+	const popupShow = ref<boolean>(false)
+	const popupContainerStyle = "display: flex; align-items: center; justify-content: center; background-color: transparent;"
 	const inputRef = ref<Element | null>(null)
 	const title = ref("默认标题")
 	const value = ref("")
@@ -27,14 +30,18 @@
 			value.value = currentValue
 		}
 		confirmCallBack = callback
-		popupRef.value!.open()
+		popupShow.value = true
 		nextTick(() => {
 			inputRef.value!.focus()
 		})
 	}
 
+	function closePopup() {
+		popupShow.value = false
+	}
+
 	function cancel() {
-		popupRef.value!.close()
+		closePopup()
 		value.value = ""
 		emit('cancel')
 	}
@@ -43,7 +50,7 @@
 		if (value.value.length > 0) {
 			emit('confirm', value.value)
 			confirmCallBack(value.value)
-			popupRef.value!.close()
+			closePopup()
 			value.value = ""
 		} else {
 			uni.showToast({
