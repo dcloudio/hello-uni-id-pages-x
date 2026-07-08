@@ -101,6 +101,9 @@
 				console.log(JSON.stringify(testErr.value))
 			})
 	}
+	defineExpose({
+		showPopupCaptcha
+	})
 </script>
 
 <style>
