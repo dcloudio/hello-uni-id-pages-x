@@ -55,10 +55,6 @@
 		return '未设置昵称'
 	})
 
-	const test = computed(() : number => {
-		return state.test
-	})
-
 	const loginTypeList = [
 		{
 			"value": "smsCode",
@@ -83,18 +79,12 @@
 		//   "name": "微信手机号登录"
 		// }
 	] as ItemType[]
-
-	type PageData = {
-		loginType : string
-	}
-	// 使用reactive避免ref数据在自动化测试中无法访问
-	const pageData = reactive({
-		loginType: "nickname"
-	} as PageData)
-
+	
+	const loginType = ref("nickname")
+	
 	function radioChange(e : RadioGroupChangeEvent) {
 		const selected = loginTypeList.find((item) : boolean => item.value == e.detail.value)
-		pageData.loginType = selected!.value
+		loginType.value = selected!.value
 	}
 
 	function toLogin(loginType : string) {
@@ -108,10 +98,6 @@
 			url: "/uni_modules/uni-id-pages-x/pages/userinfo/userinfo?showLoginManage=true"
 		})
 	}
-
-	defineExpose({
-		pageData
-	})
 </script>
 
 <style lang="scss">

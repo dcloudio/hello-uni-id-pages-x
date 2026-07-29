@@ -37,7 +37,7 @@
 		agreementsRef.value!.showPopupAgreements(callback)
 	}
 
-	async function loginByPwd() : Promise<any> {
+	function loginByPwd() {
 		if (data.username.length == 0) {
 			usernameRef.value!.setFocus(true)
 			return uni.showToast({
@@ -94,38 +94,32 @@
 			mask: false
 		})
 
-		const testRes = await new Promise((resolve) => {
-			uniIdCo.login(payload)
-				.finally(() : void => {
-					uni.hideLoading()
-					data.loginCaptcha = ""
-				})
-				.then((e) => {
-					console.log('uniIdCo.login res', e)
-					loginSuccess(e)
-					resolve(e['uid'])
-				})
-				.catch<void>((err : any | null) : void => {
-					const error = err as UniCloudError
-					console.error(error)
-					console.error(error.code)
-					if (error.code == 'uni-id-captcha-required') {
-						data.needCaptcha = true
-						popupCaptchaRef.value!.open(() => {
-							loginByPwd()
-						})
-					} else {
-						uni.showToast({
-							title: error.message,
-							icon: 'none',
-							duration: 3000
-						})
-					}
-					resolve({ errCode: error.errCode, errMsg: error.errMsg })
-				})
-		})
-		console.log('testRes: ', testRes)
-		return testRes
+		uniIdCo.login(payload)
+			.finally(() : void => {
+				uni.hideLoading()
+				data.loginCaptcha = ""
+			})
+			.then<void>((e) => {
+				console.log('uniIdCo.login res', e)
+				loginSuccess(e)
+			})
+			.catch<void>((err : any | null) : void => {
+				const error = err as UniCloudError
+				console.error(error)
+				console.error(error.code)
+				if (error.code == 'uni-id-captcha-required') {
+					data.needCaptcha = true
+					popupCaptchaRef.value!.open(() => {
+						loginByPwd()
+					})
+				} else {
+					uni.showToast({
+						title: error.message,
+						icon: 'none',
+						duration: 3000
+					})
+				}
+			})
 	}
 
 	function toRegister() {
@@ -148,13 +142,6 @@
 		setTimeout(() => {
 			usernameRef.value!.setFocus(true)
 		}, 300)
-	})
-	
-	defineExpose({
-		data,
-		toRegister,
-		toRetrievePwd,
-		loginByPwd
 	})
 </script>
 

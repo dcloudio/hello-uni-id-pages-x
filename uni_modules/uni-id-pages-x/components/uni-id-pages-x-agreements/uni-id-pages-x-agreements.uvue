@@ -59,7 +59,6 @@
 	const popupShow = ref<boolean>(false)
 	const popupContainerStyle = "display: flex; align-items: center; justify-content: center; background-color: transparent;"
 	const popupBoxRef = ref<UniElement | null>(null)
-	// 使用 reactive，便于自动化测试直接读取组件数据
 	const data = reactive({
 		needAgreements: true
 	})
@@ -137,8 +136,6 @@
 	})
 
 	defineExpose({
-		data,
-		confirm,
 		showPopupAgreements
 	})
 </script>

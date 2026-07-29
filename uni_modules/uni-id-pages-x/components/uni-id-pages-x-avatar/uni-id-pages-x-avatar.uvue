@@ -137,7 +137,7 @@
 					name: '',
 					url: filePath
 				} as UTSJSONObject
-				console.error('avatar_file', nextAvatarFile)
+				// console.log('avatar_file', nextAvatarFile)
 
 				// #ifndef UNI-APP-X
 				filePath = await new Promise((callback) => {

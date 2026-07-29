@@ -26,10 +26,10 @@
     </view>
 
     <!-- 密码登录 -->
-    <uni-id-pages-x-loginByPwd v-if="data.loginType == 'username'" class="test-loginByPwd" />
+    <uni-id-pages-x-loginByPwd v-if="data.loginType == 'username'" />
 
     <!-- 手机号验证码登录 -->
-    <uni-id-pages-x-loginBySmsCode v-if="data.loginType == 'smsCode'" class="test-loginBySmsCode" />
+    <uni-id-pages-x-loginBySmsCode v-if="data.loginType == 'smsCode'" />
 
     <!-- 固定定位的快捷登录按钮 -->
     <uni-id-pages-x-fab-login :currentLoginType="data.loginType"
@@ -46,7 +46,6 @@
   type PageData = {
     loginType : string
   }
-  // 使用reactive避免ref数据在自动化测试中无法访问
   const data = reactive({
     loginType: "username"
   } as PageData)
@@ -109,9 +108,6 @@
     }
   })
 
-  defineExpose({
-    data
-  })
 </script>
 
 <style lang="scss" scoped>
