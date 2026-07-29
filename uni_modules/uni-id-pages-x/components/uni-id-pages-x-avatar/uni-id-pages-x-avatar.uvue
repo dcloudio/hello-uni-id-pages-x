@@ -72,7 +72,7 @@
 	})
 
 	const hasLogin = computed(() : boolean => {
-		return state.isLogin as Boolean
+		return state.isLogin
 	})
 
 	const userInfo = computed(() : UTSJSONObject => {

@@ -22,6 +22,12 @@
 	import fabSmsCodeInput from './fab-sms-code-input.uvue';
 	import { state } from '@/uni_modules/uni-id-pages-x/store.uts';
 
+	type FabSmsCodeInputExpose = {
+		show() : void
+		hide() : void
+		clear() : void
+	}
+
 	const emit = defineEmits(['input'])
 	const props = defineProps({
 		scene: {
@@ -39,7 +45,7 @@
 	})
 
 	const currentInstance = getCurrentInstance()
-	const fabSmsCodeInputRef = ref<ComponentPublicInstance | null>(null)
+	const fabSmsCodeInputRef = ref<FabSmsCodeInputExpose | null>(null)
 	const sendSmsCaptchaRef = ref<UniCaptchaComponentPublicInstance | null>(null)
 	const mobileInputRef = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
 	const data = reactive({
@@ -67,7 +73,7 @@
 			}
 			reverseTimer()
 		}
-		(fabSmsCodeInputRef.value as FabSmsCodeInputComponentPublicInstance).show()
+		fabSmsCodeInputRef.value?.show()
 	}
 
 	function emitInput() {
@@ -93,11 +99,11 @@
 	}
 
 	function hideCodeInput() {
-		(fabSmsCodeInputRef.value as FabSmsCodeInputComponentPublicInstance).hide()
+		fabSmsCodeInputRef.value?.hide()
 	}
 
 	function clearCodeInput() {
-		(fabSmsCodeInputRef.value as FabSmsCodeInputComponentPublicInstance).clear()
+		fabSmsCodeInputRef.value?.clear()
 	}
 
 	function reset() {

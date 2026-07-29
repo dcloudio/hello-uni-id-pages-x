@@ -13,9 +13,13 @@ export const loginSuccess = (_ : UTSJSONObject) => {
 	function loginAfterToPage() {
 		const pages = getCurrentPages()
 		const currentPage = pages[pages.length - 1]
-		const uniIdRedirectUrl = currentPage.options.get("uniIdRedirectUrl");
+		const uniIdRedirectUrl = currentPage.options.get("uniIdRedirectUrl") as string | null;
 		if (uniIdRedirectUrl != null) {
 			const targetUrl = decodeURIComponent(uniIdRedirectUrl)
+			if (targetUrl == null || targetUrl.length == 0) {
+				uni.navigateBack()
+				return
+			}
 			// console.log('uniIdRedirectUrl', uniIdRedirectUrl);
 			uni.redirectTo({
 				url: targetUrl,
