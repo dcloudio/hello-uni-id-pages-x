@@ -20,10 +20,8 @@ export default async function () {
     // 1. 检查本地uni-id-pages中配置的登录方式，服务器端是否已经配置正确。否则提醒并引导去配置
     // 调用云对象，获取服务端已正确配置的登录方式
     const res = await uniIdCo.getSupportedLoginType()
-    let supportedLoginType = res.getArray<string>('supportedLoginType')
-    if(supportedLoginType == null){
-      supportedLoginType = []
-    }
+    const rawSupportedLoginType = res.getArray<string>('supportedLoginType')
+    const supportedLoginType = rawSupportedLoginType == null ? ([] as string[]) : rawSupportedLoginType
     // 登录方式，服务端和客户端的映射关系
     const data:UTSJSONObject = {
       "smsCode": 'mobile-code',

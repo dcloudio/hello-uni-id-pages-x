@@ -111,7 +111,7 @@
 		}
 
 		const checkPasswordRes = checkPassword(data.password)
-		const isPass = checkPasswordRes.getBoolean("pass") as Boolean
+		const isPass = checkPasswordRes.getBoolean("pass") == true
 		if (!isPass) {
 			const errMsg = checkPasswordRes.getString("errMsg")
 			return uni.showModal({
