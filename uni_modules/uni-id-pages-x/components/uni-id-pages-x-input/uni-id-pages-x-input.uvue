@@ -142,7 +142,7 @@
 	function setVisiblePwd(eventName : string) {
 		if (eventName == "click" && props.visiblePwdOption == 'click') {
 			visiblePwd.value = !visiblePwd.value
-		} else if (eventName == "touch") {
+		} else if (props.visiblePwdOption == "touch") {
 			switch (eventName) {
 				case "touchstart":
 					visiblePwd.value = true
