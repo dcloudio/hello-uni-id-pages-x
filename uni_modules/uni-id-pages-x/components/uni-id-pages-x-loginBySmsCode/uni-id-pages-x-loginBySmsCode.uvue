@@ -95,6 +95,6 @@
 <style>
 	.tip {
 		font-size: 12px;
-		padding: 0 0 5px 10px;
+		margin-bottom: 10px;
 	}
 </style>
