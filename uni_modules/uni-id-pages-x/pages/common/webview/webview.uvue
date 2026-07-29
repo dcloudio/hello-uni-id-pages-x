@@ -6,9 +6,9 @@
 <script setup lang="uts">
 	const url = ref("")
 
-	onLoad((query : UTSJSONObject | null) => {
-		const pageUrl = query?.getString("url") ?? ""
-		let title = query?.getString("title") ?? ""
+	onLoad((query : OnLoadOptions) => {
+		const pageUrl = query["url"] ?? ""
+		let title = query["title"] ?? ""
 		if (pageUrl.substring(0, 4) != 'http') {
 			uni.showModal({
 				title: "错误",

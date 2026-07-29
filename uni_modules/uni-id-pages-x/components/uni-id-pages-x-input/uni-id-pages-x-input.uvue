@@ -3,7 +3,7 @@
 		<text v-if="hasTitleAndContent" class="title">{{ title }}</text>
 		<input class="input" ref="inputRef" :placeholder="placeholderText" :class="{ 'input-move-down': hasTitleAndContent }"
 			:value="modelValue" @input="updateValue" :type="type" :maxlength="maxlength"
-			:password="password && !visiblePwd" :focus="focus" @blur="onBlur" @focus="onFocus" @confirm="confirm"
+			:password="password && !visiblePwd" :focus="inputFocus" @blur="onBlur" @focus="onFocus" @confirm="confirm"
 			:confirm-type="confirmType" />
 		<view class="my-input-icon-box" v-if="modelValue">
 			<uni-id-pages-x-icons v-if="password" :color="visiblePwd ? '#0070ff' : '#ddd'"
@@ -63,6 +63,7 @@
 
 	const inputRef = ref<Element | null>(null)
 	const visiblePwd = ref(false)
+	const focusState = ref(false)
 
 	const title = computed(() : string => {
 		return props.title
@@ -84,8 +85,8 @@
 		return props.password
 	})
 
-	const focus = computed(() : boolean => {
-		return props.focus
+	const inputFocus = computed(() : boolean => {
+		return props.focus || focusState.value
 	})
 
 	const border = computed(() : boolean => {
@@ -120,6 +121,7 @@
 	}
 
 	function onBlur() {
+		focusState.value = false
 		emit('blur')
 	}
 
@@ -128,11 +130,23 @@
 	}
 
 	function setFocus(state : boolean) {
+		// #ifdef MP
+		if (state) {
+			focusState.value = false
+			nextTick(() => {
+				focusState.value = true
+			})
+		} else {
+			focusState.value = false
+		}
+		// #endif
+		// #ifndef MP
 		if (state) {
 			inputRef.value!.focus()
 		} else {
 			inputRef.value!.blur()
 		}
+		// #endif
 	}
 
 	function confirm(event : InputConfirmEvent) {
