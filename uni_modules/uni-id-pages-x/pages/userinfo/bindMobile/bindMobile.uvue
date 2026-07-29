@@ -46,7 +46,7 @@
 		}
 	}
 
-	function bindMobileBySms(param : UTSJSONObject) {
+	async function bindMobileBySms(param : UTSJSONObject) : Promise<any> {
 		console.log('param:--------- ', param)
 
 		function setCaptchaRetry() {
@@ -69,45 +69,63 @@
 
 		uni.showLoading({ "title": "请求中" })
 		const uniIdCo = uniCloud.importObject("uni-id-co", { "customUI": true })
-		uniIdCo.bindMobileBySms(param)
-			.finally(() : void => {
-				uni.hideLoading()
-			})
-			.then<void>((e : UTSJSONObject) : void => {
-				data.testState = true
-				console.log('then')
-				console.log(e)
-				data.testSuccess = e['errCode'] as number
-				console.log(data.testSuccess)
-				smsCodeRef.value!.hideCodeInput()
+		const testRes = await new Promise((resolve) => {
+			uniIdCo.bindMobileBySms(param)
+				.finally(() : void => {
+					uni.hideLoading()
+				})
+				.then<void>((e : UTSJSONObject) : void => {
+					data.testState = true
+					console.log('then')
+					console.log(e)
+					data.testSuccess = e['errCode'] as number
+					console.log(data.testSuccess)
+					smsCodeRef.value!.hideCodeInput()
 
-				uni.showToast({
-					title: '绑定成功',
-					icon: 'none',
-					duration: 3000
+					uni.showToast({
+						title: '绑定成功',
+						icon: 'none',
+						duration: 3000
+					})
+					mutations.updateUserInfo({
+						"mobile": param.getString("mobile")
+					} as UTSJSONObject)
+					setTimeout(() => {
+						uni.navigateBack()
+					}, 300)
+					resolve(e)
 				})
-				mutations.updateUserInfo({
-					"mobile": param.getString("mobile")
-				} as UTSJSONObject)
-				setTimeout(() => {
-					uni.navigateBack()
-				}, 300)
-			})
-			.catch<void>((err : any | null) : void => {
-				data.testState = true
-				const error = err as UniCloudError
-				console.error(error)
-				console.error(error.code)
-				data.testErr.errCode = error.errCode as string
-				data.testErr.errMsg = error.errMsg as string
-				console.log(JSON.stringify(data.testErr))
-				uni.showToast({
-					title: error.message,
-					icon: 'none',
-					duration: 3000,
-					mask: false
+				.catch<void>((err : any | null) : void => {
+					data.testState = true
+					const error = err as UniCloudError
+					let errCode = error.errCode
+					if (errCode == null) {
+						errCode = error.code
+					}
+					let errMsg = error.errMsg
+					if (errMsg == null) {
+						errMsg = error.message
+					}
+					console.error(error)
+					console.error(error.code)
+					data.testErr.errCode = errCode as string
+					data.testErr.errMsg = errMsg as string
+					console.log(JSON.stringify(data.testErr))
+					uni.showToast({
+						title: error.message,
+						icon: 'none',
+						duration: 3000,
+						mask: false
+					})
+					resolve({ errCode: errCode, errMsg: errMsg })
 				})
-			})
+		})
+		return testRes
+	}
+
+	function bindMobileBySmsForTest(paramString : string) : Promise<any> {
+		const param = JSON.parseObject(paramString)!
+		return bindMobileBySms(param)
 	}
 
 	function popupCaptchaCancel() {
@@ -116,7 +134,8 @@
 	}
 
 	defineExpose({
-		data
+		data,
+		bindMobileBySmsForTest
 	})
 </script>
 

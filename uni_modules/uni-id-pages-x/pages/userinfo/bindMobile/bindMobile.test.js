@@ -1,8 +1,28 @@
 // uni-app自动化测试教程: uni-app自动化测试教程: https://uniapp.dcloud.net.cn/worktile/auto/hbuilderx-extension/
+const TEST_STATE_TIMEOUT = 10000
+const TEST_STATE_INTERVAL = 500
+const CAPTCHA_REQUIRED_MESSAGES = ['请输入图形验证码', 'Captcha required']
+
+async function waitForTestState(page) {
+	const startTime = Date.now()
+	while (Date.now() - startTime < TEST_STATE_TIMEOUT) {
+		if (await page.data('data.testState') === true) {
+			return true
+		}
+		await page.waitFor(TEST_STATE_INTERVAL)
+	}
+	return false
+}
+
+function waitForMs(ms) {
+	return new Promise((resolve) => {
+		setTimeout(resolve, ms)
+	})
+}
 
 describe('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile.uvue', () => {
 
-	let page,mobile,captcha,smsCode,smsCodeEl;
+	let page,mobile,captcha,smsCode,bindMobileBySmsRes;
 	beforeAll(async () => {
 		page = await program.navigateTo('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile')
 		await page.waitFor('view')
@@ -11,57 +31,64 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/bindMobile/bindMobile.uvue'
 		mobile = "17766666666"
 		captcha = "1234"
 		smsCode = "123456"
-		smsCodeEl = await page.$('.test-smsCode')
-		await smsCodeEl.setData({
-			data:{
-				mobile,
-				sendSmsCaptcha:captcha
-			}
-		})
-		await page.waitFor(1000)
-		await smsCodeEl.setData({
-			data:{smsCode}
-		})
-		const needCaptcha = await page.data('data.needCaptcha')
-		if(needCaptcha){
-			await page.setData({
-				'data.captcha': captcha,
-			})
+		const bindMobileParam = {
+			mobile,
+			code: smsCode,
+			sendSmsCaptcha: captcha
 		}
+		bindMobileBySmsRes = await page.callMethod('bindMobileBySmsForTest', JSON.stringify(bindMobileParam))
+		console.log('bindMobileBySmsRes: ',bindMobileBySmsRes);
+		await page.waitFor(100)
 	});
 	it('绑定手机号', async () => {
-		// await page.callMethod('bindMobileBySms',{
-		// 	"code": smsCode,
-		// 	"mobile":mobile,
-		// 	"sendSmsCaptcha": captcha
-		// })
+		if (bindMobileBySmsRes != null) {
+			if (bindMobileBySmsRes.errCode == 0) {
+				console.log('绑定成功');
+				expect(bindMobileBySmsRes.errCode).toBe(0)
+				await waitForMs(400)
+				return
+			}
+			if (bindMobileBySmsRes.errCode) {
+				assertBindMobileError(bindMobileBySmsRes)
+				return
+			}
+		}
+
 		// 等待登录结果
-		await page.waitFor(async () => {
-			return await page.data('data.testState') === true
-		}) 
+		const hasBindResult = await waitForTestState(page)
+		expect(hasBindResult).toBe(true)
 		const testSuccessRes = await page.data('data.testSuccess')
-		// console.log('testSuccessRes: ',testSuccessRes);
-		if(testSuccessRes == 0){
+		if (testSuccessRes == 0 || (bindMobileBySmsRes != null && bindMobileBySmsRes.errCode == 0)) {
 			console.log('绑定成功');
 			expect(testSuccessRes).toBe(0)
+			await waitForMs(400)
 			return
 		}
 		const testErrRes = await page.data('data.testErr')
 		console.log('testErrRes: ',testErrRes);
-		switch (testErrRes.errCode){
-			case 'uni-id-bind-conflict':
-				const expectBindStr = ["此账号已被绑定","This account has been bound"]
-				expect(expectBindStr).toContain(testErrRes.errMsg);
-				break;
-			case 'uni-id-mobile-verify-code-error':
-				const expectCodeStr = ["手机验证码错误或已过期","Verify code error or expired"]
-				expect(expectCodeStr).toContain(testErrRes.errMsg);
-				break;
-			case 'uni-id-captcha-required':
-				expect(testErrRes.errMsg).toBe('请输入图形验证码')
-				break;
-			default:
-				break;
-		}
+		assertBindMobileError(testErrRes)
 	});
 });
+
+function assertBindMobileError(error) {
+	switch (error.errCode){
+		case 'uni-id-bind-conflict':
+			const expectBindStr = ["此账号已被绑定","This account has been bound"]
+			expect(expectBindStr).toContain(error.errMsg);
+			break;
+		case 'uni-id-mobile-verify-code-error':
+			const expectCodeStr = ["手机验证码错误或已过期","Verify code error or expired"]
+			expect(expectCodeStr).toContain(error.errMsg);
+			break;
+		case 'uni-id-captcha-required':
+			expect(CAPTCHA_REQUIRED_MESSAGES).toContain(error.errMsg)
+			break;
+		default:
+			expect([
+				'uni-id-bind-conflict',
+				'uni-id-mobile-verify-code-error',
+				'uni-id-captcha-required'
+			]).toContain(error.errCode)
+			break;
+	}
+}

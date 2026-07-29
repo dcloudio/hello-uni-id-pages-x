@@ -25,6 +25,7 @@
 	import { checkPassword } from '@/uni_modules/uni-id-pages-x/common/common.uts';
 
 	const uniIdCo = uniCloud.importObject("uni-id-co", { "customUI": true })
+	const uniCaptchaCo = uniCloud.importObject("uni-captcha-co", { "customUI": true })
 	const smsCodeRef = ref<UniIdPagesXSmsCodeComponentPublicInstance | null>(null)
 	const passwordRef = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
 	const password2Ref = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
@@ -84,37 +85,112 @@
 		smsCodeRef.value!.sendSmsCode()
 	}
 
-	function resetPwdBySms(param : UTSJSONObject) {
+	async function resetPwdBySms(param : UTSJSONObject) : Promise<any> {
 		uni.showLoading({ "title": "请求中" })
 		param.set("password", data.password)
 		param.set("captcha", data.captcha)
-		uniIdCo.resetPwdBySms(param)
-			.finally(() : void => {
-				uni.hideLoading()
-			})
-			.then<void>((e : UTSJSONObject) : void => {
-				data.testState = true
-				console.log(e)
-				data.testSuccess = e['errCode'] as number
-				console.log(data.testSuccess)
-				smsCodeRef.value!.hideCodeInput()
-				uni.showToast({
-					title: '重置成功',
-					icon: 'none'
+		const testRes = await new Promise((resolve) => {
+			uniIdCo.resetPwdBySms(param)
+				.finally(() : void => {
+					uni.hideLoading()
 				})
-				setTimeout(() => {
-					uni.navigateBack()
-				}, 1500)
+				.then<void>((e : UTSJSONObject) : void => {
+					data.testState = true
+					console.log(e)
+					data.testSuccess = e['errCode'] as number
+					console.log(data.testSuccess)
+					smsCodeRef.value!.hideCodeInput()
+					uni.showToast({
+						title: '重置成功',
+						icon: 'none'
+					})
+					setTimeout(() => {
+						uni.navigateBack()
+					}, 1500)
+					resolve(e)
+				})
+				.catch<void>((err : any | null) : void => {
+					data.testState = true
+					const error = err as UniCloudError
+					let errCode = error.errCode
+					if (errCode == null) {
+						errCode = error.code
+					}
+					let errMsg = error.errMsg
+					if (errMsg == null) {
+						errMsg = error.message
+					}
+					console.error(error)
+					console.error(error.code)
+					data.testErr.errCode = errCode as string
+					data.testErr.errMsg = errMsg as string
+					console.log(JSON.stringify(data.testErr))
+					resolve({ errCode: errCode, errMsg: errMsg })
+				})
+		})
+		return testRes
+	}
+
+	async function createResetPwdImageCaptchaForTest() : Promise<any> {
+		const testRes = await new Promise((resolve) => {
+			uniCaptchaCo.getImageCaptcha({
+				"scene": "reset-pwd-by-sms",
+				"isUniAppX": true
 			})
-			.catch<void>((err : any | null) : void => {
-				data.testState = true
-				const error = err as UniCloudError
-				console.error(error)
-				console.error(error.code)
-				data.testErr.errCode = error.errCode as string
-				data.testErr.errMsg = error.errMsg as string
-				console.log(JSON.stringify(data.testErr))
+				.then<void>((e : UTSJSONObject) : void => {
+					resolve(e)
+				})
+				.catch<void>((err : any | null) : void => {
+					const error = err as UniCloudError
+					let errCode = error.errCode
+					if (errCode == null) {
+						errCode = error.code
+					}
+					let errMsg = error.errMsg
+					if (errMsg == null) {
+						errMsg = error.message
+					}
+					resolve({ errCode: errCode, errMsg: errMsg })
+				})
+		})
+		return testRes
+	}
+
+	async function sendResetPwdSmsCodeForTest(paramString : string) : Promise<any> {
+		const param = JSON.parseObject(paramString)!
+		const mobile = param.getString("mobile") as string
+		const sendSmsCaptcha = param.getString("sendSmsCaptcha") as string
+		const testRes = await new Promise((resolve) => {
+			uniIdCo.sendSmsCode({
+				"mobile": mobile,
+				"scene": "reset-pwd-by-sms",
+				"captcha": sendSmsCaptcha
 			})
+				.then<void>((e : UTSJSONObject) : void => {
+					resolve(e)
+				})
+				.catch<void>((err : any | null) : void => {
+					const error = err as UniCloudError
+					let errCode = error.errCode
+					if (errCode == null) {
+						errCode = error.code
+					}
+					let errMsg = error.errMsg
+					if (errMsg == null) {
+						errMsg = error.message
+					}
+					resolve({ errCode: errCode, errMsg: errMsg })
+				})
+		})
+		return testRes
+	}
+
+	function resetPwdBySmsForTest(paramString : string, password : string, password2 : string, captcha : string) : Promise<any> {
+		data.password = password
+		data.password2 = password2
+		data.captcha = captcha
+		const param = JSON.parseObject(paramString)!
+		return resetPwdBySms(param)
 	}
 
 	onLoad((query : UTSJSONObject | null) => {
@@ -128,7 +204,10 @@
 
 	defineExpose({
 		data,
-		doNext
+		doNext,
+		createResetPwdImageCaptchaForTest,
+		sendResetPwdSmsCodeForTest,
+		resetPwdBySmsForTest
 	})
 </script>
 

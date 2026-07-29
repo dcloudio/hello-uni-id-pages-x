@@ -16,11 +16,16 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/setNickname/setNickname.uvu
 		   nickname = "dcloud99";  
 		}
 		await page.setData({
-			'data.nickname': nickname
+			data: {
+				nickname
+			}
 		})
 		await page.waitFor(300)
 		const res = await page.callMethod('setNickname')
-		// console.log(nickname,'res: ---',res,typeof res);
-		if(typeof res == 'number'){expect(res).toBe(1)}
+		console.log(nickname,'res: ---',res,typeof res);
+		if(typeof res == 'number'){
+			expect(res).toBe(1)
+			await page.waitFor(1200)
+		}
 	});
 });

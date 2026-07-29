@@ -3,7 +3,8 @@
 		<text class="tip">未注册的账号验证通过后将自动注册</text>
 
 		<view class="form">
-			<uni-id-pages-x-smsCode ref="smsCodeRef" class="test-smsCode" @input="smsCodeInput" :checkAgreements="true"></uni-id-pages-x-smsCode>
+			<uni-id-pages-x-smsCode ref="smsCodeRef" class="test-smsCode" @input="smsCodeInput"
+				:checkAgreements="true"></uni-id-pages-x-smsCode>
 			<uni-id-pages-x-agreements class="agreements-box" ref="agreementsRef" scope="login" />
 			<button class="uni-btn" type="primary" @click="sendSmsCode">获取手机验证码</button>
 		</view>
@@ -25,6 +26,12 @@
 		passwordConfirmed ?: boolean | null
 	}
 
+	type TypeData = {
+		testErr : TypeTestErr,
+		testSuccess : TypeTestSuccess,
+		testState : boolean
+	}
+
 	import { loginSuccess } from '@/uni_modules/uni-id-pages-x/common/common.uts';
 
 	const uniIdCo = uniCloud.importObject("uni-id-co", { "customUI": true })
@@ -32,17 +39,19 @@
 	const agreementsRef = ref<UniIdPagesXAgreementsComponentPublicInstance | null>(null)
 	const captchaRef = ref<UniPopupCaptchaComponentPublicInstance | null>(null)
 	const captcha = ref("")
-	const testErr = ref({
-		errCode: '',
-		errMsg: ''
-	} as TypeTestErr)
-	const testSuccess = ref({
-		errCode: null,
-		uid: '',
-		newToken: '',
-		passwordConfirmed: null
-	} as TypeTestSuccess)
-	const testState = ref(false)
+	const data = reactive({
+		testErr: {
+			errCode: '',
+			errMsg: ''
+		} as TypeTestErr,
+		testSuccess: {
+			errCode: null,
+			uid: '',
+			newToken: '',
+			passwordConfirmed: null
+		} as TypeTestSuccess,
+		testState: false
+	} as TypeData)
 
 	function sendSmsCode() {
 		smsCodeRef.value!.sendSmsCode()
@@ -57,52 +66,86 @@
 	}
 
 	function showPopupCaptcha(callback : () => void) {
+		openAgreementsPopup(callback)
+	}
+
+	function openAgreementsPopup(callback : () => void) {
 		agreementsRef.value!.showPopupAgreements(callback)
 	}
 
-	function login(param : UTSJSONObject) {
-		uni.showLoading({ "title": "登录中" })
-		uniIdCo.loginBySms(param)
-			.finally(() : void => {
-				uni.hideLoading()
-			})
-			.then<void>((e : UTSJSONObject) : void => {
-				smsCodeRef.value!.hideCodeInput()
-				uni.showToast({
-					title: '登录成功',
-					icon: 'none'
-				})
-				loginSuccess(e)
-				testState.value = true
-				smsCodeRef.value!.clearCodeInput()
-				testSuccess.value.uid = e['uid'] as string
-				testSuccess.value.errCode = e['errCode'] as number
-			})
-			.catch<void>((err : any | null) : void => {
-				testState.value = true
-				const error = err as UniCloudError
-				console.error(error)
-				console.error(error.code)
-				if (["uni-id-captcha-required", "uni-captcha-verify-fail"].includes(error.code as string)) {
-					captchaRef.value!.open(() => {
-						login(param)
-					})
-				} else {
-					uni.showToast({
-						title: error.message,
-						icon: 'none',
-						mask: false
-					})
-					smsCodeRef.value!.clearCodeInput()
-					captcha.value = ""
-				}
-				testErr.value.errCode = error.errCode as string
-				testErr.value.errMsg = error.errMsg as string
-				console.log(JSON.stringify(testErr.value))
-			})
+	function openCaptchaPopup(callback : () => void) {
+		if (captchaRef.value == null) {
+			return
+		}
+		captchaRef.value!.open(callback)
 	}
+
+	async function login(param : UTSJSONObject) : Promise<any> {
+		uni.showLoading({ "title": "登录中" })
+		console.log('param',param)
+		const testRes = await new Promise((resolve) => {
+			uniIdCo.loginBySms(param)
+				.finally(() : void => {
+					uni.hideLoading()
+				})
+				.then<void>((e : UTSJSONObject) : void => {
+					console.log('e----',e)
+					smsCodeRef.value!.hideCodeInput()
+					uni.showToast({
+						title: '登录成功',
+						icon: 'none'
+					})
+					data.testState = true
+					data.testSuccess.uid = e['uid'] as string
+					data.testSuccess.errCode = e['errCode'] as number
+					smsCodeRef.value!.clearCodeInput()
+					loginSuccess(e)
+					resolve(e)
+				})
+				.catch<void>((err : any | null) : void => {
+					data.testState = true
+					const error = err as UniCloudError
+					let errCode = error.errCode
+					if (errCode == null) {
+						errCode = error.code
+					}
+					let errMsg = error.errMsg
+					if (errMsg == null) {
+						errMsg = error.message
+					}
+					console.error(error)
+					console.error(error.code)
+					if (["uni-id-captcha-required", "uni-captcha-verify-fail"].includes(error.code as string)) {
+						openCaptchaPopup(() => {
+							login(param)
+						})
+					} else {
+						uni.showToast({
+							title: error.message,
+							icon: 'none',
+							mask: false
+						})
+						smsCodeRef.value!.clearCodeInput()
+						captcha.value = ""
+					}
+					data.testErr.errCode = errCode as string
+					data.testErr.errMsg = errMsg as string
+					console.log(JSON.stringify(data.testErr))
+					resolve({ errCode: errCode, errMsg: errMsg })
+				})
+		})
+		return testRes
+	}
+
+	function loginBySmsCodeForTest(paramString : string) : Promise<any> {
+		const param = JSON.parseObject(paramString)!
+		return login(param)
+	}
+
 	defineExpose({
-		showPopupCaptcha
+		data,
+		showPopupCaptcha,
+		loginBySmsCodeForTest
 	})
 </script>
 

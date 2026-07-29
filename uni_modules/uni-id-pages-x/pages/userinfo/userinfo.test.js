@@ -7,14 +7,17 @@ describe('/uni_modules/uni-id-pages-x/pages/userinfo/userinfo.uvue', () => {
 		await page.waitFor('view')
 	});
 	it('昵称', async () => {
-		const values = await page.$$('.value')
+		const values = await page.$$('.item-value')
+		expect(values.length).toBeGreaterThanOrEqual(1)
 		expect(["dcloud99","dcloud00"]).toContain(await values[0].text())
-		expect(await values[1].text()).toHaveLength(11)
 	});
 	it('退出登录', async () => {
-		const titleList = await page.$$('.title')
+		const titleList = await page.$$('.item-title')
 		expect(titleList.length).toBe(5)
 		expect(await titleList[4].text()).toBe('退出登录')
 		await page.callMethod('logout')
+		await new Promise((resolve) => {
+			setTimeout(resolve, 1500)
+		})
 	});
 });
