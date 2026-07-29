@@ -4,7 +4,8 @@
 		@clickoverlay="closePopup" @afterleave="closePopup">
 		<view class="dialog-box">
 			<text class="title dialog-box-title">{{ title }}</text>
-			<input class="input dialog-box-input" ref="inputRef" type="text" v-model="value" cursor-spacing="210" />
+			<input class="input dialog-box-input" ref="inputRef" type="text" v-model="value" cursor-spacing="210"
+				:focus="inputFocus" @blur="onBlur" />
 			<view class="btn-group dialog-box-btn-group">
 				<text class="btn dialog-box-btn" @click="cancel">取消</text>
 				<text class="btn confirm dialog-box-btn dialog-box-btn-confirm" @click="confirm">确认</text>
@@ -20,6 +21,7 @@
 	const popupShow = ref<boolean>(false)
 	const popupContainerStyle = "display: flex; align-items: center; justify-content: center; background-color: transparent;"
 	const inputRef = ref<Element | null>(null)
+	const inputFocus = ref(false)
 	const title = ref("默认标题")
 	const value = ref("")
 
@@ -32,8 +34,24 @@
 		confirmCallBack = callback
 		popupShow.value = true
 		nextTick(() => {
-			inputRef.value!.focus()
+			focusInput()
 		})
+	}
+
+	function focusInput() {
+		// #ifdef MP
+		inputFocus.value = false
+		nextTick(() => {
+			inputFocus.value = true
+		})
+		// #endif
+		// #ifndef MP
+		inputRef.value!.focus()
+		// #endif
+	}
+
+	function onBlur() {
+		inputFocus.value = false
 	}
 
 	function closePopup() {

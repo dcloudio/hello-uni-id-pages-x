@@ -97,8 +97,8 @@
     }
   }
 
-  onLoad((query : UTSJSONObject | null) => {
-    const type = query?.getString("type")
+  onLoad((query : OnLoadOptions) => {
+    const type = query["type"]
     // 如果传递了参数就按参数指定的登录方式，否则指定为 config 中配置的第一项
     if (type != null) {
       data.loginType = type

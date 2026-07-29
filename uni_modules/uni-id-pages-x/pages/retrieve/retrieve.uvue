@@ -104,8 +104,8 @@
 			})
 	}
 
-	onLoad((query : UTSJSONObject | null) => {
-		const mobile = query?.getString("mobile")
+	onLoad((query : OnLoadOptions) => {
+		const mobile = query["mobile"]
 		if (mobile != null) {
 			nextTick(() => {
 				smsCodeRef.value!.mobile = mobile
