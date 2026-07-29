@@ -16,22 +16,10 @@
 </template>
 
 <script setup lang="uts">
-	type TypeTestErr = {
-		errCode : string,
-		errMsg : string
-	}
-
 	import { state, mutations } from '@/uni_modules/uni-id-pages-x/store.uts';
-	// 使用reactive避免ref数据在自动化测试中无法访问
 	const data = reactive({
 		nickname: '',
-		savedNickname: '',
-		testErr: {
-			errCode: '',
-			errMsg: ''
-		} as TypeTestErr,
-		testState: false,
-		testSuccess: 100
+		savedNickname: ''
 	})
 
 	const hasChange = computed(() : boolean => {
@@ -43,7 +31,7 @@
 		return currentNickname == null ? '' : currentNickname
 	}
 
-	async function setNickname() : Promise<any> {
+	function setNickname() {
 		if (data.nickname.length == 0) {
 			uni.showToast({
 				title: '昵称不能为空',
@@ -64,39 +52,30 @@
 		const uid = uniCloud.getCurrentUserInfo().uid
 
 		if (uid != null) {
-			const testRes = await new Promise((resolve) => {
-				db.collection('uni-id-users')
-					.doc(uid)
-					.update({
-						"nickname": data.nickname
+			db.collection('uni-id-users')
+				.doc(uid)
+				.update({
+					"nickname": data.nickname
+				})
+				.then<void>((e) => {
+					console.log('e: ', e)
+					data.savedNickname = data.nickname
+					mutations.updateUserInfo({ "nickname": data.nickname } as UTSJSONObject)
+					uni.showToast({
+						title: '修改成功',
+						icon: 'none'
 					})
-					.then<void>((e) => {
-						console.log('e: ', e)
-						data.savedNickname = data.nickname
-						mutations.updateUserInfo({ "nickname": data.nickname } as UTSJSONObject)
-							uni.showToast({
-								title: '修改成功',
-								icon: 'none'
-							})
-							setTimeout(() => {
-								uni.navigateBack()
-							}, 1000)
-							resolve(e['updated'])
-						})
-					.catch<void>((err : any | null) => {
-						const error = err as UniCloudError
-						console.log('error', error)
-						data.testErr.errCode = error.errCode as string
-						data.testErr.errMsg = error.errMsg as string
-						resolve({ errCode: error.errCode, errMsg: error.errMsg })
-					})
-					.finally(() => {
-						uni.hideLoading()
-					})
-			})
-			data.testState = true
-			console.log('testRes: ', testRes)
-			return testRes
+					setTimeout(() => {
+						uni.navigateBack()
+					}, 1000)
+				})
+				.catch<void>((err : any | null) => {
+					const error = err as UniCloudError
+					console.log('error', error)
+				})
+				.finally(() => {
+					uni.hideLoading()
+				})
 		}
 
 		return false
@@ -107,10 +86,6 @@
 		data.nickname = data.savedNickname
 	})
 
-	defineExpose({
-		data,
-		setNickname
-	})
 </script>
 
 <style lang="scss">

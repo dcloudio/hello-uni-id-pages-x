@@ -41,7 +41,6 @@
 	const password2Ref = ref<UniIdPagesXInputComponentPublicInstance | null>(null)
 	const captchaRef = ref<UniCaptchaComponentPublicInstance | null>(null)
 	const agreementsRef = ref<UniIdPagesXAgreementsComponentPublicInstance | null>(null)
-	// 使用 reactive，便于自动化测试直接 setData 和读取页面状态
 	const data = reactive({
 		username: "",
 		nickname: "",
@@ -158,7 +157,7 @@
 		register()
 	}
 
-	async function register() : Promise<any> {
+	function register() {
 		const payload : UTSJSONObject = {
 			"username": data.username,
 			"nickname": data.nickname,
@@ -169,39 +168,28 @@
 		const uniIdCo = uniCloud.importObject("uni-id-co", { customUI: true })
 		uni.showLoading({ "title": "请求中" })
 
-		const testRes = await new Promise((resolve) => {
-			uniIdCo.registerUser(payload)
-				.finally(() => uni.hideLoading())
-				.then((e) => {
-					console.log('e: ', e)
-					uni.showToast({
-						title: '注册成功',
-						icon: 'none'
-					})
-					loginSuccess(e)
-					resolve(e['uid'])
+		uniIdCo.registerUser(payload)
+			.finally(() => uni.hideLoading())
+			.then<void>((e) => {
+				console.log('e: ', e)
+				uni.showToast({
+					title: '注册成功',
+					icon: 'none'
 				})
-				.catch<void>((err : any | null) : void => {
-					const error = err as UniCloudError
-					console.error(error)
-					if (error.code == 'uni-captcha-verify-fail') {
-						captchaRef.value!.getImageCaptcha(true)
-					}
-					uni.showToast({
-						title: error.message,
-						icon: 'none'
-					})
-					resolve({ errCode: error.errCode, errMsg: error.errMsg })
+				loginSuccess(e)
+			})
+			.catch<void>((err : any | null) : void => {
+				const error = err as UniCloudError
+				console.error(error)
+				if (error.code == 'uni-captcha-verify-fail') {
+					captchaRef.value!.getImageCaptcha(true)
+				}
+				uni.showToast({
+					title: error.message,
+					icon: 'none'
 				})
-		})
-		console.log('testRes: ', testRes)
-		return testRes
+			})
 	}
-
-	defineExpose({
-		data,
-		register
-	})
 </script>
 
 <style lang="scss" scoped>
