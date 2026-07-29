@@ -78,23 +78,47 @@
   }
 
   function loginByCurrentOAuth() {
+    const loginType = data.loginType
     if (state.pendingAgreements) {
-      agreementsRef.value!.showPopupAgreements(() => {
+      showPopupAgreements(() => {
+        loginByOAuth(loginType)
+      })
+      return
+    }
+    loginByOAuth(loginType)
+  }
+
+  function showPopupAgreements(callback : () => void) {
+    const agreements = agreementsRef.value
+    if (agreements != null) {
+      agreements.showPopupAgreements(() => {
         if (!state.pendingAgreements) {
-          loginByOAuth(data.loginType)
+          callback()
         }
       })
       return
     }
-    loginByOAuth(data.loginType)
+
+    nextTick(() => {
+      const nextAgreements = agreementsRef.value
+      if (nextAgreements != null) {
+        nextAgreements.showPopupAgreements(() => {
+          if (!state.pendingAgreements) {
+            callback()
+          }
+        })
+        return
+      }
+      console.error("uni-id-pages-x agreements component is not ready")
+    })
   }
 
   function changeLoginType(type : string) {
     data.loginType = type
     if (isOAuthLoginType(type)) {
-      setTimeout(() => {
+      nextTick(() => {
         loginByCurrentOAuth()
-      }, 0)
+      })
     }
   }
 
