@@ -217,6 +217,17 @@
 		padding: 0;
 	}
 
+	/* #ifdef MP-WEIXIN */
+	.box {
+		background-color: transparent;
+		border: 0;
+	}
+
+	.box::after {
+		border: 0;
+	}
+	/* #endif */
+
 	.chooseAvatar {
 		/* #ifndef UNI-APP-X */
 		display: inline-block;
