@@ -17,7 +17,9 @@ export default {
   ],
   "loginTypes":[
 	"username",
+	// #ifndef WEB
 	"weixin",
+	// #endif
     // #ifdef APP-IOS
     "apple",
     // #endif

@@ -137,7 +137,7 @@
 	.fab-login-box {
 		width: 750rpx;
 		position: fixed;
-		bottom: 30;
+		bottom: 30px;
 		left: 0;
 		flex-direction: row;
 		flex-wrap: wrap;
