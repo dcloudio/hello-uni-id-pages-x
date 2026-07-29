@@ -16,6 +16,7 @@ export default {
     "/uni_modules/uni-id-pages-x/pages/userinfo/*"
   ],
   "loginTypes":[
+	"username",
 	"weixin",
     // #ifdef APP-IOS
     "apple",
@@ -23,7 +24,6 @@ export default {
     // #ifdef APP-HARMONY
     "huawei",
     // #endif
-    "username",
     // 以下登录方式 uni-app x 暂不支持
     // "qq",
     // "xiaomi",

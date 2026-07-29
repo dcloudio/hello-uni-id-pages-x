@@ -6,3 +6,4 @@
 .DS_Store
 /uni_modules/uni-config-center/uniCloud/cloudfunctions/common/uni-config-center/
 /harmony-configs/
+/testCaseToSnapshotFilePath.json

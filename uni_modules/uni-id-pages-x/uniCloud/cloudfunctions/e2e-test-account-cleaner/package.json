@@ -1,0 +1,7 @@
+{
+	"name": "e2e-test-account-cleaner",
+	"version": "1.0.0",
+	"description": "Deletes registered e2e test accounts after registration tests",
+	"main": "index.obj.js",
+	"dependencies": {}
+}

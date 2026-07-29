@@ -80,6 +80,13 @@
 				//   }
 				// }
 			}
+		},
+		{
+			"path": "pages/test-account-cleaner/test-account-cleaner",
+			"style": {
+				"navigationBarTitleText": "清除测试账号",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"globalStyle": {
